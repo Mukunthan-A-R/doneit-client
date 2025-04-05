@@ -11,6 +11,7 @@ function App() {
       {/* <Header />{" "} */}
       {/* You can put common components like Header and Footer here */}
       <NavBar></NavBar>
+      <h1 class="text-3xl font-bold underline">Hello world!</h1>
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
