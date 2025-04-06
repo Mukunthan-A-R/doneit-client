@@ -1,7 +1,7 @@
 import React from "react";
 import MenuItem from "./MenuItem";
 
-const ProjectTollbar = () => {
+const ProjectToolbar = () => {
   return (
     <ul className="py-6">
       <MenuItem text="Creat Project" />
@@ -13,4 +13,4 @@ const ProjectTollbar = () => {
   );
 };
 
-export default ProjectTollbar;
+export default ProjectToolbar;
