@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ProjectCard = () => {
+const ProjectCard = ({ project }) => {
   // State to manage dropdown visibility
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -61,16 +61,20 @@ const ProjectCard = () => {
       <div className="px-6 py-4">
         {/* Circle Before Title */}
         <div className="flex items-center space-x-3">
-          <div className="w-4 h-4 rounded-full bg-blue-600"></div>{" "}
+          {project.status === "active" ? (
+            <div className="w-4 h-4 rounded-full bg-green-600"></div>
+          ) : project.status === "completed" ? (
+            <div className="w-4 h-4 rounded-full bg-gray-800"></div>
+          ) : (
+            <div className="w-4 h-4 rounded-full bg-red-600"></div>
+          )}
+
           {/* Smaller Circle */}
           <h2 className="text-xl font-semibold text-blue-800">
-            Project Card Title
+            {project.name}
           </h2>
         </div>
-        <p className="text-gray-600 mt-2">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac urna
-          ac libero efficitur consequat nec eu lacus.
-        </p>
+        <p className="text-gray-600 mt-2">{project.description}</p>
       </div>
 
       <div className="px-6 py-4 flex items-center justify-between">
