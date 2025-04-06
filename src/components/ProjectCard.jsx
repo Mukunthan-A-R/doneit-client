@@ -79,7 +79,7 @@ const ProjectCard = () => {
           href="#"
           className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
         >
-          Learn More
+          Open
         </a>
       </div>
     </div>
