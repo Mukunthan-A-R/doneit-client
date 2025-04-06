@@ -12,20 +12,28 @@ const TaskCardHolder = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        console.log("project_id", project_id); // Added log to check the project_id
         const fetchedTasks = await fetchTasks(project_id);
-
-        console.log(fetchedTasks); // Debugging log for fetched tasks
         setTasks(fetchedTasks);
       } catch (err) {
-        console.error(err);
-        console.error("Error fetching tasks");
         setError(err.message);
       }
     };
 
     getData();
   }, [project_id]);
+
+  const handleStatusChange = (taskId, newStatus) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.task_id === taskId ? { ...task, status: newStatus } : task
+      )
+    );
+  };
+
+  const handleEditClick = (taskId) => {
+    console.log("Edit task with ID:", taskId);
+    // You can implement a modal or navigate to an edit page
+  };
 
   // Separate tasks by status
   const notStartedTasks = tasks.filter((task) => task.status === "not started");
@@ -34,7 +42,7 @@ const TaskCardHolder = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 h-screen overflow-y-auto">
-      {/* Column 1 - Not Started */}
+      {/* Not Started Tasks */}
       <div className="bg-red-500 text-white p-6 rounded-lg">
         <h2 className="text-xl font-semibold">Not Started</h2>
         {notStartedTasks.length === 0 ? (
@@ -42,20 +50,22 @@ const TaskCardHolder = () => {
         ) : (
           notStartedTasks.map((task) => (
             <TaskCard
-              title={task.title}
               key={task.task_id}
-              desc={task.description}
               task_id={task.task_id}
+              title={task.title}
+              desc={task.description}
               status={task.status}
               startDate={task.start_date}
               endDate={task.end_date}
               timeDuration={task.time_duration}
+              onStatusChange={handleStatusChange}
+              onEditClick={handleEditClick}
             />
           ))
         )}
       </div>
 
-      {/* Column 2 - In Progress */}
+      {/* In Progress Tasks */}
       <div className="bg-blue-500 text-white p-6 rounded-lg">
         <h2 className="text-xl font-semibold">In Progress</h2>
         {inProgressTasks.length === 0 ? (
@@ -65,18 +75,20 @@ const TaskCardHolder = () => {
             <TaskCard
               key={task.task_id}
               task_id={task.task_id}
-              desc={task.description}
               title={task.title}
+              desc={task.description}
               status={task.status}
               startDate={task.start_date}
               endDate={task.end_date}
               timeDuration={task.time_duration}
+              onStatusChange={handleStatusChange}
+              onEditClick={handleEditClick}
             />
           ))
         )}
       </div>
 
-      {/* Column 3 - Completed */}
+      {/* Completed Tasks */}
       <div className="bg-green-500 text-white p-6 rounded-lg">
         <h2 className="text-xl font-semibold">Completed</h2>
         {completedTasks.length === 0 ? (
@@ -86,12 +98,14 @@ const TaskCardHolder = () => {
             <TaskCard
               key={task.task_id}
               task_id={task.task_id}
-              desc={task.description}
               title={task.title}
+              desc={task.description}
               status={task.status}
               startDate={task.start_date}
               endDate={task.end_date}
               timeDuration={task.time_duration}
+              onStatusChange={handleStatusChange}
+              onEditClick={handleEditClick}
             />
           ))
         )}
