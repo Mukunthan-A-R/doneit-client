@@ -27,7 +27,7 @@ export const createProject = async (projectData) => {
   }
 };
 
-export const deleteProjects = async () => {
+export const deleteAllProjects = async () => {
   // user id
   const user = {
     user_id: 1,
