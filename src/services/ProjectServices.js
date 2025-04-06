@@ -40,3 +40,15 @@ export const deleteAllProjects = async () => {
     throw new Error(error.response ? error.response.data : error.message);
   }
 };
+
+export const deleteProjectById = async (projectId) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:5000/api/project/${projectId}`
+    );
+    console.log("Project Deleted:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting project:", error);
+  }
+};
