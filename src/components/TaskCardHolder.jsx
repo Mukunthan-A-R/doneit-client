@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { fetchTasks } from "../services/TaskServices";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { ProjectState } from "../data/atom";
 import TaskCard from "./TaskCard";
 
 const TaskCardHolder = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
-  const [project_id, setProject_id] = useRecoilState(ProjectState);
-  // const project_id = 70;
+  const project_id = useRecoilValue(ProjectState);
 
   useEffect(() => {
     const getData = async () => {
@@ -49,7 +48,6 @@ const TaskCardHolder = () => {
           <h3 className="text-2xl font-semibold">Fetched Tasks:</h3>
           <ul>
             {tasks.map((task) => (
-              // <li key={task.task_id}>{task.title}</li>
               <TaskCard
                 key={task.task_id}
                 task_id={task.task_id}
