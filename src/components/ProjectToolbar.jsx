@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MenuItem from "./MenuItem";
+import MenuItem from "./modals/MenuItem";
 import CreateProject from "./modals/CreateProject";
 
 const ProjectToolbar = () => {
