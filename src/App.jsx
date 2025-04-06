@@ -4,6 +4,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import NavBar from "./components/NavBar";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -11,9 +12,9 @@ function App() {
       {/* <Header />{" "} */}
       {/* You can put common components like Header and Footer here */}
       <NavBar></NavBar>
-      <h1 class="text-3xl font-bold underline">Hello world!</h1>
       <Routes>
         <Route exact path="/" element={<Home />} />
+        <Route exact path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route element={<NotFound />} />
