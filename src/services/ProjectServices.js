@@ -26,3 +26,17 @@ export const createProject = async (projectData) => {
     throw error;
   }
 };
+
+export const deleteProjects = async () => {
+  // user id
+  const user = {
+    user_id: 1,
+  };
+
+  try {
+    const response = await axios.delete(API_URL, user);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response ? error.response.data : error.message);
+  }
+};
