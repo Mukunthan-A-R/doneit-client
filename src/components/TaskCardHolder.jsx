@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { fetchTasks } from "../services/TaskServices";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { ProjectState } from "../data/atom";
+import TaskCard from "./TaskCard";
 
 const TaskCardHolder = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
-  const project_id = useRecoilValue(ProjectState);
+  const [project_id, setProject_id] = useRecoilState(ProjectState);
   // const project_id = 70;
 
   useEffect(() => {
     const getData = async () => {
       try {
+        console.log("project_id");
+        console.log(project_id);
         const fetchedTasks = await fetchTasks(project_id);
+
         console.log(fetchedTasks);
         setTasks(fetchedTasks);
       } catch (err) {
         console.error(err);
+        console.error("i am here");
         setError(err.message);
       }
     };
@@ -44,7 +49,16 @@ const TaskCardHolder = () => {
           <h3 className="text-2xl font-semibold">Fetched Tasks:</h3>
           <ul>
             {tasks.map((task) => (
-              <li key={task.task_id}>{task.title}</li>
+              // <li key={task.task_id}>{task.title}</li>
+              <TaskCard
+                key={task.task_id}
+                task_id={task.task_id}
+                title={task.title}
+                status={task.status}
+                startDate={task.start_date}
+                endDate={task.end_date}
+                timeDuration={task.time_duration}
+              />
             ))}
           </ul>
         </div>
