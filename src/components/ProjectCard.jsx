@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { deleteProjectById } from "../services/ProjectServices";
+import { Link } from "react-router-dom";
 
 const ProjectCard = ({ project, onDelete }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -100,12 +101,12 @@ const ProjectCard = ({ project, onDelete }) => {
             <p>{diff.minutes} min</p>
           </span>
         </div>
-        <a
-          href="#"
+        <Link
+          to="/tasks"
           className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
         >
           Open
-        </a>
+        </Link>
       </div>
     </div>
   );
