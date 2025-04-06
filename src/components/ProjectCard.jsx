@@ -74,8 +74,11 @@ const ProjectCard = ({ project }) => {
         </div>
         <p className="text-gray-600 mt-2">{project.description}</p>
       </div>
-
-      <div className="px-6 py-4 flex items-center justify-between">
+      <div className="pl-6">
+        <p className="text-sm text-gray-600 ">DeadLine</p>
+        <p>{formatDate(project.end_date)}</p>
+      </div>
+      <div className="px-6 py-2 flex items-center justify-between">
         <div className="flex flex-col">
           <span className="text-sm text-gray-600">Remaining Time</span>
           <span className="flex gap-1">
@@ -123,4 +126,9 @@ const calculateRemainingTime = (endDate) => {
     seconds: remainingSeconds,
     message: "Time remaining",
   };
+};
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB"); // Formats to "DD/MM/YYYY"
 };
