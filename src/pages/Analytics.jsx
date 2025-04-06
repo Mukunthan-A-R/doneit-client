@@ -54,13 +54,13 @@ const Analytics = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left Sidebar - Task Toolbar */}
-      <div className="lg:w-1/6 w-full bg-blue-900 p-6">
+      <div className="lg:w-2/12 w-full bg-blue-900 p-6">
         <h2 className="text-white text-lg font-semibold mb-6">Task Toolbar</h2>
         <TaskToolbar />
       </div>
 
       {/* Right Side - Pie Chart and Stats */}
-      <div className="w-full lg:w-5/6 bg-gray-50 p-6 flex flex-col lg:flex-row justify-between items-center">
+      <div className="w-full lg:w-10/12 bg-gray-50 p-6 flex flex-col lg:flex-row justify-between items-center">
         <div className="lg:w-1/2 w-full mb-6 lg:mb-0">
           {/* Render the PieChart component with tasks as a prop */}
           <div className="bg-white shadow-xl p-6 rounded-lg">

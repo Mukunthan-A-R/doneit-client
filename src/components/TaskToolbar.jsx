@@ -8,6 +8,9 @@ const TaskToolbar = () => {
       <Link to="/dashboard">
         <MenuItem text="Dashboard" />
       </Link>
+      <Link to="/tasks">
+        <MenuItem text="Task Tracker" />
+      </Link>
       <Link to="/analytics">
         <MenuItem text="Analysis" />
       </Link>
