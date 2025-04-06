@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProjectCard from "./ProjectCard";
-import { fetchProjects } from "../../services/ProjectServices";
+import { fetchProjects } from "../services/ProjectServices";
 
 const ProjectCardHolder = () => {
   const [projects, setProjects] = useState([]);

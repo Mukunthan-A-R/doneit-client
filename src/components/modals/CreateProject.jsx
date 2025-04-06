@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createProject } from "../../services/ProjectServices";
 
 const CreateProject = ({ showModal, setShowModal }) => {
   if (!showModal) return null;
@@ -11,6 +12,8 @@ const CreateProject = ({ showModal, setShowModal }) => {
     end_date: "",
     status: "",
     priority: "",
+    // have to change create data
+    created: 1,
   });
 
   const [errors, setErrors] = useState({});
@@ -75,7 +78,7 @@ const CreateProject = ({ showModal, setShowModal }) => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate form
@@ -85,9 +88,16 @@ const CreateProject = ({ showModal, setShowModal }) => {
       return;
     }
 
-    // Do something with the projectData (like sending it to an API)
-    console.log("Project Created:", projectData);
-    setShowModal(false); // Close the modal after submitting
+    try {
+      const response = await createProject(projectData);
+
+      if (response) {
+        console.log("Project created:", response);
+        setShowModal(false);
+      }
+    } catch (error) {
+      console.error("Failed to create project:", error);
+    }
   };
 
   return (
