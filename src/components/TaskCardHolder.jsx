@@ -65,6 +65,7 @@ const TaskCardHolder = () => {
             <TaskCard
               key={task.task_id}
               task_id={task.task_id}
+              desc={task.description}
               title={task.title}
               status={task.status}
               startDate={task.start_date}
@@ -85,6 +86,7 @@ const TaskCardHolder = () => {
             <TaskCard
               key={task.task_id}
               task_id={task.task_id}
+              desc={task.description}
               title={task.title}
               status={task.status}
               startDate={task.start_date}
