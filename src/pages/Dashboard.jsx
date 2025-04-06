@@ -4,7 +4,7 @@ import ProjectTollbar from "../components/ProjectTollbar";
 
 const Dashboard = () => {
   return (
-    <div className="h-screen flex">
+    <div className="min-h-screen flex">
       <div className={`lg:block w-1/6 bg-blue-900 p-4`}>
         <h2 className="text-white">Project Toolbar</h2>
         <ProjectTollbar></ProjectTollbar>

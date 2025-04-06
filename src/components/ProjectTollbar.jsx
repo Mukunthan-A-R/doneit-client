@@ -3,7 +3,7 @@ import MenuItem from "./MenuItem";
 
 const ProjectTollbar = () => {
   return (
-    <ul className="p-6">
+    <ul className="py-6">
       <MenuItem text="Creat Project" />
       <MenuItem text="Edit User" />
       <MenuItem text="Format Projects" />
