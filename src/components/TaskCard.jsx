@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { updateTask } from "../services/TaskServices"; // Make sure this import is correct
 
+// TaskCard component
 const TaskCard = ({
   task_id,
   title,
@@ -10,6 +12,7 @@ const TaskCard = ({
   timeDuration,
   onEditClick,
   onStatusChange,
+  project_id, // Added project_id prop to pass project_id for the update
 }) => {
   const remainingTime = calculateRemainingTime(endDate);
   const endTime = formatDate(endDate);
@@ -18,13 +21,57 @@ const TaskCard = ({
   // State to manage the dropdown menu visibility
   const [menuVisible, setMenuVisible] = useState(false);
 
+  // State for popup notifications
+  const [notification, setNotification] = useState("");
+
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
-  const handleStatusChange = (newStatus) => {
-    onStatusChange(task_id, newStatus); // This will be handled by TaskCardHolder
-    setMenuVisible(false); // Close the menu after selecting a status
+  const handleStatusChange = async (newStatus) => {
+    // Prepare task data to update
+    const updatedTaskData = {
+      project_id: project_id, // Ensure project_id is included in the request
+      status: newStatus,
+      title,
+      description: desc,
+      start_date: startDate,
+      end_date: endDate,
+      time_duration: timeDuration,
+    };
+
+    try {
+      // Send the PUT request to update the task status
+      const data = await updateTask(task_id, updatedTaskData); // Ensure you're passing the updated data
+
+      // Show success message
+      setNotification({
+        type: "success",
+        message: "Status updated successfully!",
+      });
+
+      setMenuVisible(false); // Close the menu
+
+      // Hide the notification after 2 seconds
+      setTimeout(() => {
+        setNotification("");
+      }, 2000);
+
+      // Update status locally in the parent component
+      onStatusChange(task_id, newStatus);
+    } catch (err) {
+      console.error("Failed to update task status", err);
+      // Show failure message
+      setNotification({
+        type: "failure",
+        message: "Failed to update status.",
+      });
+
+      // Hide the notification after 2 seconds
+      setTimeout(() => {
+        setNotification("");
+      }, 2000);
+    }
   };
 
   return (
@@ -83,7 +130,7 @@ const TaskCard = ({
       <p className="text-sm text-gray-600 pb-3">{desc}</p>
       <p className="text-sm text-gray-600">Start Date: {startTime}</p>
       <p className="text-sm text-gray-600">End Date: {endTime}</p>
-      <p className="text-sm text-gray-600">
+      <span className="text-sm text-gray-600">
         {remainingTime.timeOver === false ? (
           <span className="flex gap-1">
             <p>{remainingTime.message}</p>
@@ -94,13 +141,26 @@ const TaskCard = ({
         ) : (
           <p className="text-red-500">{remainingTime.message}</p>
         )}
-      </p>
+      </span>
       <p className="text-sm text-gray-600">Duration: {timeDuration}</p>
+
+      {/* Notification Popup */}
+      {notification && (
+        <div
+          className={`fixed top-4 right-4 p-4 rounded-md shadow-lg ${
+            notification.type === "success" ? "bg-green-500" : "bg-red-500"
+          } text-white`}
+        >
+          {notification.message}
+        </div>
+      )}
     </div>
   );
 };
 
 export default TaskCard;
+
+// Utility functions
 
 const calculateRemainingTime = (endDate) => {
   const currentDate = new Date();

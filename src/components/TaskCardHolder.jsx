@@ -53,13 +53,14 @@ const TaskCardHolder = () => {
               key={task.task_id}
               task_id={task.task_id}
               title={task.title}
-              desc={task.description}
               status={task.status}
+              desc={task.description}
               startDate={task.start_date}
               endDate={task.end_date}
               timeDuration={task.time_duration}
-              onStatusChange={handleStatusChange}
+              project_id={task.project_id} // Ensure project_id is passed here
               onEditClick={handleEditClick}
+              onStatusChange={handleStatusChange}
             />
           ))
         )}
@@ -76,13 +77,14 @@ const TaskCardHolder = () => {
               key={task.task_id}
               task_id={task.task_id}
               title={task.title}
-              desc={task.description}
               status={task.status}
+              desc={task.description}
               startDate={task.start_date}
               endDate={task.end_date}
               timeDuration={task.time_duration}
-              onStatusChange={handleStatusChange}
+              project_id={task.project_id} // Ensure project_id is passed here
               onEditClick={handleEditClick}
+              onStatusChange={handleStatusChange}
             />
           ))
         )}
@@ -99,13 +101,14 @@ const TaskCardHolder = () => {
               key={task.task_id}
               task_id={task.task_id}
               title={task.title}
-              desc={task.description}
               status={task.status}
+              desc={task.description}
               startDate={task.start_date}
               endDate={task.end_date}
               timeDuration={task.time_duration}
-              onStatusChange={handleStatusChange}
+              project_id={task.project_id} // Ensure project_id is passed here
               onEditClick={handleEditClick}
+              onStatusChange={handleStatusChange}
             />
           ))
         )}
