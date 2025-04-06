@@ -34,7 +34,7 @@ const TaskCard = ({
     >
       {/* Menu Bar (3-dot menu) */}
       <div className="absolute top-2 right-2">
-        <button className="text-black font-bold pr-3" onClick={toggleMenu}>
+        <button className="text-black font-bold pr-2" onClick={toggleMenu}>
           {/* 3-Dot Icon */}
           <span className="text-xl">...</span>
         </button>
@@ -42,24 +42,32 @@ const TaskCard = ({
         {/* Dropdown Menu */}
         {menuVisible && (
           <div className="absolute bg-white shadow-md rounded-md mt-2 w-32 p-2">
-            <button
-              className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleStatusChange("not started")}
-            >
-              Not Started
-            </button>
-            <button
-              className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleStatusChange("in progress")}
-            >
-              In Progress
-            </button>
-            <button
-              className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleStatusChange("completed")}
-            >
-              Completed
-            </button>
+            {/* Conditionally render status options */}
+            {status !== "not started" && (
+              <button
+                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => handleStatusChange("not started")}
+              >
+                Not Started
+              </button>
+            )}
+            {status !== "in progress" && (
+              <button
+                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => handleStatusChange("in progress")}
+              >
+                In Progress
+              </button>
+            )}
+            {status !== "completed" && (
+              <button
+                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => handleStatusChange("completed")}
+              >
+                Completed
+              </button>
+            )}
+            {/* Edit Button */}
             <button
               className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
               onClick={() => onEditClick(task_id)} // Trigger edit on parent component
