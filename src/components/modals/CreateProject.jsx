@@ -94,6 +94,7 @@ const CreateProject = ({ showModal, setShowModal }) => {
       if (response) {
         console.log("Project created:", response);
         setShowModal(false);
+        window.location.reload();
       }
     } catch (error) {
       console.error("Failed to create project:", error);
