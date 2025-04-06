@@ -1,5 +1,6 @@
 import React from "react";
 import TaskToolbar from "../components/TaskToolbar";
+import TaskCardHolder from "../components/TaskCardHolder";
 
 const TaskDashboard = () => {
   return (
@@ -11,7 +12,7 @@ const TaskDashboard = () => {
 
       <div className="w-full lg:w-5/6 bg-white p-6">
         <h1 className="text-2xl font-semibold pb-4">Your Projects !</h1>
-        <p>hello</p>
+        <TaskCardHolder></TaskCardHolder>
       </div>
     </div>
   );
