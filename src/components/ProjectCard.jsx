@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { deleteProjectById } from "../services/ProjectServices";
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, onDelete }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -8,6 +9,17 @@ const ProjectCard = ({ project }) => {
   };
 
   const diff = calculateRemainingTime(project.end_date);
+
+  const handleDelete = async () => {
+    try {
+      await deleteProjectById(project.project_id); // Call the delete function from the service
+      onDelete(project.project_id); // Notify the parent component to remove the project
+      alert("Project deleted successfully!"); // Optionally show success message
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      alert("Error deleting project!"); // Optionally show error message
+    }
+  };
 
   return (
     <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-lg">
@@ -49,6 +61,7 @@ const ProjectCard = ({ project }) => {
                 <a
                   href="#"
                   className="block px-4 py-2 text-gray-700 hover:bg-red-600 hover:text-white"
+                  onClick={handleDelete}
                 >
                   Delete
                 </a>
