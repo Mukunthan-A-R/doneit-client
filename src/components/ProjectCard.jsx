@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
 const ProjectCard = ({ project }) => {
-  // State to manage dropdown visibility
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Function to toggle the dropdown
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
+
+  const diff = calculateRemainingTime(project.end_date);
 
   return (
     <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-lg">
@@ -59,7 +59,6 @@ const ProjectCard = ({ project }) => {
       </div>
 
       <div className="px-6 py-4">
-        {/* Circle Before Title */}
         <div className="flex items-center space-x-3">
           {project.status === "active" ? (
             <div className="w-4 h-4 rounded-full bg-green-600"></div>
@@ -69,7 +68,6 @@ const ProjectCard = ({ project }) => {
             <div className="w-4 h-4 rounded-full bg-red-600"></div>
           )}
 
-          {/* Smaller Circle */}
           <h2 className="text-xl font-semibold text-blue-800">
             {project.name}
           </h2>
@@ -78,7 +76,14 @@ const ProjectCard = ({ project }) => {
       </div>
 
       <div className="px-6 py-4 flex items-center justify-between">
-        <span className="text-sm text-gray-600">Last updated 2 days ago</span>
+        <div className="flex flex-col">
+          <span className="text-sm text-gray-600">Remaining Time</span>
+          <span className="flex gap-1">
+            <p> {diff.days} day</p>
+            <p> {diff.hours} hrs</p>
+            <p>{diff.minutes} min</p>
+          </span>
+        </div>
         <a
           href="#"
           className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
@@ -91,3 +96,31 @@ const ProjectCard = ({ project }) => {
 };
 
 export default ProjectCard;
+
+const calculateRemainingTime = (endDate) => {
+  const currentDate = new Date();
+
+  const end = new Date(endDate);
+
+  const diffInMilliseconds = end - currentDate;
+  if (diffInMilliseconds <= 0) {
+    return { message: "The project has ended" };
+  }
+
+  const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
+
+  const remainingHours = diffInHours % 24;
+  const remainingMinutes = diffInMinutes % 60;
+  const remainingSeconds = diffInSeconds % 60;
+
+  return {
+    days: diffInDays,
+    hours: remainingHours,
+    minutes: remainingMinutes,
+    seconds: remainingSeconds,
+    message: "Time remaining",
+  };
+};
