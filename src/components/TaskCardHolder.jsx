@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { fetchTasks } from "../services/TaskServices";
+import { useRecoilValue } from "recoil";
+import { ProjectState } from "../data/atom";
 
 const TaskCardHolder = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
-  const project_id = 70;
+  const project_id = useRecoilValue(ProjectState);
+  // const project_id = 70;
 
   useEffect(() => {
     const getData = async () => {

@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { deleteProjectById } from "../services/ProjectServices";
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { ProjectState } from "../data/atom";
 
 const ProjectCard = ({ project, onDelete }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [currentProject, setCurrentProject] = useRecoilState(ProjectState);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -105,7 +108,9 @@ const ProjectCard = ({ project, onDelete }) => {
           to="/tasks"
           className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
         >
-          Open
+          <button onClick={() => setCurrentProject(project.project_id)}>
+            Open
+          </button>
         </Link>
       </div>
     </div>
