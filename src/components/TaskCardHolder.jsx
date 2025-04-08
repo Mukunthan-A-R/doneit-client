@@ -40,6 +40,12 @@ const TaskCardHolder = () => {
   const inProgressTasks = tasks.filter((task) => task.status === "in progress");
   const completedTasks = tasks.filter((task) => task.status === "completed");
 
+  if (project_id === null) {
+    return (
+      <p className="text-xl text-red-600">Please select a project first</p>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 h-screen overflow-y-auto">
       {/* Not Started Tasks */}

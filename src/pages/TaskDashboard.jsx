@@ -14,7 +14,7 @@ const TaskDashboard = () => {
         <TaskToolKit></TaskToolKit>
       </div>
       <div className="w-full lg:w-5/6 bg-white p-6">
-        <h1 className="text-2xl font-semibold pb-4">Your Projects !</h1>
+        <h1 className="text-2xl font-semibold pb-4">Your Tasks Tracker !</h1>
         <TaskCardHolder></TaskCardHolder>
       </div>
     </div>
