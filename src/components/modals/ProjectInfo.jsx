@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { fetchProjectById } from "../../services/ProjectServices";
+import { ProjectState } from "../../data/atom";
+import { useRecoilValue } from "recoil";
 
-const ProjectInfo = ({ show, onClose, projectId = 70, children }) => {
+const ProjectInfo = ({ show, onClose }) => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const projectId = useRecoilValue(ProjectState);
 
   useEffect(() => {
     const getProject = async () => {
       if (projectId) {
         try {
           setLoading(true);
-          const data = await fetchProjectById(projectId); // Fetch project by ID
-          setProject(data); // Set project data to state
-          console.log(data); // Log the data to the console
+          const data = await fetchProjectById(projectId);
+          setProject(data);
+          console.log(data);
         } catch (err) {
-          setError(err.message); // Set error if something goes wrong
+          setError(err.message);
         } finally {
           setLoading(false);
         }
       }
     };
 
-    getProject();
-  }, []); // Fetch whenever projectId changes
+    getProject(projectId);
+  }, []);
 
   console.log(project);
 
@@ -31,17 +35,14 @@ const ProjectInfo = ({ show, onClose, projectId = 70, children }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Blurred Background */}
       <div
         className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={onClose}
       ></div>
-
-      {/* Modal */}
       <div className="relative bg-white rounded-xl shadow-xl p-6 w-96 z-10">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold pr-2 text-xl "
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 font-bold pr-2 text-xl "
         >
           &times;
         </button>
@@ -62,7 +63,6 @@ const ProjectInfo = ({ show, onClose, projectId = 70, children }) => {
         {project && (
           <div>Project End Date : {formatDate(project.data.end_date)}</div>
         )}
-        {/* Render children or project content */}
       </div>
     </div>
   );
