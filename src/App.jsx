@@ -7,6 +7,7 @@ import NavBar from "./components/NavBar";
 import Dashboard from "./pages/Dashboard";
 import TaskDashboard from "./pages/TaskDashboard";
 import Analytics from "./pages/Analytics";
+import Graph from "./pages/Graph";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route exact path="/analytics" element={<Analytics />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/graph" element={<Graph />} />
         <Route element={<NotFound />} />
       </Routes>
       {/* <Footer />  */}
