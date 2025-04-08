@@ -36,6 +36,19 @@ export const createProject = async (projectData) => {
   }
 };
 
+export const editProjectById = async (projectId, projectData) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:5000/api/project/${projectId}`,
+      projectData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating project:", error);
+    throw new Error(error.response ? error.response.data : error.message);
+  }
+};
+
 export const deleteAllProjects = async () => {
   // user id
   const user = {
