@@ -39,6 +39,7 @@ const ProjectCard = ({ project, onDelete }) => {
       });
       console.log("Project updated successfully:", updatedProject);
       setIsEditing(false); // Close the edit mode after successful update
+      location.reload();
     } catch (error) {
       console.error("Error updating project:", error);
       alert("Error updating project!");
