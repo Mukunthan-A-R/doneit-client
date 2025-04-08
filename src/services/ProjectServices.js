@@ -11,6 +11,15 @@ export const fetchProjects = async () => {
   }
 };
 
+export const fetchProjectById = async (projectId) => {
+  try {
+    const response = await axios.get(`${API_URL}/${projectId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response ? error.response.data : error.message);
+  }
+};
+
 export const createProject = async (projectData) => {
   try {
     const response = await axios.post(API_URL, projectData);
