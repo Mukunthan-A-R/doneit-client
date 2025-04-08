@@ -12,6 +12,9 @@ const TaskCardHolder = () => {
   useEffect(() => {
     const getData = async () => {
       try {
+        if (project_id === null) {
+          return;
+        }
         const fetchedTasks = await fetchTasks(project_id);
         setTasks(fetchedTasks);
       } catch (err) {
