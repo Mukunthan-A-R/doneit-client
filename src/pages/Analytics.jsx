@@ -54,8 +54,8 @@ const Analytics = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left Sidebar - Task Toolbar */}
-      <div className="lg:w-2/12 w-full bg-blue-900 p-6">
-        <h2 className="text-white text-lg font-semibold mb-6">Task Toolbar</h2>
+      <div className="lg:w-2/12 w-full bg-blue-900 p-4">
+        <h2 className="text-white">Task Toolbar</h2>
         <TaskToolbar />
       </div>
 
