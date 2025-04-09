@@ -3,7 +3,7 @@ import { createTask } from "../../services/TaskServices"; // Import the function
 import { useRecoilValue } from "recoil";
 import { ProjectState } from "../../data/atom";
 
-const CreateTask = ({ show, onClose }) => {
+const CreateTask = ({ show, onClose, onCreateTask }) => {
   const currentProjectId = useRecoilValue(ProjectState);
   const [taskData, setTaskData] = useState({
     title: "",
@@ -97,6 +97,7 @@ const CreateTask = ({ show, onClose }) => {
       const newTask = await createTask(taskData);
       console.log("Task created successfully:", newTask);
       onClose(); // Close the modal after submission
+      onCreateTask();
     } catch (error) {
       console.error("Error creating task:", error);
       alert("Failed to create task.");

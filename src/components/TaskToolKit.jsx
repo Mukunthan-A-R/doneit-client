@@ -4,7 +4,7 @@ import { MdInfoOutline } from "react-icons/md";
 import ProjectInfo from "./modals/ProjectInfo";
 import CreateTask from "./modals/CreateTask"; // Import the new task creation component
 
-const TaskToolKit = () => {
+const TaskToolKit = ({ onCreateTask }) => {
   const [showInfo, setShowInfo] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false); // State to toggle CreateTask visibility
 
@@ -28,6 +28,7 @@ const TaskToolKit = () => {
       {/* Show the CreateTask modal */}
       {showCreateTask && (
         <CreateTask
+          onCreateTask={onCreateTask}
           show={showCreateTask}
           onClose={() => setShowCreateTask(false)} // Close the modal
         />

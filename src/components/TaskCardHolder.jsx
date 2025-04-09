@@ -4,7 +4,7 @@ import { useRecoilValue } from "recoil";
 import { ProjectState } from "../data/atom";
 import TaskCard from "./TaskCard";
 
-const TaskCardHolder = () => {
+const TaskCardHolder = ({ value }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const project_id = useRecoilValue(ProjectState);
@@ -24,7 +24,7 @@ const TaskCardHolder = () => {
     };
 
     getData();
-  }, [project_id, trigger]);
+  }, [project_id, trigger, value]);
 
   const handleStatusChange = (taskId, newStatus) => {
     setTasks((prevTasks) =>
