@@ -62,6 +62,14 @@ const TaskCardHolder = ({ value }) => {
     );
   }
 
+  if (tasks.length === 0) {
+    return <p>Please Create a Task to work !</p>;
+  }
+
+  if (error) {
+    return <p>Error Occured Pls try refreshing the page !</p>;
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 h-screen overflow-y-auto">
       {/* Not Started Tasks */}
@@ -140,7 +148,7 @@ const TaskCardHolder = ({ value }) => {
       </div>
 
       {/* Show error message if there was an error */}
-      {error && <p className="text-red-500">{error}</p>}
+      {/* {error && <p className="text-red-500">{error}</p>} */}
     </div>
   );
 };
