@@ -7,7 +7,6 @@ const TaskDashboard = () => {
   const [trigger, setTrigger] = useState(1);
   const handleCreateTask = () => {
     setTrigger(trigger + 1);
-    console.log("I feel good !");
   };
 
   return (
