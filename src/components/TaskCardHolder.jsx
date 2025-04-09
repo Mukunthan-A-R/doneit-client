@@ -66,7 +66,7 @@ const TaskCardHolder = ({ value }) => {
     return <p>Please Create a Task to work !</p>;
   }
 
-  if (error) {
+  if (error && parseInt(error.status) === 404) {
     return <p>Error Occured Pls try refreshing the page !</p>;
   }
 
