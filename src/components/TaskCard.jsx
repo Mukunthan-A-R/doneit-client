@@ -11,6 +11,7 @@ const TaskCard = ({
   endDate,
   timeDuration,
   onEditClick,
+  onhandleDelete,
   onStatusChange,
   project_id, // Added project_id prop to pass project_id for the update
 }) => {
@@ -120,6 +121,12 @@ const TaskCard = ({
               onClick={() => onEditClick(task_id)} // Trigger edit on parent component
             >
               Edit
+            </button>
+            <button
+              className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+              onClick={() => onhandleDelete(task_id)} // Trigger edit on parent component
+            >
+              Delete
             </button>
           </div>
         )}

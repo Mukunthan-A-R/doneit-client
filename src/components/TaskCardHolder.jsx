@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchTasks } from "../services/TaskServices";
+import { deleteTask, fetchTasks } from "../services/TaskServices";
 import { useRecoilValue } from "recoil";
 import { ProjectState } from "../data/atom";
 import TaskCard from "./TaskCard";
@@ -8,6 +8,7 @@ const TaskCardHolder = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const project_id = useRecoilValue(ProjectState);
+  const [trigger, setTrigger] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -23,7 +24,7 @@ const TaskCardHolder = () => {
     };
 
     getData();
-  }, [project_id]);
+  }, [project_id, trigger]);
 
   const handleStatusChange = (taskId, newStatus) => {
     setTasks((prevTasks) =>
@@ -34,8 +35,20 @@ const TaskCardHolder = () => {
   };
 
   const handleEditClick = (taskId) => {
+    deleteTask(taskId);
     console.log("Edit task with ID:", taskId);
     // You can implement a modal or navigate to an edit page
+  };
+
+  const handleDelete = async (taskId) => {
+    try {
+      const deletedTask = await deleteTask(taskId);
+      console.log("Task deleted:", deletedTask);
+      console.log("Delete action completed for task ID:", taskId);
+      setTrigger(!trigger);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
   };
 
   // Separate tasks by status
@@ -69,6 +82,7 @@ const TaskCardHolder = () => {
               timeDuration={task.time_duration}
               project_id={task.project_id} // Ensure project_id is passed here
               onEditClick={handleEditClick}
+              onhandleDelete={handleDelete}
               onStatusChange={handleStatusChange}
             />
           ))
@@ -93,6 +107,7 @@ const TaskCardHolder = () => {
               timeDuration={task.time_duration}
               project_id={task.project_id} // Ensure project_id is passed here
               onEditClick={handleEditClick}
+              onhandleDelete={handleDelete}
               onStatusChange={handleStatusChange}
             />
           ))
@@ -117,6 +132,7 @@ const TaskCardHolder = () => {
               timeDuration={task.time_duration}
               project_id={task.project_id} // Ensure project_id is passed here
               onEditClick={handleEditClick}
+              onhandleDelete={handleDelete}
               onStatusChange={handleStatusChange}
             />
           ))
