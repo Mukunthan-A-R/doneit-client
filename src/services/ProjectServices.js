@@ -39,7 +39,7 @@ export const createProject = async (projectData) => {
 export const editProjectById = async (projectId, projectData) => {
   try {
     const response = await axios.put(
-      `http://localhost:5000/api/project/${projectId}`,
+      `${API_URL}/${projectId}`,
       projectData
     );
     return response.data;
