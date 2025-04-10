@@ -20,3 +20,24 @@ export const updateTask = async (taskId, taskData) => {
     throw error;
   }
 };
+
+export const createTask = async (taskData) => {
+  try {
+    const response = await axios.post(`${API_URL}/task`, taskData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating task:", error);
+    throw error;
+  }
+};
+
+// New function to delete a task
+export const deleteTask = async (taskId) => {
+  try {
+    const response = await axios.delete(`${API_URL}/task/${taskId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    throw error;
+  }
+};

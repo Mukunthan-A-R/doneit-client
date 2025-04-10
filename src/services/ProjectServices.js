@@ -11,6 +11,15 @@ export const fetchProjects = async () => {
   }
 };
 
+export const fetchProjectById = async (projectId) => {
+  try {
+    const response = await axios.get(`${API_URL}/${projectId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response ? error.response.data : error.message);
+  }
+};
+
 export const createProject = async (projectData) => {
   try {
     const response = await axios.post(API_URL, projectData);
@@ -24,6 +33,19 @@ export const createProject = async (projectData) => {
   } catch (error) {
     console.error("Error creating project:", error);
     throw error;
+  }
+};
+
+export const editProjectById = async (projectId, projectData) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:5000/api/project/${projectId}`,
+      projectData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating project:", error);
+    throw new Error(error.response ? error.response.data : error.message);
   }
 };
 
