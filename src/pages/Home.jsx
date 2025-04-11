@@ -1,11 +1,13 @@
 // src/pages/Home.js
 import React from "react";
+import HomeBanner from "../components/modals/HomeBanner";
+import HomeProductDesc from "../components/HomeProductDesc";
 
 const Home = () => {
   return (
     <div>
-      <h2>Welcome to the Home Page</h2>
-      <p>This is where you can add information about the home page.</p>
+      <HomeBanner></HomeBanner>
+      <HomeProductDesc></HomeProductDesc>
     </div>
   );
 };
