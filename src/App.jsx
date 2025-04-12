@@ -8,6 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import TaskDashboard from "./pages/TaskDashboard";
 import Analytics from "./pages/Analytics";
 import Graph from "./pages/Graph";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/dashboard" element={<Dashboard />} />
+        <Route exact path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route exact path="/tasks" element={<TaskDashboard />} />
         <Route exact path="/analytics" element={<Analytics />} />
         <Route path="/about" element={<About />} />
