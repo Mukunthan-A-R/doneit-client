@@ -9,26 +9,30 @@ const TaskCardHolder = ({ value }) => {
   const [error, setError] = useState(null);
   const project_id = useRecoilValue(ProjectState);
   const [trigger, setTrigger] = useState(false);
+  const [loading,setLoading] = useState(true);
 
   console.log(project_id);
 
   useEffect(() => {
     const getData = async () => {
       try {
+        setLoading(true); // Start loading
         if (project_id === null) {
+          setLoading(false); // Still stop loading if no project selected
           return;
         }
         const fetchedTasks = await fetchTasks(project_id);
         setTasks(fetchedTasks.data);
-        console.log(fetchedTasks.data);
-        
       } catch (err) {
         setError(err.message);
+      } finally {
+        setLoading(false); // Done loading
       }
     };
-
+  
     getData();
   }, [project_id, trigger, value]);
+  
 
   const handleStatusChange = (taskId, newStatus) => {
     setTasks((prevTasks) =>
@@ -109,7 +113,7 @@ const TaskCardHolder = ({ value }) => {
         ) : (
           inProgressTasks.map((task) => (
             <TaskCard
-              key={task.task_id}
+              key={task.task_id}  
               task_id={task.task_id}
               title={task.title}
               status={task.status}
