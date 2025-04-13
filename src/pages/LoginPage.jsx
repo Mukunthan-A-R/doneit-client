@@ -27,10 +27,13 @@ const LoginPage = () => {
       // Store token in local storage
       localStorage.setItem("x-auth-token", token);
 
+    
       // ✅ Update user data in Recoil
       setUser({
-        email,
         token,
+        user_id: response.user.user_id,
+        name: response.user.name,
+        email: response.user.email,
         loggedIn: true,
       });
 
