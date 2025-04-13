@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createProject } from "../../services/ProjectServices";
 
-const CreateProject = ({ showModal, setShowModal ,user_id}) => {
+const CreateProject = ({ showModal, setShowModal ,user_id , handleTrigger}) => {
   if (!showModal) return null;
 
   // State to store form data and validation errors
@@ -94,7 +94,8 @@ const CreateProject = ({ showModal, setShowModal ,user_id}) => {
       if (response) {
         console.log("Project created:", response);
         setShowModal(false);
-        window.location.reload();
+        // window.location.reload();
+        handleTrigger();
       }
     } catch (error) {
       console.error("Failed to create project:", error);

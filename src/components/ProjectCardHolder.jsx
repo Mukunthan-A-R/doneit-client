@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import ProjectCard from "./ProjectCard";
 import { fetchProjects } from "../services/ProjectServices";
 
-const ProjectCardHolder = ({ user_id }) => {
+const ProjectCardHolder = ({ user_id , trigger}) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  
   const currentUserId = parseInt(user_id);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const ProjectCardHolder = ({ user_id }) => {
       }
     };
     getProjects();
-  }, [currentUserId]);
+  }, [currentUserId, trigger]);
 
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
