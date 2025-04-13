@@ -14,7 +14,7 @@ const Analytics = () => {
     const getData = async () => {
       try {
         const fetchedTasks = await fetchTasks(currentProject);
-        setTasks(fetchedTasks);
+        setTasks(fetchedTasks.data);
       } catch (err) {
         setError(err.message);
       }

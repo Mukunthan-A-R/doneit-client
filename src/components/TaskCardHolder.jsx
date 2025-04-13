@@ -10,6 +10,8 @@ const TaskCardHolder = ({ value }) => {
   const project_id = useRecoilValue(ProjectState);
   const [trigger, setTrigger] = useState(false);
 
+  console.log(project_id);
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -17,7 +19,9 @@ const TaskCardHolder = ({ value }) => {
           return;
         }
         const fetchedTasks = await fetchTasks(project_id);
-        setTasks(fetchedTasks);
+        setTasks(fetchedTasks.data);
+        console.log(fetchedTasks.data);
+        
       } catch (err) {
         setError(err.message);
       }
