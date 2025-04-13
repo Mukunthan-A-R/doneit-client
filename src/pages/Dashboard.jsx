@@ -13,7 +13,7 @@ const Dashboard = () => {
     <div className="min-h-screen flex">
       <div className={`lg:block w-1/6 bg-blue-900 p-4`}>
         <h2 className="text-white">Project Toolbar</h2>
-        <ProjectToolbar></ProjectToolbar>
+        <ProjectToolbar user_id={currentUserData.user_id}></ProjectToolbar>
       </div>
 
       <div className="w-full lg:w-5/6 bg-white p-6">

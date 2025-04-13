@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createProject } from "../../services/ProjectServices";
 
-const CreateProject = ({ showModal, setShowModal }) => {
+const CreateProject = ({ showModal, setShowModal ,user_id}) => {
   if (!showModal) return null;
 
   // State to store form data and validation errors
@@ -13,7 +13,7 @@ const CreateProject = ({ showModal, setShowModal }) => {
     status: "",
     priority: "",
     // have to change create data
-    created: 1,
+    created: parseInt(user_id),
   });
 
   const [errors, setErrors] = useState({});

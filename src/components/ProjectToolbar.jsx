@@ -3,7 +3,7 @@ import MenuItem from "./modals/MenuItem";
 import CreateProject from "./modals/CreateProject";
 import FormatProjects from "./modals/FormatProjects";
 
-const ProjectToolbar = () => {
+const ProjectToolbar = ({user_id}) => {
   const [showModal, setShowModal] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -22,7 +22,7 @@ const ProjectToolbar = () => {
       </ul>
 
       {/* Modals */}
-      <CreateProject showModal={showModal} setShowModal={setShowModal} />
+      <CreateProject user_id={user_id} showModal={showModal} setShowModal={setShowModal} />
       {isPopupOpen && <FormatProjects onCancel={setIsPopupOpen} />}
     </>
   );
