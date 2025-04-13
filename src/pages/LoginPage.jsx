@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../services/User"; // Adjust path based on your structure
+import { loginUser } from "../services/User"; // Adjust if needed
+import { useSetRecoilState } from "recoil";
+import { userData } from "../data/atom"; 
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(""); // ✅ new state for success
+  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+
+  const setUser = useSetRecoilState(userData); // ✅ recoil setter
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,13 +22,20 @@ const LoginPage = () => {
       const response = await loginUser({ email, password });
       console.log(response);
 
-      // Store token if needed
-      localStorage.setItem("x-auth-token", response.token);
+      const token = response.token;
 
-      // ✅ Set success message
+      // Store token in local storage
+      localStorage.setItem("x-auth-token", token);
+
+      // ✅ Update user data in Recoil
+      setUser({
+        email,
+        token,
+        loggedIn: true,
+      });
+
+      // ✅ Show success and navigate
       setSuccess("Login successful!");
-
-      // ✅ Delay navigation so user sees the success message
       setTimeout(() => {
         navigate("/dashboard");
       }, 1500);
@@ -35,7 +46,6 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12 relative">
-      {/* ✅ Toast Success Message */}
       {success && (
         <div className="absolute top-6 z-50 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg animate-fadeIn">
           {success}
@@ -43,7 +53,6 @@ const LoginPage = () => {
       )}
 
       <div className="max-w-4xl w-full bg-gray-50 rounded-2xl shadow-xl overflow-hidden grid lg:grid-cols-2">
-        {/* Left: Branding */}
         <div className="hidden lg:flex flex-col justify-center items-center bg-blue-900 text-white p-10">
           <h1 className="text-4xl font-extrabold mb-2">Done it</h1>
           <p className="text-blue-100 text-lg mb-4 italic">
@@ -54,7 +63,6 @@ const LoginPage = () => {
           </p>
         </div>
 
-        {/* Right: Login Form */}
         <div className="flex flex-col justify-center px-8 py-12">
           <h2 className="text-2xl font-bold text-blue-900 mb-6">
             Sign in to Done it

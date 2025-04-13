@@ -1,33 +1,72 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userData } from "../data/atom"; // Update path if needed
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [user, setUser] = useRecoilState(userData);
+  const navigate = useNavigate();
 
-  // Toggle the menu on mobile
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+
+  const handleLogout = () => {
+    localStorage.removeItem("x-auth-token");
+    setUser({});
+    navigate("/login");
   };
+
+  const isLoggedIn = !!user?.token;
 
   return (
     <nav className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex items-center justify-between">
-        {/* Logo or Brand */}
+        {/* Logo */}
         <div className="text-xl font-semibold">
-          <a href="/">Done</a>
+          <Link to="/">Done</Link>
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6">
+        <div className="hidden md:flex space-x-6 items-center">
           <Link to="/" className="hover:text-gray-400">
             Home
           </Link>
           <Link to="/dashboard" className="hover:text-gray-400">
             Dashboard
           </Link>
-          <Link to="/login" className="hover:text-gray-400">
-            Login
-          </Link>
+
+          {!isLoggedIn ? (
+            <Link to="/login" className="hover:text-gray-400">
+              Login
+            </Link>
+          ) : (
+            <div className="relative">
+              <button onClick={toggleDropdown} className="flex items-center gap-2">
+                <FaUserCircle className="text-2xl" />
+              </button>
+
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg z-50">
+                  <Link
+                    to="/dashboard"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    User Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -40,39 +79,39 @@ function Navbar() {
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden mt-4">
-          <a
-            href="/"
-            className="block py-2 px-4 text-gray-300 hover:bg-gray-700 rounded"
-          >
+        <div className="md:hidden mt-4 space-y-2">
+          <Link to="/" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded">
             Home
-          </a>
-          <a
-            href="/dashboard"
-            className="block py-2 px-4 text-gray-300 hover:bg-gray-700 rounded"
-          >
+          </Link>
+          <Link to="/dashboard" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded">
             Dashboard
-          </a>
-          <a
-            href="/login"
-            className="block py-2 px-4 text-gray-300 hover:bg-gray-700 rounded"
-          >
-            Login
-          </a>
+          </Link>
+
+          {!isLoggedIn ? (
+            <Link to="/login" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded">
+              Login
+            </Link>
+          ) : (
+            <>
+              <Link to="/dashboard" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded">
+                User Dashboard
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
+              >
+                Logout
+              </button>
+            </>
+          )}
         </div>
       )}
     </nav>
