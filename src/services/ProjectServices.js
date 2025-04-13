@@ -2,15 +2,24 @@ import axios from "axios";
 
 const API_URL = "https://task-manager-server-ugiw.onrender.com/api/project";
 
-export const fetchProjects = async () => {
+export const fetchProjects = async (user_id) => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(`https://task-manager-server-ugiw.onrender.com/project/${user_id}`);
     return response.data;
   } catch (error) {
-    throw new Error(error.response ? error.response.data : error.message);
+    // If the response is 404 (no projects), return empty array
+    if (error.response && error.response.status === 404) {
+      return {
+        success: false,
+        status: 404,
+        data: []
+      };
+    }
+
+    // Throw other errors (like network/server issues)
+    throw new Error(error.message || "An error occurred while fetching projects.");
   }
 };
-
 export const fetchProjectById = async (projectId) => {
   try {
     const response = await axios.get(`${API_URL}/${projectId}`);

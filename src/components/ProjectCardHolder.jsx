@@ -2,26 +2,31 @@ import React, { useState, useEffect } from "react";
 import ProjectCard from "./ProjectCard";
 import { fetchProjects } from "../services/ProjectServices";
 
-const ProjectCardHolder = () => {
+const ProjectCardHolder = ({ user_id }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const currentUserId = parseInt(user_id);
+
   useEffect(() => {
     const getProjects = async () => {
       try {
-        const data = await fetchProjects();
+        const data = await fetchProjects(currentUserId);
         setProjects(data.data);
-        setLoading(false);
       } catch (err) {
-        setError(err.message);
+        if (err.response && err.response.status === 404) {
+          setProjects([]); // No projects found
+        } else {
+          setError(err.message);
+        }
+      } finally {
         setLoading(false);
       }
     };
     getProjects();
-  }, []);
+  }, [currentUserId]);
 
-  // Function to remove a project from the list
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
       prevProjects.filter((project) => project.project_id !== projectId)
@@ -34,14 +39,16 @@ const ProjectCardHolder = () => {
   return (
     <div>
       {projects.length === 0 ? (
-        <div>No current projects</div>
+        <div className="text-gray-500 text-center mt-10 text-lg">
+          Add new projects to get started
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {projects.map((project) => (
             <ProjectCard
               key={project.project_id}
               project={project}
-              onDelete={handleDeleteProject} // Pass the onDelete function to each ProjectCard
+              onDelete={handleDeleteProject}
             />
           ))}
         </div>
