@@ -1,25 +1,43 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../services/User"; // Adjust path based on your structure
 
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await loginUser({ email, password });
+      console.log(response);
+      
+      // Store token if needed
+      localStorage.setItem("x-auth-token", response.token);
+
+      // Navigate to dashboard or home
+      navigate("/dashboard"); // Change path as needed
+    } catch (err) {
+      setError("Invalid email or password");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
       <div className="max-w-4xl w-full bg-gray-50 rounded-2xl shadow-xl overflow-hidden grid lg:grid-cols-2">
-        {/* Left: Branding / Illustration */}
+        {/* Left: Branding */}
         <div className="hidden lg:flex flex-col justify-center items-center bg-blue-900 text-white p-10">
           <h1 className="text-4xl font-extrabold mb-2">Done it</h1>
           <p className="text-blue-100 text-lg mb-4 italic">
             Your smart task companion
           </p>
           <p className="text-blue-100 text-center max-w-xs">
-            Stay on track, meet deadlines, and accomplish more with your
-            intelligent task tracker.
+            Stay on track, meet deadlines, and accomplish more with your intelligent task tracker.
           </p>
-          {/* <img
-            src="https://via.placeholder.com/300x200?text=Task+Tracking"
-            alt="Task tracking illustration"
-            className="mt-8 rounded-md"
-          /> */}
         </div>
 
         {/* Right: Login Form */}
@@ -28,15 +46,22 @@ const LoginPage = () => {
             Sign in to Done it
           </h2>
 
-          <form className="space-y-6">
+          {error && (
+            <div className="mb-4 text-red-600 text-sm font-medium">{error}</div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Email address
               </label>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="you@example.com"
+                required
               />
             </div>
 
@@ -46,8 +71,11 @@ const LoginPage = () => {
               </label>
               <input
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="••••••••"
+                required
               />
             </div>
 

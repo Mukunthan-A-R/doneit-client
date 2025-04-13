@@ -15,3 +15,20 @@ export const registerUser = async (userData) => {
     throw error;
   }
 };
+
+
+
+const API_URL_login = "https://task-manager-server-ugiw.onrender.com/login";
+
+export const loginUser = async (credentials) => {
+  try {
+    const response = await axios.post(API_URL_login, credentials);  
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Login failed:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
