@@ -8,7 +8,7 @@ import { ProjectState } from "../data/atom";
 const Graph = () => {
   
     const projectId =   useRecoilValue(ProjectState);
-
+   
   return (
     <div>
        <div className="min-h-screen flex">
