@@ -7,32 +7,48 @@ import TaskCard from "./TaskCard";
 const TaskCardHolder = ({ value }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
-  const project_id = useRecoilValue(ProjectState);
+  const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState(false);
-  const [loading,setLoading] = useState(true);
-
-  console.log(project_id);
+  const project_id = useRecoilValue(ProjectState);
 
   useEffect(() => {
+    let isMounted = true;
+
     const getData = async () => {
       try {
-        setLoading(true); // Start loading
+        setLoading(true);
         if (project_id === null) {
-          setLoading(false); // Still stop loading if no project selected
+          setTasks([]); // Clear tasks if no project selected
+          setLoading(false);
           return;
         }
-        const fetchedTasks = await fetchTasks(project_id);
-        setTasks(fetchedTasks.data);
+
+        // Add cache-busting param
+        const fetchedTasks = await fetchTasks(`${project_id}?_=${Date.now()}`);
+        if (isMounted) {
+          setTasks(fetchedTasks.data);
+        }
       } catch (err) {
-        setError(err.message);
+        if (isMounted) {
+          setError(err.message);
+        }
       } finally {
-        setLoading(false); // Done loading
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
-  
+
     getData();
+
+    return () => {
+      // Cleanup state on unmount
+      isMounted = false;
+      setTasks([]);
+      setError(null);
+      setLoading(true);
+    };
   }, [project_id, trigger, value]);
-  
 
   const handleStatusChange = (taskId, newStatus) => {
     setTasks((prevTasks) =>
@@ -43,39 +59,44 @@ const TaskCardHolder = ({ value }) => {
   };
 
   const handleEditClick = (taskId) => {
-    deleteTask(taskId);
+    deleteTask(taskId); // Consider separating edit vs delete!
     console.log("Edit task with ID:", taskId);
-    // You can implement a modal or navigate to an edit page
   };
 
   const handleDelete = async (taskId) => {
     try {
       const deletedTask = await deleteTask(taskId);
       console.log("Task deleted:", deletedTask);
-      console.log("Delete action completed for task ID:", taskId);
-      setTrigger(!trigger);
+      setTrigger((prev) => !prev);
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
 
-  // Separate tasks by status
+  // Categorize tasks
   const notStartedTasks = tasks.filter((task) => task.status === "not started");
   const inProgressTasks = tasks.filter((task) => task.status === "in progress");
   const completedTasks = tasks.filter((task) => task.status === "completed");
 
+  // UI rendering logic
   if (project_id === null) {
+    return <p className="text-xl text-red-600">Please select a project first</p>;
+  }
+
+  if (loading) {
+    return <p className="text-blue-500">Loading tasks...</p>;
+  }
+
+  if (!loading && tasks.length === 0) {
+    return <p className="text-gray-600">Please create a task to get started!</p>;
+  }
+
+  if (error) {
     return (
-      <p className="text-xl text-red-600">Please select a project first</p>
+      <p className="text-red-600">
+        An error occurred: {error}. Please try refreshing the page.
+      </p>
     );
-  }
-
-  if (tasks.length === 0) {
-    return <p>Please Create a Task to work !</p>;
-  }
-
-  if (error && parseInt(error.status) === 404) {
-    return <p>Error Occured Pls try refreshing the page !</p>;
   }
 
   return (
@@ -89,14 +110,7 @@ const TaskCardHolder = ({ value }) => {
           notStartedTasks.map((task) => (
             <TaskCard
               key={task.task_id}
-              task_id={task.task_id}
-              title={task.title}
-              status={task.status}
-              desc={task.description}
-              startDate={task.start_date}
-              endDate={task.end_date}
-              timeDuration={task.time_duration}
-              project_id={task.project_id} // Ensure project_id is passed here
+              {...task}
               onEditClick={handleEditClick}
               onhandleDelete={handleDelete}
               onStatusChange={handleStatusChange}
@@ -113,15 +127,8 @@ const TaskCardHolder = ({ value }) => {
         ) : (
           inProgressTasks.map((task) => (
             <TaskCard
-              key={task.task_id}  
-              task_id={task.task_id}
-              title={task.title}
-              status={task.status}
-              desc={task.description}
-              startDate={task.start_date}
-              endDate={task.end_date}
-              timeDuration={task.time_duration}
-              project_id={task.project_id} // Ensure project_id is passed here
+              key={task.task_id}
+              {...task}
               onEditClick={handleEditClick}
               onhandleDelete={handleDelete}
               onStatusChange={handleStatusChange}
@@ -139,14 +146,7 @@ const TaskCardHolder = ({ value }) => {
           completedTasks.map((task) => (
             <TaskCard
               key={task.task_id}
-              task_id={task.task_id}
-              title={task.title}
-              status={task.status}
-              desc={task.description}
-              startDate={task.start_date}
-              endDate={task.end_date}
-              timeDuration={task.time_duration}
-              project_id={task.project_id} // Ensure project_id is passed here
+              {...task}
               onEditClick={handleEditClick}
               onhandleDelete={handleDelete}
               onStatusChange={handleStatusChange}
@@ -154,9 +154,6 @@ const TaskCardHolder = ({ value }) => {
           ))
         )}
       </div>
-
-      {/* Show error message if there was an error */}
-      {/* {error && <p className="text-red-500">{error}</p>} */}
     </div>
   );
 };
