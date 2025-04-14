@@ -110,7 +110,14 @@ const TaskCardHolder = ({ value }) => {
           notStartedTasks.map((task) => (
             <TaskCard
               key={task.task_id}
-              {...task}
+               task_id={task.task_id}
+              title={task.title}
+              status={task.status}
+              desc={task.description}
+              startDate={task.start_date}
+              endDate={task.end_date}
+              timeDuration={task.time_duration}
+              project_id={task.project_id}
               onEditClick={handleEditClick}
               onhandleDelete={handleDelete}
               onStatusChange={handleStatusChange}
@@ -128,7 +135,14 @@ const TaskCardHolder = ({ value }) => {
           inProgressTasks.map((task) => (
             <TaskCard
               key={task.task_id}
-              {...task}
+               task_id={task.task_id}
+              title={task.title}
+              status={task.status}
+              desc={task.description}
+              startDate={task.start_date}
+              endDate={task.end_date}
+              timeDuration={task.time_duration}
+              project_id={task.project_id}
               onEditClick={handleEditClick}
               onhandleDelete={handleDelete}
               onStatusChange={handleStatusChange}
@@ -146,7 +160,14 @@ const TaskCardHolder = ({ value }) => {
           completedTasks.map((task) => (
             <TaskCard
               key={task.task_id}
-              {...task}
+               task_id={task.task_id}
+              title={task.title}
+              status={task.status}
+              desc={task.description}
+              startDate={task.start_date}
+              endDate={task.end_date}
+              timeDuration={task.time_duration}
+              project_id={task.project_id}
               onEditClick={handleEditClick}
               onhandleDelete={handleDelete}
               onStatusChange={handleStatusChange}

@@ -11,10 +11,10 @@ const GanttChart = ({ projectId }) => {
     const getTasks = async () => {
       try {
         const data = await fetchTasks(projectId);
-        setTasks(data);
+        setTasks(data.data); // ✅ FIXED: accessing the actual task array
 
-        if (data.length > 0) {
-          const earliest = data.reduce((min, task) =>
+        if (data.data.length > 0) {
+          const earliest = data.data.reduce((min, task) =>
             new Date(task.start_date) < new Date(min.start_date) ? task : min
           );
           setBaseDate(new Date(earliest.start_date));
@@ -48,11 +48,17 @@ const GanttChart = ({ projectId }) => {
     return <div className="text-red-600 text-center py-4">{error}</div>;
 
   if (!tasks.length || !baseDate)
-    return <div className="text-center py-6 text-gray-500 animate-pulse">Loading Gantt chart...</div>;
+    return (
+      <div className="text-center py-6 text-gray-500 animate-pulse">
+        Loading Gantt chart...
+      </div>
+    );
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-7xl mx-auto mt-10 border border-gray-200">
-      <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Your Project Graph</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+        Your Project Graph
+      </h2>
 
       {/* Grid Header */}
       <div className="grid grid-cols-13 font-semibold text-xs text-gray-600 border-b pb-2 mb-4">
@@ -103,7 +109,8 @@ const GanttChart = ({ projectId }) => {
 
       {/* Legend */}
       <div className="mt-6 text-sm text-gray-500 text-center">
-        Showing {NUM_DAYS} day window from <strong>{formatDate(baseDate)}</strong>
+        Showing {NUM_DAYS} day window from{" "}
+        <strong>{formatDate(baseDate)}</strong>
       </div>
     </div>
   );
