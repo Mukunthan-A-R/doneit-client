@@ -1,16 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProjectCardHolder from "../components/ProjectCardHolder";
 import ProjectToolbar from "../components/ProjectToolbar";
 
 import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
 
+import { useNavigate } from "react-router-dom";
+
+
 const Dashboard = () => {
   const [trigger,setTrigger] = useState(1)
+
+  const navigate = useNavigate(); // ✅ This gives you the navigate function
+
 
   const currentUserData = useRecoilValue(userData);
   console.log(currentUserData);
 
+  useEffect(() => {
+    const token = localStorage.getItem("x-auth-token");
+  
+    if (!token) {
+      navigate("/login"); // Redirects to login if token not found
+    }
+  }, [navigate]);
+  
   
   return (
     <div className="min-h-screen flex">
