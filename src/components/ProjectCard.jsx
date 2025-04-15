@@ -66,7 +66,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
         {/* Menu Icon */}
         <div className="absolute top-3 right-3">
           <button
-            className="text-gray-600 hover:text-gray-800 focus:outline-none"
+            className="text-gray-600 hover:text-gray-800 focus:outline-none cursor-pointer"
             onClick={toggleDropdown}
           >
             <svg
