@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../services/User"; // Adjust if needed
+import { loginUser } from "../services/User";
 import { useSetRecoilState } from "recoil";
-import { userData } from "../data/atom"; 
+import { userData } from "../data/atom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  const setUser = useSetRecoilState(userData); // ✅ recoil setter
+  const setUser = useSetRecoilState(userData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,28 +20,27 @@ const LoginPage = () => {
 
     try {
       const response = await loginUser({ email, password });
-      console.log(response);
 
       const token = response.token;
 
-      // Store token in local storage
+      // Store token in local storage (optional, but used elsewhere)
       localStorage.setItem("x-auth-token", token);
 
-    
-      // ✅ Update user data in Recoil
-      setUser({
+      const userPayload = {
         token,
         user_id: response.user.user_id,
         name: response.user.name,
         email: response.user.email,
         loggedIn: true,
-      });
+      };
 
-      // ✅ Show success and navigate
+      // ✅ Update Recoil and let atom persist to localStorage
+      setUser(userPayload);
+
       setSuccess("Login successful!");
       setTimeout(() => {
         navigate("/dashboard");
-      }, 1500);
+      }, 500);
     } catch (err) {
       setError("Invalid email or password");
     }
@@ -62,7 +61,8 @@ const LoginPage = () => {
             Your smart task companion
           </p>
           <p className="text-blue-100 text-center max-w-xs">
-            Stay on track, meet deadlines, and accomplish more with your intelligent task tracker.
+            Stay on track, meet deadlines, and accomplish more with your
+            intelligent task tracker.
           </p>
         </div>
 

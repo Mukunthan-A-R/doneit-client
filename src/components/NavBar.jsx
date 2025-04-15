@@ -15,7 +15,14 @@ function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("x-auth-token");
-    setUser({});
+    localStorage.removeItem("userData");
+    setUser({
+      token: null,
+      user_id: null,
+      name: "",
+      email: "",
+      loggedIn: false,
+    });
     navigate("/login");
   };
 
@@ -44,7 +51,10 @@ function Navbar() {
             </Link>
           ) : (
             <div className="relative">
-              <button onClick={toggleDropdown} className="flex items-center gap-2">
+              <button
+                onClick={toggleDropdown}
+                className="flex items-center gap-2"
+              >
                 <FaUserCircle className="text-2xl" />
               </button>
 
@@ -80,7 +90,12 @@ function Navbar() {
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </div>
@@ -88,20 +103,32 @@ function Navbar() {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden mt-4 space-y-2">
-          <Link to="/" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded">
+          <Link
+            to="/"
+            className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
+          >
             Home
           </Link>
-          <Link to="/dashboard" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded">
+          <Link
+            to="/dashboard"
+            className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
+          >
             Dashboard
           </Link>
 
           {!isLoggedIn ? (
-            <Link to="/login" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded">
+            <Link
+              to="/login"
+              className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
+            >
               Login
             </Link>
           ) : (
             <>
-              <Link to="/dashboard" className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded">
+              <Link
+                to="/dashboard"
+                className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
+              >
                 User Dashboard
               </Link>
               <button

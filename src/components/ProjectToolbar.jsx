@@ -14,7 +14,14 @@ const ProjectToolbar = ({ user_id, handleTrigger }) => {
 
   const handleLogout = () => {
     localStorage.removeItem("x-auth-token");
-    setUser({});
+    localStorage.removeItem("userData");
+    setUser({
+      token: null,
+      user_id: null,
+      name: "",
+      email: "",
+      loggedIn: false,
+    });
     navigate("/login");
   };
 
