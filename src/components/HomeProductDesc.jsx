@@ -1,8 +1,9 @@
-import React from "react";
+// src/components/HomeProductDesc.js
+import React, { forwardRef } from "react";
 
-const HomeProductDesc = () => {
+const HomeProductDesc = forwardRef((props, ref) => {
   return (
-    <section className="bg-white font-sans antialiased">
+    <section ref={ref} className="bg-white font-sans antialiased">
       <section className="bg-white py-20 px-6 md:px-12 lg:px-24">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -80,6 +81,6 @@ const HomeProductDesc = () => {
       </section>
     </section>
   );
-};
+});
 
 export default HomeProductDesc;
