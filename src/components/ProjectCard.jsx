@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { ProjectState } from "../data/atom";
 
-const ProjectCard = ({ project, onDelete }) => {
+const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedProjectData, setEditedProjectData] = useState({ ...project });
@@ -44,7 +44,8 @@ const ProjectCard = ({ project, onDelete }) => {
       setCurrentProject(project.project_id);
       console.log("Project updated successfully:", updatedProject);
       setIsEditing(false); // Close the edit mode after successful update
-      location.reload();
+      // location.reload();
+      handleEditTrigger();
     } catch (error) {
       console.error("Error updating project:", error);
       alert("Error updating project!");

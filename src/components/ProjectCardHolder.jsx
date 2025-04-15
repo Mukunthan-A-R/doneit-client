@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import ProjectCard from "./ProjectCard";
 import { fetchProjects } from "../services/ProjectServices";
 
-const ProjectCardHolder = ({ user_id , trigger}) => {
+const ProjectCardHolder = ({ user_id, trigger }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+  const [editTrigger, setEditTrigger] = useState(1);
+
   const currentUserId = parseInt(user_id);
 
   useEffect(() => {
@@ -25,7 +26,7 @@ const ProjectCardHolder = ({ user_id , trigger}) => {
       }
     };
     getProjects();
-  }, [currentUserId, trigger]);
+  }, [currentUserId, trigger, editTrigger]);
 
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
@@ -46,6 +47,9 @@ const ProjectCardHolder = ({ user_id , trigger}) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {projects.map((project) => (
             <ProjectCard
+              handleEditTrigger={() => {
+                setEditTrigger(editTrigger + 1);
+              }}
               key={project.project_id}
               project={project}
               onDelete={handleDeleteProject}
