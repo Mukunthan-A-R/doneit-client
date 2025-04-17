@@ -4,79 +4,89 @@ import PaperWork from "../../assets/paperwork.avif";
 
 const ProductivityBoost = () => {
   return (
-    <section className="bg-white py-20 px-6 md:px-12 lg:px-24 font-sans">
-      {/* Heading */}
-      <div className="max-w-3xl mx-auto text-center mb-20">
-        <h2 className="text-4xl font-bold text-blue-900 mb-4">
-          Boost Productivity with Smart Tracking
+    <section className="bg-white py-24 px-6 md:px-12 lg:px-32 font-sans">
+      {/* Section Header */}
+      <div className="max-w-4xl mx-auto text-center mb-20">
+        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          Drive Productivity with Smart Insights
         </h2>
-        <p className="text-gray-600 text-lg">
-          Empower your team with{" "}
-          <span className="text-blue-700 font-medium">insights</span> and{" "}
-          <span className="text-blue-700 font-medium">tools</span> designed to
-          increase efficiency and focus.
+        <p className="text-gray-600 text-lg leading-relaxed">
+          Equip your team with{" "}
+          <span className="text-blue-700 font-semibold">data-driven tools</span>{" "}
+          and
+          <span className="text-blue-700 font-semibold">
+            {" "}
+            real-time tracking
+          </span>{" "}
+          to stay focused and achieve more.
         </p>
       </div>
 
-      <div className="space-y-24">
-        {/* Row 1 */}
-        <div className="flex flex-col lg:flex-row items-center lg:gap-24 gap-12">
+      {/* Feature Blocks */}
+      <div className="space-y-28">
+        {/* Feature 1 */}
+        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           <div className="lg:w-1/2 text-center lg:text-left">
-            <h3 className="text-2xl font-semibold text-blue-800 mb-4">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4">
               Measurable Productivity Gains
             </h3>
-            <p className="text-gray-700 text-base leading-relaxed">
-              Teams using our platform have experienced up to{" "}
+            <p className="text-gray-700 text-lg leading-relaxed">
+              Teams using our platform report up to
               <span className="text-blue-600 font-semibold">
-                40% more completed tasks
+                {" "}
+                40% more task completions
               </span>
-              . Track progress visually and optimize workflow with{" "}
+              . Optimize workflows with
               <span className="text-blue-600 font-medium">
-                real-time updates
+                {" "}
+                real-time insights
               </span>{" "}
-              and{" "}
+              and
               <span className="text-blue-600 font-medium">
-                streamlined processes
+                {" "}
+                intuitive dashboards
               </span>
               .
             </p>
           </div>
           <div className="lg:w-1/2 w-full">
-            <div className="border border-gray-100 flex justify-center rounded-xl shadow-xl p-2 bg-gray-50">
+            <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md">
               <img
                 src={GraphImg}
-                alt="Productivity Improvement Graph"
-                className="rounded-lg md:w-2/3 w-full object-cover h-auto"
+                alt="Productivity Statistics"
+                className="object-cover w-full h-auto max-h-80 xl:max-h-72 2xl:max-h-64 transition duration-300 ease-in-out"
               />
             </div>
           </div>
         </div>
 
-        {/* Row 2 */}
-        <div className="flex flex-col lg:flex-row-reverse items-center lg:gap-24 gap-12">
+        {/* Feature 2 */}
+        <div className="flex flex-col lg:flex-row-reverse items-center gap-16 lg:gap-24">
           <div className="lg:w-1/2 text-center lg:text-left">
-            <h3 className="text-2xl font-semibold text-blue-800 mb-4">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4">
               Smarter Time Allocation
             </h3>
-            <p className="text-gray-700 text-base leading-relaxed">
-              Reduce{" "}
+            <p className="text-gray-700 text-lg leading-relaxed">
+              Reduce
               <span className="text-blue-600 font-medium">
+                {" "}
                 context switching
               </span>{" "}
-              with intelligent alerts and simplified task assignment. Your team
-              stays in sync while maintaining focus on{" "}
+              with smart notifications and focused task management. Prioritize
+              effortlessly and maintain team alignment on
               <span className="text-blue-600 font-medium">
-                high-priority tasks
+                {" "}
+                high-impact objectives
               </span>
               .
             </p>
           </div>
-          <div className="lg:w-1/2 w-full ">
-            <div className="border border-gray-100 flex justify-center rounded-xl shadow-xl p-2 bg-gray-50">
+          <div className="lg:w-1/2 w-full">
+            <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md">
               <img
                 src={PaperWork}
-                alt="Focus and Time Management Graph"
-                className="rounded-lg md:w-2/3 w-full object-cover"
+                alt="Team Focus and Planning"
+                className="object-cover w-full h-auto max-h-80 xl:max-h-72 2xl:max-h-64 transition duration-300 ease-in-out"
               />
             </div>
           </div>
