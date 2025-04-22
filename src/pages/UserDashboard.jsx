@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
 import { Link, useNavigate } from "react-router-dom";
 
+import { fetchProjects } from "../services/ProjectServices";
+
 const UserDashboard = () => {
   const navigate = useNavigate();
   const userDatas = useRecoilValue(userData);
+  const [projects, setProjects] = useState([]);
 
   const [user, setUser] = useState({
     email: userDatas.email,
@@ -26,6 +28,17 @@ const UserDashboard = () => {
     });
     navigate("/login");
   };
+
+  useEffect(() => {
+    const loadProjects = async () => {
+      const projectData = await fetchProjects(7); // fetch + get returned data
+      setProjects(projectData); // store in state
+    };
+
+    loadProjects(projects);
+  }, []);
+
+  console.log(projects);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100 text-gray-800 font-sans">
