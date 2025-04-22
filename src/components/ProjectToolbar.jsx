@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MenuItem from "./modals/MenuItem";
 import CreateProject from "./modals/CreateProject";
 import FormatProjects from "./modals/FormatProjects";
@@ -31,7 +31,9 @@ const ProjectToolbar = ({ user_id, handleTrigger }) => {
         <button onClick={() => setShowModal(true)}>
           <MenuItem text="Creat Project" />
         </button>
-        <MenuItem text="Edit User" />
+        <Link to="/user-dashboard">
+          <MenuItem text="User Data" />
+        </Link>
         <button onClick={() => setIsPopupOpen(true)}>
           <MenuItem text="Format Projects" />
         </button>
