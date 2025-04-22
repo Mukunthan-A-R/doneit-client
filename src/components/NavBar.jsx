@@ -61,7 +61,7 @@ function Navbar() {
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg z-50">
                   <Link
-                    to="/dashboard"
+                    to="/user-dashboard"
                     className="block px-4 py-2 hover:bg-gray-100"
                     onClick={() => setIsDropdownOpen(false)}
                   >
@@ -126,7 +126,7 @@ function Navbar() {
           ) : (
             <>
               <Link
-                to="/dashboard"
+                to="/user-dashboard"
                 className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
               >
                 User Dashboard

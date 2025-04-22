@@ -10,6 +10,7 @@ import Analytics from "./pages/Analytics";
 import Graph from "./pages/Graph";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import UserDashboard from "./pages/UserDashboard";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route exact path="/tasks" element={<TaskDashboard />} />
         <Route exact path="/analytics" element={<Analytics />} />
+        <Route exact path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/graph" element={<Graph />} />
