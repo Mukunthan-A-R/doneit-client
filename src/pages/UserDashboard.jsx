@@ -142,6 +142,20 @@ const UserDashboard = () => {
                       Deadline:{" "}
                       {new Date(project.end_date).toLocaleDateString()}
                     </p>
+                    <div>
+                      {/* Status Badge */}
+                      <span
+                        className={`px-3 py-1 rounded-full text-white text-xs ${
+                          project.priority === "high"
+                            ? "bg-red-500"
+                            : project.priority === "medium"
+                            ? "bg-yellow-500"
+                            : "bg-green-500"
+                        }`}
+                      >
+                        {project.priority}
+                      </span>
+                    </div>
                     <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
                       <div
                         className="bg-blue-700 h-2 rounded-full"
