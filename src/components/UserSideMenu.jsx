@@ -30,15 +30,15 @@ const UserSideMenu = () => {
           My Projects
         </Link>
 
+        <Link to="/settings" className="block py-3 px-6 hover:bg-blue-800">
+          Settings
+        </Link>
         <div
           onClick={handleLogout}
           className="block py-3 px-6 hover:bg-blue-800"
         >
           Logout
         </div>
-        <Link to="/settings" className="block py-3 px-6 hover:bg-blue-800">
-          Settings
-        </Link>
       </nav>
     </aside>
   );
