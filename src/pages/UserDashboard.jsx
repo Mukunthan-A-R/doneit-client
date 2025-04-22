@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
-import { Link, useNavigate } from "react-router-dom";
 
 import { fetchProjects } from "../services/ProjectServices";
+import UserSideMenu from "../components/UserSideMenu";
 
 const UserDashboard = () => {
-  const navigate = useNavigate();
   const userDatas = useRecoilValue(userData);
   const [projects, setProjects] = useState([]);
 
@@ -15,19 +14,6 @@ const UserDashboard = () => {
     name: userDatas.name,
     user_id: userDatas.user_id,
   });
-
-  const handleLogout = () => {
-    localStorage.removeItem("x-auth-token");
-    localStorage.removeItem("userData");
-    setUser({
-      token: null,
-      user_id: null,
-      name: "",
-      email: "",
-      loggedIn: false,
-    });
-    navigate("/login");
-  };
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -43,29 +29,7 @@ const UserDashboard = () => {
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100 text-gray-800 font-sans">
       {/* Sidebar */}
-      <aside className="w-64 bg-blue-900 text-white flex-shrink-0">
-        <div className="p-6 text-center text-2xl font-bold border-b border-blue-800">
-          TaskBoard
-        </div>
-        <nav className="mt-6">
-          <Link to="/dashboard" className="block py-3 px-6 hover:bg-blue-800">
-            Dashboard
-          </Link>
-          <Link to="/dashboard" className="block py-3 px-6 hover:bg-blue-800">
-            My Projects
-          </Link>
-
-          <div
-            onClick={handleLogout}
-            className="block py-3 px-6 hover:bg-blue-800"
-          >
-            Logout
-          </div>
-          <Link to="/settings" className="block py-3 px-6 hover:bg-blue-800">
-            Settings
-          </Link>
-        </nav>
-      </aside>
+      <UserSideMenu></UserSideMenu>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
