@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
-
 import { fetchProjects } from "../services/ProjectServices";
 import UserSideMenu from "../components/UserSideMenu";
 
@@ -18,10 +17,15 @@ const UserDashboard = () => {
   useEffect(() => {
     const loadProjects = async () => {
       const projectData = await fetchProjects(7); // fetch + get returned data
-      setProjects(projectData); // store in state
+      if (projectData.status === 404) {
+        // Handle the case when the fetch returns status 404
+        console.error("Error: " + projectData.message);
+        return;
+      }
+      setProjects(projectData.data); // store the 'data' array in state
     };
 
-    loadProjects(projects);
+    loadProjects();
   }, []);
 
   console.log(projects);
@@ -89,18 +93,9 @@ const UserDashboard = () => {
             </div>
             <ul className="divide-y divide-gray-200">
               {[
-                {
-                  title: "Design homepage wireframe",
-                  due: "Today",
-                },
-                {
-                  title: "Client feedback review",
-                  due: "3:00 PM",
-                },
-                {
-                  title: "Fix login validation bug",
-                  due: "5:30 PM",
-                },
+                { title: "Design homepage wireframe", due: "Today" },
+                { title: "Client feedback review", due: "3:00 PM" },
+                { title: "Fix login validation bug", due: "5:30 PM" },
               ].map((task, index) => (
                 <li
                   key={index}
@@ -118,47 +113,36 @@ const UserDashboard = () => {
             </ul>
           </div>
 
-          {/* Projects Section */}
+          {/* Ongoing Projects Section */}
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4 text-blue-900">
               Ongoing Projects
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  name: "Redesign Website",
-                  deadline: "April 30",
-                  progress: 65,
-                },
-                {
-                  name: "Mobile App Launch",
-                  deadline: "May 15",
-                  progress: 40,
-                },
-                {
-                  name: "Marketing Campaign",
-                  deadline: "May 1",
-                  progress: 80,
-                },
-              ].map((project, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-4 rounded shadow border-l-4 border-blue-700"
-                >
-                  <h3 className="font-semibold text-gray-800">
-                    {project.name}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Deadline: {project.deadline}
-                  </p>
-                  <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-blue-700 h-2 rounded-full"
-                      style={{ width: `${project.progress}%` }}
-                    ></div>
+              {projects.length > 0 ? (
+                projects.map((project) => (
+                  <div
+                    key={project.project_id}
+                    className="bg-white p-4 rounded shadow border-l-4 border-blue-700"
+                  >
+                    <h3 className="font-semibold text-gray-800">
+                      {project.name}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      Deadline:{" "}
+                      {new Date(project.end_date).toLocaleDateString()}
+                    </p>
+                    <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-700 h-2 rounded-full"
+                        style={{ width: `${project.progress}%` }}
+                      ></div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p>No ongoing projects</p>
+              )}
             </div>
           </div>
         </main>
