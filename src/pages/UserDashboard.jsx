@@ -8,6 +8,7 @@ import ProjectProgressTime from "../components/ProjectProgressTime";
 const UserDashboard = () => {
   const userDatas = useRecoilValue(userData);
   const [projects, setProjects] = useState([]);
+  const [totalProjects, setTotalProjects] = useState([]);
 
   const [user, setUser] = useState({
     email: userDatas.email,
@@ -17,19 +18,27 @@ const UserDashboard = () => {
 
   useEffect(() => {
     const loadProjects = async () => {
-      const projectData = await fetchProjects(7); // fetch + get returned data
+      const projectData = await fetchProjects(user.user_id); // fetch + get returned data
+      setTotalProjects(projectData.data.length);
+
       if (projectData.status === 404) {
         // Handle the case when the fetch returns status 404
         console.error("Error: " + projectData.message);
         return;
       }
-      setProjects(projectData.data); // store the 'data' array in state
+
+      // Filter ongoing projects
+      const ongoingProjects = projectData.data.filter((project) => {
+        const currentDate = new Date();
+        const endDate = new Date(project.end_date);
+        return project.status === "active" && endDate >= currentDate;
+      });
+
+      setProjects(ongoingProjects); // store the filtered 'ongoing' projects in state
     };
 
     loadProjects();
   }, []);
-
-  console.log(projects);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100 text-gray-800 font-sans">
@@ -64,8 +73,8 @@ const UserDashboard = () => {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
             {[
-              { title: "Tasks Today", count: 5 },
-              { title: "Upcoming", count: 12 },
+              { title: "Tasks Today", count: projects.length },
+              { title: "Total Projects", count: totalProjects },
               { title: "Completed", count: 38 },
               { title: "Overdue", count: 3, color: "text-red-600" },
             ].map((item, index) => (
@@ -126,7 +135,7 @@ const UserDashboard = () => {
                     key={project.project_id}
                     className="bg-white p-4 rounded shadow border-l-4 border-blue-700"
                   >
-                    <div className="flex items-center  space-x-2">
+                    <div className="flex items-center space-x-2">
                       <h3 className="font-semibold text-gray-800">
                         {project.name}
                       </h3>
