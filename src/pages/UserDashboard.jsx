@@ -9,6 +9,8 @@ const UserDashboard = () => {
   const userDatas = useRecoilValue(userData);
   const [projects, setProjects] = useState([]);
   const [totalProjects, setTotalProjects] = useState([]);
+  const [completedProjects, setCompletedProjects] = useState(0); // New state for completed projects
+  const [overdueProjects, setOverdueProjects] = useState(0); // New state for overdue projects
 
   const [user, setUser] = useState({
     email: userDatas.email,
@@ -35,10 +37,28 @@ const UserDashboard = () => {
       });
 
       setProjects(ongoingProjects); // store the filtered 'ongoing' projects in state
+
+      // Calculate completed and overdue projects
+      let completedCount = 0;
+      let overdueCount = 0;
+
+      projectData.data.forEach((project) => {
+        const currentDate = new Date();
+        const endDate = new Date(project.end_date);
+
+        if (project.status === "completed") {
+          completedCount++;
+        } else if (project.status === "active" && endDate < currentDate) {
+          overdueCount++;
+        }
+      });
+
+      setCompletedProjects(completedCount); // Set the completed projects count
+      setOverdueProjects(overdueCount); // Set the overdue projects count
     };
 
     loadProjects();
-  }, []);
+  }, [user.user_id]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100 text-gray-800 font-sans">
@@ -75,8 +95,12 @@ const UserDashboard = () => {
             {[
               { title: "Tasks Today", count: projects.length },
               { title: "Total Projects", count: totalProjects },
-              { title: "Completed", count: 38 },
-              { title: "Overdue", count: 3, color: "text-red-600" },
+              { title: "Completed", count: completedProjects }, // Updated with completedProjects state
+              {
+                title: "Overdue",
+                count: overdueProjects,
+                color: "text-red-600",
+              }, // Updated with overdueProjects state
             ].map((item, index) => (
               <div
                 key={index}
