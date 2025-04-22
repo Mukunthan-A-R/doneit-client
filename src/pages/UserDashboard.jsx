@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
 import { fetchProjects } from "../services/ProjectServices";
 import UserSideMenu from "../components/UserSideMenu";
+import ProjectProgressTime from "../components/ProjectProgressTime";
 
 const UserDashboard = () => {
   const userDatas = useRecoilValue(userData);
@@ -156,12 +157,7 @@ const UserDashboard = () => {
                         {project.priority}
                       </span>
                     </div>
-                    <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-blue-700 h-2 rounded-full"
-                        style={{ width: `${project.progress}%` }}
-                      ></div>
-                    </div>
+                    <ProjectProgressTime project={project} />
                   </div>
                 ))
               ) : (
