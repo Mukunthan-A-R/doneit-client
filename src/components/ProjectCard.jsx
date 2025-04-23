@@ -237,6 +237,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
                 onChange={handleInputChange}
                 className="mt-2 p-2 border border-gray-300 rounded w-full"
               >
+                <option value="">Select</option>
                 <option value="active">Active</option>
                 <option value="on-hold">On Hold</option>
               </select>
