@@ -17,7 +17,9 @@ const TaskToolbar = () => {
       <Link to="/graph">
         <MenuItem text="Graph" />
       </Link>
-
+      <Link to="/project-calendar">
+        <MenuItem text="Calendar" />
+      </Link>
       <MenuItem text="Format Tasks" />
       <MenuItem text="Settings" />
     </ul>
