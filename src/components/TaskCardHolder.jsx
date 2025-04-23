@@ -84,6 +84,9 @@ const TaskCardHolder = ({ value }) => {
   const inProgressTasks = tasks.filter((task) => task.status === "in progress");
   const completedTasks = tasks.filter((task) => task.status === "completed");
 
+  const allTasksCompleted =
+    tasks.length > 0 && tasks.length === completedTasks.length;
+
   if (!activeProjectId) {
     return (
       <p className="text-xl text-red-600">Please select a project first.</p>
@@ -105,37 +108,47 @@ const TaskCardHolder = ({ value }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 h-screen overflow-y-auto">
-      {/* Not Started Tasks */}
-      <TaskColumn
-        title="Not Started"
-        bg="bg-red-500"
-        tasks={notStartedTasks}
-        onEditClick={handleEditClick}
-        onDelete={handleDelete}
-        onStatusChange={handleStatusChange}
-      />
+    <>
+      {allTasksCompleted && (
+        <div className="col-span-3 text-center p-2 bg-green-100 text-green-800 rounded-md shadow-md">
+          <p>🎉 All tasks are completed! Great job! 🎉</p>
+          <button className="text-blue-700 hover:underline">
+            Mark Project as Completed !
+          </button>
+        </div>
+      )}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 h-screen overflow-y-auto">
+        {/* Not Started Tasks */}
+        <TaskColumn
+          title="Not Started"
+          bg="bg-red-500"
+          tasks={notStartedTasks}
+          onEditClick={handleEditClick}
+          onDelete={handleDelete}
+          onStatusChange={handleStatusChange}
+        />
 
-      {/* In Progress Tasks */}
-      <TaskColumn
-        title="In Progress"
-        bg="bg-blue-500"
-        tasks={inProgressTasks}
-        onEditClick={handleEditClick}
-        onDelete={handleDelete}
-        onStatusChange={handleStatusChange}
-      />
+        {/* In Progress Tasks */}
+        <TaskColumn
+          title="In Progress"
+          bg="bg-blue-500"
+          tasks={inProgressTasks}
+          onEditClick={handleEditClick}
+          onDelete={handleDelete}
+          onStatusChange={handleStatusChange}
+        />
 
-      {/* Completed Tasks */}
-      <TaskColumn
-        title="Completed"
-        bg="bg-green-500"
-        tasks={completedTasks}
-        onEditClick={handleEditClick}
-        onDelete={handleDelete}
-        onStatusChange={handleStatusChange}
-      />
-    </div>
+        {/* Completed Tasks */}
+        <TaskColumn
+          title="Completed"
+          bg="bg-green-500"
+          tasks={completedTasks}
+          onEditClick={handleEditClick}
+          onDelete={handleDelete}
+          onStatusChange={handleStatusChange}
+        />
+      </div>
+    </>
   );
 };
 
