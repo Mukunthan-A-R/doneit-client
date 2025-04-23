@@ -62,6 +62,8 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
     }));
   };
 
+  const remainingTime = calculateRemainingTime(project.end_date);
+
   return (
     <>
       <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-lg">
@@ -139,11 +141,16 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
             <div className="px-6 py-2 flex items-center justify-between">
               <div className="flex flex-col">
                 <span className="text-sm text-gray-600">Remaining Time</span>
-                <span className="flex gap-1">
-                  <p>{calculateRemainingTime(project.end_date).days} day</p>
-                  <p>{calculateRemainingTime(project.end_date).hours} hrs</p>
-                  <p>{calculateRemainingTime(project.end_date).minutes} min</p>
-                </span>
+
+                {remainingTime.overDue === 0 ? (
+                  <span className="flex gap-1">
+                    <p>{remainingTime.days} day</p>
+                    <p>{remainingTime.hours} hrs</p>
+                    <p>{remainingTime.minutes} min</p>
+                  </span>
+                ) : (
+                  <span className="text-red-600">Task Overdue</span>
+                )}
               </div>
               <Link
                 to="/tasks"
@@ -151,6 +158,8 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
               >
                 <button
                   onClick={() => {
+                    console.log(remainingTime);
+
                     setCurrentProject(project.project_id);
                     setCurrentProjectData(project);
                   }}
@@ -289,7 +298,7 @@ const calculateRemainingTime = (endDate) => {
   const end = new Date(endDate);
   const diffInMilliseconds = end - currentDate;
   if (diffInMilliseconds <= 0) {
-    return { message: "The project has ended" };
+    return { message: "The project has ended", overDue: 1 };
   }
 
   const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
@@ -305,6 +314,7 @@ const calculateRemainingTime = (endDate) => {
     hours: remainingHours,
     minutes: remainingMinutes,
     message: "Time remaining",
+    overDue: 0,
   };
 };
 
