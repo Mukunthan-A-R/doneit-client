@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { fetchUserById } from "../services/UserData";
+import { updateUserById } from "../services/UserData"; // <-- Import here
 
 const EditUserModal = ({ userId, onClose }) => {
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    role: "",
+  });
 
   useEffect(() => {
     const loadUserDetails = async () => {
@@ -11,6 +19,12 @@ const EditUserModal = ({ userId, onClose }) => {
         const response = await fetchUserById(userId);
         if (response.success && response.status === 200) {
           setUserDetails(response.data);
+          setFormData({
+            name: response.data.name || "",
+            email: response.data.email || "",
+            company: response.data.company || "",
+            role: response.data.role || "",
+          });
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -23,6 +37,24 @@ const EditUserModal = ({ userId, onClose }) => {
       loadUserDetails();
     }
   }, [userId]);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await updateUserById(userId, formData);
+      onClose(); // Close modal after successful update
+    } catch (error) {
+      console.error("Failed to update user:", error);
+      // Optionally show a message here
+    } finally {
+      setSaving(false);
+    }
+  };
 
   if (!userId) return null;
 
@@ -39,7 +71,7 @@ const EditUserModal = ({ userId, onClose }) => {
         {loading ? (
           <div className="text-center text-gray-500">Loading...</div>
         ) : userDetails ? (
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-blue-900 border-b pb-2 mb-4">
               Edit User Profile
             </h2>
@@ -50,8 +82,10 @@ const EditUserModal = ({ userId, onClose }) => {
               </label>
               <input
                 type="text"
-                defaultValue={userDetails.name}
-                className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-600 focus:ring focus:ring-blue-100 transition"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full rounded-md border border-gray-300 p-2"
               />
             </div>
 
@@ -61,8 +95,10 @@ const EditUserModal = ({ userId, onClose }) => {
               </label>
               <input
                 type="email"
-                defaultValue={userDetails.email}
-                className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-600 focus:ring focus:ring-blue-100 transition"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full rounded-md border border-gray-300 p-2"
               />
             </div>
 
@@ -72,8 +108,10 @@ const EditUserModal = ({ userId, onClose }) => {
               </label>
               <input
                 type="text"
-                defaultValue={userDetails.company}
-                className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-600 focus:ring focus:ring-blue-100 transition"
+                name="company"
+                value={formData.company}
+                onChange={handleChange}
+                className="w-full rounded-md border border-gray-300 p-2"
               />
             </div>
 
@@ -83,8 +121,10 @@ const EditUserModal = ({ userId, onClose }) => {
               </label>
               <input
                 type="text"
-                defaultValue={userDetails.role || ""}
-                className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-600 focus:ring focus:ring-blue-100 transition"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="w-full rounded-md border border-gray-300 p-2"
               />
             </div>
 
@@ -92,15 +132,16 @@ const EditUserModal = ({ userId, onClose }) => {
               <button
                 type="button"
                 onClick={onClose}
-                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 transition"
+                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-blue-700 text-white px-5 py-2 rounded-md hover:bg-blue-800 shadow-sm transition"
+                disabled={saving}
+                className="bg-blue-700 text-white px-5 py-2 rounded-md hover:bg-blue-800"
               >
-                Save Changes
+                {saving ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </form>
