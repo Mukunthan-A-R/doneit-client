@@ -158,8 +158,6 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
               >
                 <button
                   onClick={() => {
-                    console.log(remainingTime);
-
                     setCurrentProject(project.project_id);
                     setCurrentProjectData(project);
                   }}
