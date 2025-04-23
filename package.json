@@ -1,13 +1,13 @@
 {
-  "homepage":"https://Mukunthan-A-R.github.io/Done-client/",
+  "homepage": "https://Mukunthan-A-R.github.io/Done-client/",
   "name": "doneit-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "predeploy":"npm run build",
-    "deploy":"gh-pages -d dist",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -15,6 +15,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.3",
     "axios": "^1.8.4",
+    "date-fns": "^4.1.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.3.1",

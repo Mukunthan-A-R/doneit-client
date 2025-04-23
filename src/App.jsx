@@ -11,6 +11,7 @@ import Graph from "./pages/Graph";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import UserDashboard from "./pages/UserDashboard";
+import ProjectCalendar from "./pages/ProjectCalendar";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route exact path="/tasks" element={<TaskDashboard />} />
         <Route exact path="/analytics" element={<Analytics />} />
+        <Route exact path="/project-calendar" element={<ProjectCalendar />} />
         <Route exact path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
