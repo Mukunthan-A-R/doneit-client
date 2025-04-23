@@ -16,25 +16,26 @@ const CalendarCard = ({ startDate, endDate, tasksByDate = {} }) => {
   const end = new Date(endDate);
   const dates = getDatesInRange(start, end);
 
-  // Count total tasks in range
   const totalTasks = Object.values(tasksByDate).reduce(
     (sum, tasks) => sum + tasks.length,
     0
   );
 
   return (
-    <div className="bg-white shadow-xl rounded-xl p-6 overflow-hidden">
+    <div className="bg-white shadow-lg rounded-2xl p-6 overflow-hidden border border-gray-200">
       {/* Header */}
       <div className="flex justify-between items-start mb-6 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Project Calendar</h2>
-          <p className="text-sm text-gray-600">
+          <h2 className="text-3xl font-semibold text-gray-900">
+            Project Calendar
+          </h2>
+          <p className="text-sm text-gray-500">
             {format(start, "dd MMM yyyy")} — {format(end, "dd MMM yyyy")}
           </p>
         </div>
-        <div className="text-sm font-semibold text-gray-700 mt-2 md:mt-0">
-          <span className="text-blue-500">📋 Total Tasks:</span>{" "}
-          <span className="font-bold">{totalTasks}</span>
+        <div className="text-sm font-medium text-gray-700 mt-2 md:mt-0">
+          <span className="text-blue-600">Total Tasks:</span>{" "}
+          <span className="font-bold text-gray-900">{totalTasks}</span>
         </div>
       </div>
 
@@ -50,39 +51,47 @@ const CalendarCard = ({ startDate, endDate, tasksByDate = {} }) => {
             <div
               key={i}
               className={`
-                p-4 rounded-lg transition-all transform
-                ${
-                  today
-                    ? "bg-blue-600 text-white shadow-xl"
-                    : "bg-gray-50 text-gray-800"
-                }
+                p-4 rounded-xl transition-all transform
+                ${today ? "bg-blue-600 text-white" : "bg-gray-50 text-gray-800"}
                 ${weekend && !today ? "bg-red-50 text-red-600" : ""}
-                hover:shadow-2xl hover:scale-105 cursor-pointer
-                relative group
+                hover:shadow-md hover:scale-[1.02] cursor-pointer
+                relative group border border-gray-200
               `}
             >
-              <div className="font-bold text-lg mb-2">{format(date, "dd")}</div>
-              <div className="text-sm text-gray-500">{format(date, "EEE")}</div>
+              <div className="font-semibold text-lg mb-1">
+                {format(date, "dd")}
+              </div>
+              <div
+                className={`text-xs ${
+                  today ? "text-blue-100" : "text-gray-500"
+                }`}
+              >
+                {format(date, "EEE")}
+              </div>
 
               {/* Tasks under the date */}
-              <div className="mt-3 text-left max-h-28 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+              <div className="mt-3 text-left max-h-28 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 pr-1">
                 {tasks.map((task, idx) => (
                   <div
                     key={idx}
-                    className={`text-sm truncate ${
-                      today ? "text-white" : "text-gray-600"
-                    } mb-1 group-hover:text-blue-500`}
+                    className={`text-sm truncate mb-1 ${
+                      today ? "text-white" : "text-gray-700"
+                    } group-hover:text-blue-500`}
                     title={task.title}
                   >
-                    <span className="flex items-center">• {task.title}</span>
+                    <span className="flex items-center gap-1">
+                      • {task.title}
+                    </span>
                   </div>
                 ))}
               </div>
 
-              {/* Tooltip for tasks on hover */}
-              <div className="absolute top-0 right-0 text-xs text-white font-medium bg-blue-600 rounded-full px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
-              </div>
+              {/* Task count tooltip */}
+              {tasks.length > 0 && (
+                <div className="absolute top-2 right-2 text-[11px] text-white font-medium bg-blue-600 rounded-full px-2 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-sm">
+                  {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+                </div>
+              )}
             </div>
           );
         })}
