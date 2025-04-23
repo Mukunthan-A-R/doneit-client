@@ -4,6 +4,7 @@ import { deleteTask, fetchTasks } from "../services/TaskServices";
 import { useRecoilValue } from "recoil";
 import { ProjectState } from "../data/atom";
 import TaskCard from "./TaskCard";
+import { editProjectById, fetchProjectById } from "../services/ProjectServices";
 
 const TaskCardHolder = ({ value }) => {
   const { projectId } = useParams();
@@ -66,6 +67,23 @@ const TaskCardHolder = ({ value }) => {
     );
   };
 
+  const handleCompleteProject = async () => {
+    const result = await fetchProjectById(fallbackProjectId);
+    const editData = {
+      name: result.data.name,
+      description: result.data.description,
+      start_date: result.data.start_date,
+      end_date: result.data.end_date,
+      status: "completed",
+      priority: result.data.priority,
+      created: result.data.created,
+    };
+    const response = await editProjectById(fallbackProjectId, editData);
+    if (response) {
+      alert("Project marked as completed !");
+    }
+  };
+
   const handleEditClick = (taskId) => {
     console.log("Edit task with ID:", taskId);
     // navigate to edit page or trigger modal
@@ -112,7 +130,10 @@ const TaskCardHolder = ({ value }) => {
       {allTasksCompleted && (
         <div className="col-span-3 text-center p-2 bg-green-100 text-green-800 rounded-md shadow-md">
           <p>🎉 All tasks are completed! Great job! 🎉</p>
-          <button className="text-blue-700 hover:underline">
+          <button
+            className="text-blue-700 hover:underline"
+            onClick={handleCompleteProject}
+          >
             Mark Project as Completed !
           </button>
         </div>
