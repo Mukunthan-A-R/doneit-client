@@ -80,7 +80,9 @@ const TaskCardHolder = ({ value }) => {
     };
     const response = await editProjectById(fallbackProjectId, editData);
     if (response) {
-      alert("Project marked as completed !");
+      alert(
+        "Project marked as completed !\n Please go to the Project Dashbaord to see the changes !"
+      );
     }
   };
 
