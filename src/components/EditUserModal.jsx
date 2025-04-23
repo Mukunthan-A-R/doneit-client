@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchUserById } from "../services/UserData";
 import { updateUserById } from "../services/UserData"; // <-- Import here
 
-const EditUserModal = ({ userId, onClose }) => {
+const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -46,6 +46,7 @@ const EditUserModal = ({ userId, onClose }) => {
     e.preventDefault();
     setSaving(true);
     try {
+      handleSetUserDetails({ ...formData });
       await updateUserById(userId, formData);
       onClose(); // Close modal after successful update
     } catch (error) {

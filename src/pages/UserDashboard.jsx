@@ -5,6 +5,7 @@ import { fetchProjects } from "../services/ProjectServices";
 import UserSideMenu from "../components/UserSideMenu";
 import ProjectProgressTime from "../components/ProjectProgressTime";
 import EditUserModal from "../components/EditUserModal";
+import { fetchUserById } from "../services/UserData";
 
 const UserDashboard = () => {
   const userDatas = useRecoilValue(userData);
@@ -13,6 +14,12 @@ const UserDashboard = () => {
   const [completedProjects, setCompletedProjects] = useState(0); // New state for completed projects
   const [overdueProjects, setOverdueProjects] = useState(0); // New state for overdue projects
   const [showEditModal, setShowEditModal] = useState(false);
+  const [userDetails, setUserDetails] = useState({
+    name: "",
+    email: "",
+    company: "",
+    role: "",
+  });
 
   const [user, setUser] = useState({
     email: userDatas.email,
@@ -62,6 +69,21 @@ const UserDashboard = () => {
     loadProjects();
   }, [user.user_id]);
 
+  useEffect(() => {
+    const loadUserDetails = async () => {
+      try {
+        const response = await fetchUserById(user.user_id);
+        if (response.success && response.status === 200) {
+          setUserDetails(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    loadUserDetails();
+  }, [user.user_id, userDetails]);
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100 text-gray-800 font-sans">
       {/* Sidebar */}
@@ -69,6 +91,9 @@ const UserDashboard = () => {
 
       {showEditModal && (
         <EditUserModal
+          handleSetUserDetails={(data) => {
+            setUserDetails(data);
+          }}
           userId={user.user_id}
           onClose={() => setShowEditModal(false)}
         />
@@ -86,17 +111,17 @@ const UserDashboard = () => {
             />
             <div>
               <h2 className="text-xl font-semibold text-blue-900">
-                {user.name}
+                {userDetails.name}
               </h2>
-              <p className="text-sm text-gray-600">Project Manager</p>
-              <p className="text-sm text-gray-500">{user.email}</p>
+              <p className="text-sm text-gray-600">
+                {userDetails.role} ( {userDetails.company} )
+              </p>
+              <p className="text-sm text-gray-500">{userDetails.email}</p>
             </div>
           </div>
           <button
             className="text-blue-700 hover:underline"
             onClick={() => {
-              console.log("hi bro");
-
               setShowEditModal(true);
             }}
           >
