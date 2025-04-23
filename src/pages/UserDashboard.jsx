@@ -4,6 +4,7 @@ import { userData } from "../data/atom";
 import { fetchProjects } from "../services/ProjectServices";
 import UserSideMenu from "../components/UserSideMenu";
 import ProjectProgressTime from "../components/ProjectProgressTime";
+import EditUserModal from "../components/EditUserModal";
 
 const UserDashboard = () => {
   const userDatas = useRecoilValue(userData);
@@ -11,6 +12,7 @@ const UserDashboard = () => {
   const [totalProjects, setTotalProjects] = useState([]);
   const [completedProjects, setCompletedProjects] = useState(0); // New state for completed projects
   const [overdueProjects, setOverdueProjects] = useState(0); // New state for overdue projects
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const [user, setUser] = useState({
     email: userDatas.email,
@@ -20,7 +22,7 @@ const UserDashboard = () => {
 
   useEffect(() => {
     const loadProjects = async () => {
-      const projectData = await fetchProjects(user.user_id); // fetch + get returned data
+      const projectData = await fetchProjects(userDatas.user_id); // fetch + get returned data
       setTotalProjects(projectData.data.length);
 
       if (projectData.status === 404) {
@@ -65,6 +67,13 @@ const UserDashboard = () => {
       {/* Sidebar */}
       <UserSideMenu></UserSideMenu>
 
+      {showEditModal && (
+        <EditUserModal
+          userId={user.user_id}
+          onClose={() => setShowEditModal(false)}
+        />
+      )}
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* User Info Section */}
@@ -83,7 +92,14 @@ const UserDashboard = () => {
               <p className="text-sm text-gray-500">{user.email}</p>
             </div>
           </div>
-          <button className="text-blue-700 hover:underline">
+          <button
+            className="text-blue-700 hover:underline"
+            onClick={() => {
+              console.log("hi bro");
+
+              setShowEditModal(true);
+            }}
+          >
             Edit Profile
           </button>
         </section>
