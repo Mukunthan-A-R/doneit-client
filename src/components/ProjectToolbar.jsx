@@ -28,12 +28,12 @@ const ProjectToolbar = ({ user_id, handleTrigger }) => {
   return (
     <>
       <ul className="py-6">
-        <button className="w-full text-left" onClick={() => setShowModal(true)}>
-          <MenuItem text="Creat Project" />
-        </button>
         <Link to="/user-dashboard">
           <MenuItem text="User Data" />
         </Link>
+        <button className="w-full text-left" onClick={() => setShowModal(true)}>
+          <MenuItem text="Creat Project" />
+        </button>
         <button
           className="w-full text-left"
           onClick={() => setIsPopupOpen(true)}

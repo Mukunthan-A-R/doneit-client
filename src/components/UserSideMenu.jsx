@@ -24,9 +24,6 @@ const UserSideMenu = () => {
       </div>
       <nav className="mt-6">
         <Link to="/dashboard" className="block py-3 px-6 hover:bg-blue-800">
-          Dashboard
-        </Link>
-        <Link to="/dashboard" className="block py-3 px-6 hover:bg-blue-800">
           My Projects
         </Link>
 
