@@ -1,0 +1,12 @@
+import axios from "axios";
+
+const USER_API_URL = "https://task-manager-server-ugiw.onrender.com/api/user";
+
+export const fetchUserById = async (userId) => {
+  try {
+    const response = await axios.get(`${USER_API_URL}/${userId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response ? error.response.data : error.message);
+  }
+};
