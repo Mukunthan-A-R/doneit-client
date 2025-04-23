@@ -4,8 +4,13 @@ import CalendarCard from "../components/CalendarCard";
 import TaskToolbar from "../components/TaskToolbar";
 import TaskToolKit from "../components/TaskToolKit";
 
+import { useRecoilValue } from "recoil";
+import { CurrentProject } from "../data/atom";
+
 const ProjectCalendar = () => {
   const [trigger, setTrigger] = useState(1);
+  const currentProject = useRecoilValue(CurrentProject);
+
   const handleCreateTask = () => {
     setTrigger(trigger + 1);
   };
@@ -34,8 +39,8 @@ const ProjectCalendar = () => {
       </div>
       <div className="w-full lg:w-5/6 bg-white p-6">
         <CalendarCard
-          startDate="2025-04-20"
-          endDate="2025-05-05"
+          startDate={currentProject.start_date}
+          endDate={currentProject.end_date}
           tasksByDate={tasks}
         />
       </div>
