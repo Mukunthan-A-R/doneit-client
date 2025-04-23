@@ -5,7 +5,7 @@ import {
 } from "../services/ProjectServices";
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { ProjectState } from "../data/atom";
+import { ProjectState, CurrentProject } from "../data/atom";
 
 const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -13,6 +13,8 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
   const [editedProjectData, setEditedProjectData] = useState({ ...project });
 
   const [currentProject, setCurrentProject] = useRecoilState(ProjectState);
+  const [CurrentProjectData, setCurrentProjectData] =
+    useRecoilState(CurrentProject);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -150,6 +152,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
                 <button
                   onClick={() => {
                     setCurrentProject(project.project_id);
+                    setCurrentProjectData(project);
                   }}
                 >
                   Open

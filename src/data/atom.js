@@ -31,3 +31,17 @@ export const ProjectState = atom({
   key: "ProjectState",
   default: null,
 });
+
+export const CurrentProject = atom({
+  key: "CurrentProject",
+  default: {
+    id: null,
+    name: "",
+    description: "",
+    project_id: null,
+    start_date: null,
+    end_date: null,
+    priority: "",
+    status: "",
+  },
+});
