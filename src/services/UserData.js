@@ -10,3 +10,12 @@ export const fetchUserById = async (userId) => {
     throw new Error(error.response ? error.response.data : error.message);
   }
 };
+
+export const updateUserById = async (userId, userData) => {
+  try {
+    const response = await axios.put(`${USER_API_URL}/${userId}`, userData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response ? error.response.data : error.message);
+  }
+};
