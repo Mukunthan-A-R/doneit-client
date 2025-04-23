@@ -6,6 +6,8 @@ import UserSideMenu from "../components/UserSideMenu";
 import ProjectProgressTime from "../components/ProjectProgressTime";
 import EditUserModal from "../components/EditUserModal";
 import { fetchUserById } from "../services/UserData";
+import { fetchTasksByUserId } from "../services/miscService";
+import StatsCards from "../components/modals/StatsCards.js";
 
 const UserDashboard = () => {
   const userDatas = useRecoilValue(userData);
@@ -14,6 +16,7 @@ const UserDashboard = () => {
   const [completedProjects, setCompletedProjects] = useState(0); // New state for completed projects
   const [overdueProjects, setOverdueProjects] = useState(0); // New state for overdue projects
   const [showEditModal, setShowEditModal] = useState(false);
+  const [todaysTasks, setTodaysTasks] = useState([]);
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
@@ -83,6 +86,20 @@ const UserDashboard = () => {
 
     loadUserDetails();
   }, [user.user_id, userDetails]);
+
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const data = await fetchTasksByUserId(user.user_id);
+        setTodaysTasks(data.data || []);
+        console.log(data);
+      } catch (err) {
+        console.error("Error fetching user tasks:", err.message); // Log error
+      }
+    };
+
+    getTasks();
+  }, [user.user_id]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100 text-gray-800 font-sans">
@@ -162,31 +179,7 @@ const UserDashboard = () => {
           </div>
 
           {/* Task List */}
-          <div className="bg-white shadow rounded-lg overflow-hidden">
-            <div className="p-4 border-b border-gray-200 bg-blue-800 text-white font-semibold text-lg">
-              Today's Tasks
-            </div>
-            <ul className="divide-y divide-gray-200">
-              {[
-                { title: "Design homepage wireframe", due: "Today" },
-                { title: "Client feedback review", due: "3:00 PM" },
-                { title: "Fix login validation bug", due: "5:30 PM" },
-              ].map((task, index) => (
-                <li
-                  key={index}
-                  className="p-4 flex items-center justify-between"
-                >
-                  <div>
-                    <p className="font-medium">{task.title}</p>
-                    <p className="text-sm text-gray-500">Due: {task.due}</p>
-                  </div>
-                  <button className="text-blue-700 hover:underline">
-                    Mark Done
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <StatsCards todaysTasks={todaysTasks} />
 
           {/* Ongoing Projects Section */}
           <div className="mt-8">
