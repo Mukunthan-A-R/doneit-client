@@ -51,7 +51,7 @@ const Analytics = () => {
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800 flex flex-col">
       {/* Header */}
-      <header className="bg-blue-900 text-white py-4 px-6 shadow-md flex items-center justify-between">
+      <header className="bg-blue-950 text-white py-4 px-6 shadow-md flex items-center justify-between">
         <h1 className="text-2xl font-semibold">📊 Project Analytics</h1>
         <div className="text-sm font-medium opacity-80">
           Current Project: <span className="font-bold">{currentProject}</span>
@@ -60,7 +60,7 @@ const Analytics = () => {
 
       <div className="flex flex-col lg:flex-row flex-grow">
         {/* Sidebar */}
-        <aside className="bg-blue-950 text-white p-6 w-full lg:w-2/12">
+        <aside className="bg-blue-900 text-white w-full lg:w-2/12">
           <TaskToolbar />
         </aside>
 
