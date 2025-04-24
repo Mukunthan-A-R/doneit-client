@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import UserDashboard from "./pages/UserDashboard";
 import ProjectCalendar from "./pages/ProjectCalendar";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/graph" element={<Graph />} />
+        <Route path="/settings" element={<Settings />} />
         <Route element={<NotFound />} />
       </Routes>
       {/* <Footer />  */}
