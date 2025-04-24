@@ -6,8 +6,10 @@ import {
 import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { ProjectState, CurrentProject } from "../data/atom";
+import { useNavigate } from "react-router-dom";
 
 const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
+  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedProjectData, setEditedProjectData] = useState({ ...project });
@@ -63,6 +65,12 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
   };
 
   const remainingTime = calculateRemainingTime(project.end_date);
+
+  const handleNavigate = () => {
+    setCurrentProject(project.project_id);
+    setCurrentProjectData(project);
+    navigate("/tasks");
+  };
 
   return (
     <>
@@ -172,19 +180,12 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
                   Project Completed
                 </span>
               )}
-              <Link
-                to="/tasks"
+              <button
                 className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
+                onClick={handleNavigate}
               >
-                <button
-                  onClick={() => {
-                    setCurrentProject(project.project_id);
-                    setCurrentProjectData(project);
-                  }}
-                >
-                  Open
-                </button>
-              </Link>
+                Open
+              </button>
             </div>
           </>
         )}
