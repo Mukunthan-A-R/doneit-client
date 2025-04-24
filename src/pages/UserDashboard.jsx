@@ -150,7 +150,7 @@ const UserDashboard = () => {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
             {[
-              { title: "Tasks Today", count: projects.length },
+              { title: "Projects Today", count: projects.length },
               { title: "Total Projects", count: totalProjects },
               { title: "Completed", count: completedProjects }, // Updated with completedProjects state
               {
