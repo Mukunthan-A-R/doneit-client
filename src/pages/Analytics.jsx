@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchTasks } from "../services/TaskServices";
-import PieChart from "../components/PieChart"; // Import PieChart Component
+import PieChart from "../components/PieChart";
 import TaskToolbar from "../components/TaskToolbar";
 import { useRecoilValue } from "recoil";
 import { ProjectState } from "../data/atom";
@@ -23,7 +23,6 @@ const Analytics = () => {
     getData();
   }, [currentProject]);
 
-  // Count tasks by status
   const countTasksByStatus = () => {
     const counts = {
       remaining: 0,
@@ -45,103 +44,129 @@ const Analytics = () => {
   };
 
   const { remaining, completed, notStarted } = countTasksByStatus();
-
-  // Calculate completion percentage
   const totalTasks = tasks.length;
   const completionPercentage =
     totalTasks > 0 ? (completed / totalTasks) * 100 : 0;
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Sidebar - Task Toolbar */}
-      <div className="lg:w-2/12 w-full bg-blue-900 p-4">
-        <h2 className="text-white">Task Toolbar</h2>
-        <TaskToolbar />
-      </div>
-
-      {/* Right Side - Pie Chart and Stats */}
-      <div className="w-full lg:w-10/12 bg-gray-50 p-6 flex flex-col lg:flex-row justify-between items-center">
-        <div className="lg:w-1/2 w-full mb-6 lg:mb-0">
-          {/* Render the PieChart component with tasks as a prop */}
-          <div className="bg-white shadow-xl p-6 rounded-lg">
-            <h2 className="text-xl font-semibold mb-4 text-center text-gray-800">
-              Task Status Analytics
-            </h2>
-            <PieChart tasks={tasks} />
-          </div>
+    <div className="min-h-screen bg-gray-100 text-gray-800 flex flex-col">
+      {/* Header */}
+      <header className="bg-blue-900 text-white py-4 px-6 shadow-md flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">📊 Project Analytics</h1>
+        <div className="text-sm font-medium opacity-80">
+          Current Project: <span className="font-bold">{currentProject}</span>
         </div>
+      </header>
 
-        {/* Task Stats */}
-        <div className="lg:w-1/3 w-full flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-            Task Statistics
-          </h2>
-          <div className="space-y-4 w-full">
-            {/* Task Status Cards */}
-            <div className="bg-green-100 text-center py-4 px-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
-              <h3 className="text-xl font-semibold text-green-800">
-                Remaining Tasks
-              </h3>
-              <p className="text-2xl font-bold text-green-600">{remaining}</p>
-            </div>
-            <div className="bg-blue-100 text-center py-4 px-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
-              <h3 className="text-xl font-semibold text-blue-800">
-                Completed Tasks
-              </h3>
-              <p className="text-2xl font-bold text-blue-600">{completed}</p>
-            </div>
-            <div className="bg-yellow-100 text-center py-4 px-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
-              <h3 className="text-xl font-semibold text-yellow-800">
-                Not Started Tasks
-              </h3>
-              <p className="text-2xl font-bold text-yellow-600">{notStarted}</p>
+      <div className="flex flex-col lg:flex-row flex-grow">
+        {/* Sidebar */}
+        <aside className="bg-blue-950 text-white p-6 w-full lg:w-2/12">
+          <TaskToolbar />
+        </aside>
+
+        {/* Main Content */}
+        <main className="p-6 w-full lg:w-10/12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Pie Chart */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold text-center mb-4">
+                Task Distribution
+              </h2>
+              <PieChart tasks={tasks} />
             </div>
 
-            {/* Task Completion Percentage */}
-            <div className="bg-purple-100 text-center py-4 px-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
-              <h3 className="text-xl font-semibold text-purple-800">
-                Task Completion Percentage
-              </h3>
-              <p className="text-2xl font-bold text-purple-600">
-                {completionPercentage.toFixed(2)}%
-              </p>
+            {/* Statistics */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold text-center mb-6">
+                Task Insights
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <StatCard
+                  label="Remaining Tasks"
+                  value={remaining}
+                  color="green"
+                />
+                <StatCard
+                  label="Completed Tasks"
+                  value={completed}
+                  color="blue"
+                />
+                <StatCard
+                  label="Not Started"
+                  value={notStarted}
+                  color="yellow"
+                />
+                <StatCard
+                  label="Completion"
+                  value={`${completionPercentage.toFixed(2)}%`}
+                  color="purple"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Additional Stats - Optional */}
-          <div className="mt-6 bg-white p-4 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Overall Stats
+          {/* Summary Table - Professional & Themed */}
+          <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold text-blue-900 border-b-2 border-blue-700 pb-2 mb-4">
+              Summary Overview
             </h3>
-            <table className="table-auto w-full mt-4">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 text-left text-gray-600">Metric</th>
-                  <th className="px-4 py-2 text-left text-gray-600">Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="px-4 py-2">Total Tasks</td>
-                  <td className="px-4 py-2">{totalTasks}</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-2">Completed Tasks</td>
-                  <td className="px-4 py-2">{completed}</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-2">Remaining Tasks</td>
-                  <td className="px-4 py-2">{remaining}</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-2">Not Started Tasks</td>
-                  <td className="px-4 py-2">{notStarted}</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm text-gray-800">
+                <thead className="bg-blue-900 text-white uppercase text-xs tracking-wider">
+                  <tr>
+                    <th className="text-left px-4 py-3">Metric</th>
+                    <th className="text-left px-4 py-3">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="even:bg-blue-50">
+                    <td className="px-4 py-3 font-medium">Total Tasks</td>
+                    <td className="px-4 py-3 text-blue-900 font-semibold">
+                      {totalTasks}
+                    </td>
+                  </tr>
+                  <tr className="even:bg-blue-50">
+                    <td className="px-4 py-3 font-medium">Completed Tasks</td>
+                    <td className="px-4 py-3 text-green-700 font-semibold">
+                      {completed}
+                    </td>
+                  </tr>
+                  <tr className="even:bg-blue-50">
+                    <td className="px-4 py-3 font-medium">Remaining Tasks</td>
+                    <td className="px-4 py-3 text-yellow-700 font-semibold">
+                      {remaining}
+                    </td>
+                  </tr>
+                  <tr className="even:bg-blue-50">
+                    <td className="px-4 py-3 font-medium">Not Started Tasks</td>
+                    <td className="px-4 py-3 text-red-600 font-semibold">
+                      {notStarted}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </main>
       </div>
+    </div>
+  );
+};
+
+const StatCard = ({ label, value, color }) => {
+  const colorMap = {
+    green: "bg-green-100 text-green-700",
+    blue: "bg-blue-100 text-blue-700",
+    yellow: "bg-yellow-100 text-yellow-700",
+    purple: "bg-purple-100 text-purple-700",
+  };
+
+  return (
+    <div
+      className={`p-4 rounded-lg shadow hover:shadow-lg transition-all duration-300 ${colorMap[color]}`}
+    >
+      <h4 className="text-md font-semibold">{label}</h4>
+      <p className="text-2xl font-bold">{value}</p>
     </div>
   );
 };

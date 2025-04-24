@@ -1,5 +1,5 @@
 import React from "react";
-import { Pie } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   Title,
@@ -10,7 +10,6 @@ import {
   LinearScale,
 } from "chart.js";
 
-// Register the necessary chart.js components
 ChartJS.register(
   Title,
   Tooltip,
@@ -21,13 +20,11 @@ ChartJS.register(
 );
 
 const PieChart = ({ tasks }) => {
-  // Check if tasks are available
   if (!Array.isArray(tasks)) {
     console.error("Expected tasks to be an array, but got:", tasks);
     return <p>No tasks data available</p>;
   }
 
-  // Count tasks by their status
   const countTasksByStatus = () => {
     const counts = {
       remaining: 0,
@@ -49,34 +46,44 @@ const PieChart = ({ tasks }) => {
   };
 
   const { remaining, completed, notStarted } = countTasksByStatus();
+  const total = remaining + completed + notStarted;
 
-  // Pie chart data
   const data = {
-    labels: ["Remaining", "Completed", "Not Started"],
+    labels: ["In Progress / Pending", "Completed", "Not Started"],
     datasets: [
       {
         label: "Task Status",
         data: [remaining, completed, notStarted],
-        backgroundColor: ["#FFEB3B", "#4CAF50", "#FF5733"],
-        borderColor: ["#FFEB3B", "#4CAF50", "#FF5733"],
-        borderWidth: 1,
+        backgroundColor: ["#F59E0B", "#10B981", "#E11D48"],
+        hoverOffset: 8,
+        borderWidth: 2,
+        cutout: "60%", // Donut effect
       },
     ],
   };
 
-  // Pie chart options
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top",
+        position: "bottom",
+        labels: {
+          boxWidth: 18,
+          padding: 20,
+          color: "#374151",
+          font: {
+            size: 14,
+            weight: "500",
+          },
+        },
       },
       tooltip: {
         callbacks: {
           label: function (tooltipItem) {
-            const label = tooltipItem.label;
             const value = tooltipItem.raw;
-            return `${label}: ${value} tasks`;
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${tooltipItem.label}: ${value} tasks (${percentage}%)`;
           },
         },
       },
@@ -84,8 +91,8 @@ const PieChart = ({ tasks }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <Pie data={data} options={options} />
+    <div className="w-full max-w-md mx-auto h-[300px] relative">
+      <Doughnut data={data} options={options} />
     </div>
   );
 };
