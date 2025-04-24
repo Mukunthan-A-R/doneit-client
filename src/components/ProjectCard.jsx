@@ -130,10 +130,24 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
                 )}
                 <h2 className="text-xl font-semibold text-blue-800">
                   {project.name}
+                  <span
+                    className={`text-xs font-semibold px-2 py-1 rounded-full ml-4 ${
+                      project.priority === "high"
+                        ? "bg-red-100 text-red-800"
+                        : project.priority === "medium"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : project.priority === "low"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    {project.priority?.toUpperCase()}
+                  </span>
                 </h2>
               </div>
               <p className="text-gray-600 mt-2">{project.description}</p>
             </div>
+
             <div className="pl-6">
               <p className="text-sm text-gray-600">DeadLine</p>
               <p>{formatDate(project.end_date)}</p>
