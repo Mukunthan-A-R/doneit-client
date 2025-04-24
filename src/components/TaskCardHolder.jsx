@@ -16,7 +16,6 @@ const TaskCardHolder = ({ value }) => {
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState(false);
 
-  // This is the cleanup function inside the useEffect
   useEffect(() => {
     let isMounted = true;
 
@@ -48,11 +47,8 @@ const TaskCardHolder = ({ value }) => {
 
     getData();
 
-    // Cleanup function when component unmounts
     return () => {
       isMounted = false;
-      // You can add any cleanup logic here
-      console.log("Component is unmounting, cleanup happening...");
       setTasks([]);
       setError(null);
       setLoading(false);
@@ -81,20 +77,19 @@ const TaskCardHolder = ({ value }) => {
     const response = await editProjectById(fallbackProjectId, editData);
     if (response) {
       alert(
-        "Project marked as completed !\n Please go to the Project Dashbaord to see the changes !"
+        "Project marked as completed !\n Please go to the Project Dashboard to see the changes !"
       );
     }
   };
 
   const handleEditClick = (taskId) => {
     console.log("Edit task with ID:", taskId);
-    // navigate to edit page or trigger modal
   };
 
   const handleDelete = async (taskId) => {
     try {
       await deleteTask(taskId);
-      setTrigger((prev) => !prev); // triggers refetch
+      setTrigger((prev) => !prev);
     } catch (error) {
       console.error("Error deleting task:", error);
     }
@@ -130,41 +125,38 @@ const TaskCardHolder = ({ value }) => {
   return (
     <>
       {allTasksCompleted && (
-        <div className="col-span-3 text-center p-2 bg-green-100 text-green-800 rounded-md shadow-md">
-          <p>🎉 All tasks are completed! Great job! 🎉</p>
+        <div className="col-span-3 text-center p-4 bg-green-200 text-green-800 rounded-md">
+          <p>🎉 All tasks are completed! 🎉</p>
           <button
-            className="text-blue-700 hover:underline"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md"
             onClick={handleCompleteProject}
           >
-            Mark Project as Completed !
+            Mark Project as Completed
           </button>
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 h-screen overflow-y-auto">
-        {/* Not Started Tasks */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 p-8 min-h-screen bg-gray-50">
         <TaskColumn
           title="Not Started"
-          bg="bg-red-500"
+          bg="bg-gradient-to-b from-red-500 to-red-400"
           tasks={notStartedTasks}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
           onStatusChange={handleStatusChange}
         />
 
-        {/* In Progress Tasks */}
         <TaskColumn
           title="In Progress"
-          bg="bg-blue-500"
+          bg="bg-gradient-to-b from-blue-500 to-blue-400"
           tasks={inProgressTasks}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
           onStatusChange={handleStatusChange}
         />
 
-        {/* Completed Tasks */}
         <TaskColumn
           title="Completed"
-          bg="bg-green-500"
+          bg="bg-gradient-to-b from-green-500 to-green-400"
           tasks={completedTasks}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
@@ -177,7 +169,6 @@ const TaskCardHolder = ({ value }) => {
 
 export default TaskCardHolder;
 
-// Helper Component
 const TaskColumn = ({
   title,
   bg,
@@ -186,10 +177,10 @@ const TaskColumn = ({
   onDelete,
   onStatusChange,
 }) => (
-  <div className={`${bg} text-white p-6 rounded-lg`}>
-    <h2 className="text-xl font-semibold">{title}</h2>
+  <div className={`${bg} text-white p-6 rounded-md shadow-lg h-full`}>
+    <h2 className="text-xl font-medium mb-4">{title}</h2>
     {tasks.length === 0 ? (
-      <p>No tasks to show</p>
+      <p className="text-gray-200">No tasks to show</p>
     ) : (
       tasks.map((task) => (
         <TaskCard
