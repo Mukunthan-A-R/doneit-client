@@ -97,9 +97,10 @@ const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
               <input
                 type="email"
                 name="email"
+                disabled
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-md border border-gray-300 p-2"
+                className="w-full rounded-md border border-gray-300 p-2 bg-gray-100 text-gray-500 border border-gray-300 rounded px-3 py-2 w-full cursor-not-allowed"
               />
             </div>
 
