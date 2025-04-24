@@ -139,19 +139,25 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
               <p>{formatDate(project.end_date)}</p>
             </div>
             <div className="px-6 py-2 flex items-center justify-between">
-              <div className="flex flex-col">
-                <span className="text-sm text-gray-600">Remaining Time</span>
+              {editedProjectData.status !== "completed" ? (
+                <div className="flex flex-col">
+                  <span className="text-sm text-gray-600">Remaining Time</span>
 
-                {remainingTime.overDue === 0 ? (
-                  <span className="flex gap-1">
-                    <p>{remainingTime.days} day</p>
-                    <p>{remainingTime.hours} hrs</p>
-                    <p>{remainingTime.minutes} min</p>
-                  </span>
-                ) : (
-                  <span className="text-red-600">Task Overdue</span>
-                )}
-              </div>
+                  {remainingTime.overDue === 0 ? (
+                    <span className="flex gap-1">
+                      <p>{remainingTime.days} day</p>
+                      <p>{remainingTime.hours} hrs</p>
+                      <p>{remainingTime.minutes} min</p>
+                    </span>
+                  ) : (
+                    <span className="text-red-600">Task Overdue</span>
+                  )}
+                </div>
+              ) : (
+                <span className="text-sm text-green-600">
+                  Project Completed
+                </span>
+              )}
               <Link
                 to="/tasks"
                 className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
