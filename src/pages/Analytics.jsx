@@ -50,22 +50,24 @@ const Analytics = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800 flex flex-col">
-      {/* Header */}
-      <header className="bg-blue-950 text-white py-4 px-6 shadow-md flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">📊 Project Analytics</h1>
-        <div className="text-sm font-medium opacity-80">
-          Current Project: <span className="font-bold">{currentProject}</span>
-        </div>
-      </header>
-
       <div className="flex flex-col lg:flex-row flex-grow">
         {/* Sidebar */}
-        <aside className="bg-blue-900 text-white w-full lg:w-2/12">
-          <TaskToolbar />
-        </aside>
+        <div className={`lg:block w-1/6 bg-blue-900 p-4`}>
+          <h2 className="text-white">Task Toolbar</h2>
+          <TaskToolbar></TaskToolbar>
+        </div>
 
         {/* Main Content */}
         <main className="p-6 w-full lg:w-10/12">
+          {/* Header */}
+          <header className="bg-blue-950 text-white py-4 px-6 shadow-md flex items-center justify-between">
+            <h1 className="text-2xl font-semibold">📊 Project Analytics</h1>
+            <div className="text-sm font-medium opacity-80">
+              Current Project:{" "}
+              <span className="font-bold">{currentProject}</span>
+            </div>
+          </header>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Pie Chart */}
             <div className="bg-white p-6 rounded-lg shadow-md">
