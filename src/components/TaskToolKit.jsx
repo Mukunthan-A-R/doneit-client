@@ -31,7 +31,7 @@ const TaskToolKit = ({ onCreateTask }) => {
             <MdInfoOutline size={30} />
           </button>
           {hoveredButton === "info" && (
-            <div className="absolute bottom-0 left-0 bg-blue-800 text-white text-sm p-1 rounded-md w-32 mt-2">
+            <div className="absolute left-full top-0 bg-blue-800 text-white text-sm p-1 rounded-md w-48 ml-2">
               {toolDescriptions.info}
             </div>
           )}
@@ -50,7 +50,7 @@ const TaskToolKit = ({ onCreateTask }) => {
             <IoMdAddCircleOutline size={30} />
           </button>
           {hoveredButton === "createTask" && (
-            <div className="absolute bottom-0 left-0 bg-blue-800 text-white text-sm p-1 rounded-md w-32 mt-2">
+            <div className="absolute left-full top-0 bg-blue-800 text-white text-sm p-1 rounded-md w-48 ml-2">
               {toolDescriptions.createTask}
             </div>
           )}
