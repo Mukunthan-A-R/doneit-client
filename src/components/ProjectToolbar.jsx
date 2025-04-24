@@ -40,8 +40,9 @@ const ProjectToolbar = ({ user_id, handleTrigger }) => {
         >
           <MenuItem text="Format Projects" />
         </button>
-
-        <MenuItem to="/settings" text="Settings" />
+        <Link to="/settings" className="w-full text-left">
+          <MenuItem text="Settings" />
+        </Link>
 
         <button className="w-full text-left" onClick={() => handleLogout()}>
           <MenuItem text="Logout" />

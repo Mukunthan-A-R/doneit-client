@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
 
 import { useNavigate } from "react-router-dom";
+import SettingsPage from "../components/SettingsPage";
 
 const Settings = () => {
   const [trigger, setTrigger] = useState(1);
@@ -37,6 +38,7 @@ const Settings = () => {
 
       <div className="w-full lg:w-5/6 bg-white p-6">
         <h1 className="text-2xl font-semibold pb-4">Your Settings !</h1>
+        <SettingsPage></SettingsPage>
       </div>
     </div>
   );
