@@ -28,6 +28,9 @@ const ProjectToolbar = ({ user_id, handleTrigger }) => {
   return (
     <>
       <ul className="py-6">
+        <Link to="/dashboard">
+          <MenuItem text="Dashboard" />
+        </Link>
         <Link to="/user-dashboard">
           <MenuItem text="User Data" />
         </Link>
