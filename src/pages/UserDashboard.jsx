@@ -85,14 +85,13 @@ const UserDashboard = () => {
     };
 
     loadUserDetails();
-  }, [user.user_id, userDetails]);
+  }, [user.user_id]);
 
   useEffect(() => {
     const getTasks = async () => {
       try {
         const data = await fetchTasksByUserId(user.user_id);
         setTodaysTasks(data.data || []);
-        console.log(data);
       } catch (err) {
         console.error("Error fetching user tasks:", err.message); // Log error
       }
