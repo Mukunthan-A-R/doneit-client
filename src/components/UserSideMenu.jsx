@@ -1,8 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { userData } from "../data/atom";
 
 const UserSideMenu = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useRecoilState(userData);
 
   const handleLogout = () => {
     localStorage.removeItem("x-auth-token");
