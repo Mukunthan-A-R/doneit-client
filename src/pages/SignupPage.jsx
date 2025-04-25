@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 import { registerUser } from "../services/User"; // Import the registerUser function
 
 const SignupPage = () => {
@@ -16,6 +16,8 @@ const SignupPage = () => {
   const [loading, setLoading] = useState(false); // Loading state to show a loader
   const [successMessage, setSuccessMessage] = useState(""); // Success message
   const [errorMessage, setErrorMessage] = useState(""); // Error message
+
+  const navigate = useNavigate(); // Initialize useNavigate for redirection
 
   const validate = () => {
     const newErrors = {};
@@ -80,6 +82,12 @@ const SignupPage = () => {
       const response = await registerUser(payload); // Send data using the registerUser function
       console.log("User registered:", response);
       setSuccessMessage("Registration successful! Please Login"); // Set success message
+
+      // Show success popup for 1 second and redirect
+      setTimeout(() => {
+        navigate("/login"); // Redirect to login page
+      }, 1000); // 1 second delay
+
       setFormData({
         first_name: "",
         last_name: "",
