@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { createTask } from "../../services/TaskServices"; // Import the function to create task
+import { createTask } from "../../services/TaskServices";
 import { useRecoilValue } from "recoil";
 import { ProjectState } from "../../data/atom";
 
 const CreateTask = ({ show, onClose, onCreateTask }) => {
   const currentProjectId = useRecoilValue(ProjectState);
+
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
@@ -89,14 +90,20 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      return; // Don't submit if form is invalid
+      return;
     }
 
     try {
-      // Call the createTask function to create a new task
-      const newTask = await createTask(taskData);
+      // Optional: convert date-only to ISO if backend expects a datetime
+      const formattedTaskData = {
+        ...taskData,
+        start_date: `${taskData.start_date}T00:00:00Z`,
+        end_date: `${taskData.end_date}T23:59:59Z`,
+      };
+
+      const newTask = await createTask(formattedTaskData);
       console.log("Task created successfully:", newTask);
-      onClose(); // Close the modal after submission
+      onClose();
       onCreateTask();
     } catch (error) {
       console.error("Error creating task:", error);
@@ -104,7 +111,7 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
     }
   };
 
-  if (!show) return null; // Don't render if show is false
+  if (!show) return null;
 
   return (
     <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
@@ -112,7 +119,7 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
         <h2 className="text-2xl font-semibold mb-4">Create Task</h2>
 
         <form onSubmit={handleSubmit}>
-          {/* Task Title Field */}
+          {/* Task Title */}
           <div className="mb-4">
             <label htmlFor="title" className="block text-sm font-semibold">
               Task Title
@@ -131,7 +138,7 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Task Description Field */}
+          {/* Task Description */}
           <div className="mb-4">
             <label
               htmlFor="description"
@@ -152,7 +159,7 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Task Status Field */}
+          {/* Task Status */}
           <div className="mb-4">
             <label htmlFor="status" className="block text-sm font-semibold">
               Status
@@ -174,7 +181,7 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Time Duration Field */}
+          {/* Time Duration */}
           <div className="mb-4">
             <label
               htmlFor="time_duration"
@@ -196,13 +203,13 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Start Date Field */}
+          {/* Start Date (date-only input) */}
           <div className="mb-4">
             <label htmlFor="start_date" className="block text-sm font-semibold">
               Start Date
             </label>
             <input
-              type="datetime-local"
+              type="date"
               id="start_date"
               name="start_date"
               value={taskData.start_date}
@@ -215,13 +222,13 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* End Date Field */}
+          {/* End Date (date-only input) */}
           <div className="mb-4">
             <label htmlFor="end_date" className="block text-sm font-semibold">
               End Date
             </label>
             <input
-              type="datetime-local"
+              type="date"
               id="end_date"
               name="end_date"
               value={taskData.end_date}
@@ -234,12 +241,12 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Form submission */}
+          {/* Form Actions */}
           <div className="flex justify-end space-x-2">
             <button
               type="button"
               className="bg-gray-300 text-black px-4 py-2 rounded"
-              onClick={onClose} // Close modal
+              onClick={onClose}
             >
               Cancel
             </button>
