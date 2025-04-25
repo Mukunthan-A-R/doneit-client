@@ -72,6 +72,9 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
     navigate("/tasks");
   };
 
+  const truncate = (str, max = 20) =>
+    str.length > max ? str.slice(0, max) + "..." : str;
+
   return (
     <>
       <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-lg">
@@ -136,22 +139,25 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
                 ) : (
                   <div className="w-4 h-4 rounded-full bg-red-600"></div>
                 )}
-                <h2 className="text-xl font-semibold text-blue-800">
-                  {project.name}
-                  <span
-                    className={`text-xs font-semibold px-2 py-1 rounded-full ml-4 ${
-                      project.priority === "high"
-                        ? "bg-red-100 text-red-800"
-                        : project.priority === "medium"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : project.priority === "low"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-200 text-gray-700"
-                    }`}
-                  >
-                    {project.priority?.toUpperCase()}
-                  </span>
+                <h2
+                  className="text-xl font-semibold text-blue-800 truncate w-[160px]"
+                  title={project.name}
+                >
+                  {truncate(project.name, 20)}
                 </h2>
+                <span
+                  className={`text-xs font-semibold px-2 py-1 rounded-full ml-4 ${
+                    project.priority === "high"
+                      ? "bg-red-100 text-red-800"
+                      : project.priority === "medium"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : project.priority === "low"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-200 text-gray-700"
+                  }`}
+                >
+                  {project.priority?.toUpperCase()}
+                </span>
               </div>
               <p className="text-gray-600 mt-2">{project.description}</p>
             </div>
