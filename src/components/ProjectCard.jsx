@@ -146,7 +146,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
                   {truncate(project.name, 20)}
                 </h2>
                 <span
-                  className={`text-xs font-semibold px-2 py-1 rounded-full ml-4 ${
+                  className={`text-xs font-semibold px-2 py-1 rounded-full mr-5 ${
                     project.priority === "high"
                       ? "bg-red-100 text-red-800"
                       : project.priority === "medium"
