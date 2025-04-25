@@ -34,9 +34,6 @@ const ProjectCalendar = () => {
         <h2 className="text-white">Task Toolbar</h2>
         <TaskToolbar></TaskToolbar>
       </div>
-      <div>
-        <TaskToolKit onCreateTask={handleCreateTask}></TaskToolKit>
-      </div>
       <div className="w-full lg:w-5/6 bg-white p-6">
         <CalendarCard
           startDate={currentProject.start_date}
