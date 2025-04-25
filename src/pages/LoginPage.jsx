@@ -9,6 +9,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
 
   const setUser = useSetRecoilState(userData);
@@ -17,6 +18,7 @@ const LoginPage = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
+    setLoading(true); // Set loading to true when form is submitted
 
     try {
       const response = await loginUser({ email, password });
@@ -43,6 +45,8 @@ const LoginPage = () => {
       }, 500);
     } catch (err) {
       setError("Invalid email or password");
+    } finally {
+      setLoading(false); // Set loading to false once the process is done
     }
   };
 
@@ -120,8 +124,9 @@ const LoginPage = () => {
             <button
               type="submit"
               className="w-full bg-blue-700 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition"
+              disabled={loading} // Disable the button while loading
             >
-              Sign In
+              {loading ? "Signing In..." : "Sign In"}
             </button>
           </form>
 
