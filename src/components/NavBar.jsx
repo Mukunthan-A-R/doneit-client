@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userData } from "../data/atom"; // Update path if needed
+import { userData } from "../data/atom";
+import SandySoft from "../assets/SandySoft.png";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,11 +30,16 @@ function Navbar() {
   const isLoggedIn = !!user?.token;
 
   return (
-    <nav className="bg-gray-800 text-white p-4">
+    <nav className="bg-gray-800 text-white px-4 py-2">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
-        <div className="text-xl font-semibold">
-          <Link to="/">Done</Link>
+        <div className="text-xl font-semibold flex justify-center items-center gap-3">
+          <img className="w-15" src={SandySoft} alt="" />
+
+          <Link to="/">
+            <span className="text-3xl">D</span>
+            one <span className="text-3xl">I</span>t
+          </Link>
         </div>
 
         {/* Desktop Menu */}
