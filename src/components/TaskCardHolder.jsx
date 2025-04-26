@@ -169,6 +169,7 @@ const TaskCardHolder = ({ value }) => {
 
 export default TaskCardHolder;
 
+// 👇 Scrollable Column Component
 const TaskColumn = ({
   title,
   bg,
@@ -177,27 +178,31 @@ const TaskColumn = ({
   onDelete,
   onStatusChange,
 }) => (
-  <div className={`${bg} text-white p-6 rounded-md shadow-lg h-full`}>
+  <div
+    className={`${bg} text-white p-4 rounded-md shadow-lg flex flex-col h-[80vh]`}
+  >
     <h2 className="text-xl font-medium mb-4">{title}</h2>
-    {tasks.length === 0 ? (
-      <p className="text-gray-200">No tasks to show</p>
-    ) : (
-      tasks.map((task) => (
-        <TaskCard
-          key={task.task_id}
-          task_id={task.task_id}
-          title={task.title}
-          status={task.status}
-          desc={task.description}
-          startDate={task.start_date}
-          endDate={task.end_date}
-          timeDuration={task.time_duration}
-          project_id={task.project_id}
-          onEditClick={onEditClick}
-          onhandleDelete={onDelete}
-          onStatusChange={onStatusChange}
-        />
-      ))
-    )}
+    <div className="overflow-y-auto space-y-4 pr-2" style={{ flexGrow: 1 }}>
+      {tasks.length === 0 ? (
+        <p className="text-gray-200">No tasks to show</p>
+      ) : (
+        tasks.map((task) => (
+          <TaskCard
+            key={task.task_id}
+            task_id={task.task_id}
+            title={task.title}
+            status={task.status}
+            desc={task.description}
+            startDate={task.start_date}
+            endDate={task.end_date}
+            timeDuration={task.time_duration}
+            project_id={task.project_id}
+            onEditClick={onEditClick}
+            onhandleDelete={onDelete}
+            onStatusChange={onStatusChange}
+          />
+        ))
+      )}
+    </div>
   </div>
 );
