@@ -28,8 +28,6 @@ const ProjectCalendar = () => {
       const loadProject = async () => {
         const tasks = await fetchProjectById(project_id);
         setProjectData(tasks.data);
-        console.log("projects");
-        console.log(tasks.data);
       };
       loadProject();
     }
@@ -37,7 +35,6 @@ const ProjectCalendar = () => {
     if (project_id) {
       const loadTasks = async () => {
         const tasks = await fetchTasks(project_id);
-        console.log(tasks);
 
         const result = formatTasksByDateRange(tasks.data);
         setGraphData(result);
@@ -45,9 +42,6 @@ const ProjectCalendar = () => {
       loadTasks();
     }
   }, [project_id]);
-
-  console.log("ProjectData");
-  console.log(ProjectData);
 
   return (
     <div className="min-h-screen flex">
