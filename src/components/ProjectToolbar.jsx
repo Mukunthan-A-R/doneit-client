@@ -35,7 +35,7 @@ const ProjectToolbar = ({ user_id, handleTrigger }) => {
           <MenuItem text="User Data" />
         </Link>
         <button className="w-full text-left" onClick={() => setShowModal(true)}>
-          <MenuItem text="Creat Project" />
+          <MenuItem text="Create Project" />
         </button>
         <button
           className="w-full text-left"
