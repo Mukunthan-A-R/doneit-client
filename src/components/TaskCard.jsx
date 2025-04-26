@@ -156,6 +156,8 @@ const TaskCard = ({
       console.error("Error updating task:", err);
       setNotification({ type: "failure", message: "Failed to update task." });
       setTimeout(() => setNotification(""), 2000);
+    } finally {
+      window.location.reload();
     }
   };
 
