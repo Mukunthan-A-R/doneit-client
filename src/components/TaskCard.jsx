@@ -89,7 +89,14 @@ const TaskCard = ({
 
         {/* Dropdown Menu */}
         {menuVisible && (
-          <div className="absolute bg-white shadow-md rounded-md mt-2 w-32 p-2">
+          <div
+            className="absolute bg-white shadow-xl rounded-md mt-2 w-32 p-2 z-50" // Added shadow-xl for more depth
+            style={{
+              position: "absolute", // Ensure absolute positioning
+              top: "100%", // Position the dropdown just below the button
+              right: 0, // Align it to the right edge of the button
+            }}
+          >
             {/* Conditionally render status options */}
             {status !== "not started" && (
               <button
@@ -192,7 +199,7 @@ const calculateRemainingTime = (endDate) => {
     hours: remainingHours,
     minutes: remainingMinutes,
     seconds: remainingSeconds,
-    message: "Time Remaining :",
+    message: "Time Remaining",
     timeOver: false,
   };
 };
