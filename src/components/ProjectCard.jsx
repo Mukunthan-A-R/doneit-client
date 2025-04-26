@@ -69,7 +69,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
   const handleNavigate = () => {
     setCurrentProject(project.project_id);
     setCurrentProjectData(project);
-    navigate("/tasks");
+    navigate(`/tasks/${project.project_id}`);
   };
 
   const truncate = (str, max = 20) =>

@@ -3,7 +3,7 @@ import { createTask } from "../../services/TaskServices";
 import { useRecoilValue } from "recoil";
 import { ProjectState } from "../../data/atom";
 
-const CreateTask = ({ show, onClose, onCreateTask }) => {
+const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
   const currentProjectId = useRecoilValue(ProjectState);
 
   const [taskData, setTaskData] = useState({
@@ -13,7 +13,7 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
     time_duration: 0,
     start_date: "",
     end_date: "",
-    project_id: currentProjectId,
+    project_id: project_id,
   });
 
   const [errors, setErrors] = useState({

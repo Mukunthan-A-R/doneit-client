@@ -7,8 +7,12 @@ import TaskToolKit from "../components/TaskToolKit";
 import { useRecoilValue } from "recoil";
 import { CurrentProject } from "../data/atom";
 import { fetchTasks } from "../services/TaskServices";
+import { useParams } from "react-router-dom";
 
 const ProjectCalendar = () => {
+  const params = useParams();
+  const project_id = params.projectId;
+
   const [trigger, setTrigger] = useState(1);
   const [graphData, setGraphData] = useState({});
   const currentProject = useRecoilValue(CurrentProject);
@@ -18,21 +22,23 @@ const ProjectCalendar = () => {
   };
 
   useEffect(() => {
-    if (currentProject.project_id) {
+    if (project_id) {
       const loadTasks = async () => {
-        const tasks = await fetchTasks(currentProject.project_id);
+        const tasks = await fetchTasks(project_id);
+        console.log(tasks);
+
         const result = formatTasksByDateRange(tasks.data);
         setGraphData(result);
       };
       loadTasks();
     }
-  }, [currentProject.project_id]);
+  }, [project_id]);
 
   return (
     <div className="min-h-screen flex">
       <div className={`lg:block w-1/6 bg-blue-900 p-4`}>
         <h2 className="text-white">Task Toolbar</h2>
-        <TaskToolbar></TaskToolbar>
+        <TaskToolbar project_id={project_id}></TaskToolbar>
       </div>
       <div className="w-full lg:w-5/6 bg-white p-6">
         <CalendarCard

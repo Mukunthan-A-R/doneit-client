@@ -25,13 +25,17 @@ function App() {
         <Route exact path="/dashboard" element={<Dashboard />} />
         <Route exact path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route exact path="/tasks" element={<TaskDashboard />} />
-        <Route exact path="/analytics" element={<Analytics />} />
-        <Route exact path="/project-calendar" element={<ProjectCalendar />} />
+        <Route exact path="/tasks/:projectId" element={<TaskDashboard />} />
+        <Route exact path="/analytics/:projectId" element={<Analytics />} />
+        <Route
+          exact
+          path="/project-calendar/:projectId"
+          element={<ProjectCalendar />}
+        />
+        <Route path="/graph/:projectId" element={<Graph />} />
         <Route exact path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/graph" element={<Graph />} />
         <Route path="/settings" element={<Settings />} />
         <Route element={<NotFound />} />
       </Routes>

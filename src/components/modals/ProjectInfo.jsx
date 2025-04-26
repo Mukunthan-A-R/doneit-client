@@ -3,7 +3,7 @@ import { fetchProjectById } from "../../services/ProjectServices";
 import { ProjectState } from "../../data/atom";
 import { useRecoilValue } from "recoil";
 
-const ProjectInfo = ({ show, onClose }) => {
+const ProjectInfo = ({ project_id, show, onClose }) => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,11 +11,11 @@ const ProjectInfo = ({ show, onClose }) => {
   const projectId = useRecoilValue(ProjectState);
 
   useEffect(() => {
-    const getProject = async () => {
-      if (projectId) {
+    const getProject = async (project_id) => {
+      if (project_id) {
         try {
           setLoading(true);
-          const data = await fetchProjectById(projectId);
+          const data = await fetchProjectById(project_id);
           setProject(data);
           console.log(data);
         } catch (err) {
@@ -26,7 +26,7 @@ const ProjectInfo = ({ show, onClose }) => {
       }
     };
 
-    getProject(projectId);
+    getProject(project_id);
   }, []);
 
   console.log(project);

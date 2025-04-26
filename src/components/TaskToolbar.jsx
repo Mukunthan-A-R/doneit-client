@@ -9,7 +9,7 @@ import { MdTimeline } from "react-icons/md";
 import { IoCalendarClearOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 
-const TaskToolbar = () => {
+const TaskToolbar = ({ project_id }) => {
   return (
     <ul className="py-6">
       <Link
@@ -20,28 +20,28 @@ const TaskToolbar = () => {
         <MenuItem text="Dashboard" />
       </Link>
       <Link
-        to="/tasks"
+        to={`/tasks/${project_id}`}
         className="flex text-white hover:bg-blue-800 items-center pl-4"
       >
         <FaTasks size={20} />
         <MenuItem text="Task Tracker" />
       </Link>
       <Link
-        to="/analytics"
+        to={`/analytics/${project_id}`}
         className="flex text-white hover:bg-blue-800 items-center pl-4"
       >
         <SiSimpleanalytics size={20} />
         <MenuItem text="Analysis" />
       </Link>
       <Link
-        to="/graph"
+        to={`/graph/${project_id}`}
         className="flex text-white hover:bg-blue-800 items-center pl-4"
       >
         <MdTimeline size={20} />
         <MenuItem text="Graph" />
       </Link>
       <Link
-        to="/project-calendar"
+        to={`/project-calendar/${project_id}`}
         className="flex text-white hover:bg-blue-800 items-center pl-4"
       >
         <IoCalendarClearOutline size={20} />

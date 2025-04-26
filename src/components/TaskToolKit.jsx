@@ -4,7 +4,7 @@ import { MdInfoOutline } from "react-icons/md";
 import ProjectInfo from "./modals/ProjectInfo";
 import CreateTask from "./modals/CreateTask"; // Import the new task creation component
 
-const TaskToolKit = ({ onCreateTask }) => {
+const TaskToolKit = ({ project_id, onCreateTask }) => {
   const [showInfo, setShowInfo] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false); // State to toggle CreateTask visibility
   const [hoveredButton, setHoveredButton] = useState(null); // State to track hovered button
@@ -58,11 +58,16 @@ const TaskToolKit = ({ onCreateTask }) => {
       </div>
 
       {/* Show the ProjectInfo modal */}
-      <ProjectInfo show={showInfo} onClose={() => setShowInfo(false)} />
+      <ProjectInfo
+        project_id={project_id}
+        show={showInfo}
+        onClose={() => setShowInfo(false)}
+      />
 
       {/* Show the CreateTask modal */}
       {showCreateTask && (
         <CreateTask
+          project_id={project_id}
           onCreateTask={onCreateTask}
           show={showCreateTask}
           onClose={() => setShowCreateTask(false)} // Close the modal

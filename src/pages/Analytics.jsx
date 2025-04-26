@@ -4,16 +4,20 @@ import PieChart from "../components/PieChart";
 import TaskToolbar from "../components/TaskToolbar";
 import { useRecoilValue } from "recoil";
 import { ProjectState } from "../data/atom";
+import { useParams } from "react-router-dom";
 
 const Analytics = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const currentProject = useRecoilValue(ProjectState);
 
+  const params = useParams();
+  const project_id = params.projectId;
+
   useEffect(() => {
     const getData = async () => {
       try {
-        const fetchedTasks = await fetchTasks(currentProject);
+        const fetchedTasks = await fetchTasks(project_id);
         setTasks(fetchedTasks.data);
       } catch (err) {
         setError(err.message);
@@ -54,7 +58,7 @@ const Analytics = () => {
         {/* Sidebar */}
         <div className={`lg:block w-1/6 bg-blue-900 p-4`}>
           <h2 className="text-white">Task Toolbar</h2>
-          <TaskToolbar></TaskToolbar>
+          <TaskToolbar project_id={project_id}></TaskToolbar>
         </div>
 
         {/* Main Content */}

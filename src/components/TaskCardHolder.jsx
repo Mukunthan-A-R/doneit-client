@@ -6,7 +6,7 @@ import { ProjectState } from "../data/atom";
 import TaskCard from "./TaskCard";
 import { editProjectById, fetchProjectById } from "../services/ProjectServices";
 
-const TaskCardHolder = ({ value }) => {
+const TaskCardHolder = ({ project_id, value }) => {
   const { projectId } = useParams();
   const fallbackProjectId = useRecoilValue(ProjectState);
   const activeProjectId = projectId || fallbackProjectId;
@@ -29,7 +29,8 @@ const TaskCardHolder = ({ value }) => {
         }
 
         const fetchedTasks = await fetchTasks(
-          `${activeProjectId}?_=${Date.now()}`
+          project_id
+          // `${activeProjectId}?_=${Date.now()}`
         );
         if (isMounted) {
           setTasks(fetchedTasks.data);
