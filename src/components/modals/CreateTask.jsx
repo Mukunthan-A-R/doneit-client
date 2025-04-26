@@ -190,7 +190,7 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
               htmlFor="time_duration"
               className="block text-sm font-semibold"
             >
-              Work hours per day (in Hrs)
+              Work hours per day
             </label>
             <input
               type="number"
