@@ -130,7 +130,7 @@ const UserDashboard = () => {
                 {userDetails.name}
               </h2>
               <p className="text-sm text-gray-600">
-                {userDetails.role} ( {userDetails.company} )
+                {userDetails.role} @ ( {userDetails.company} )
               </p>
               <p className="text-sm text-gray-500">{userDetails.email}</p>
             </div>
