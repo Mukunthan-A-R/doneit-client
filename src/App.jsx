@@ -17,8 +17,6 @@ import Settings from "./pages/Settings";
 function App() {
   return (
     <Router>
-      {/* <Header />{" "} */}
-      {/* You can put common components like Header and Footer here */}
       <NavBar></NavBar>
       <Routes>
         <Route exact path="/" element={<Home />} />
@@ -39,8 +37,6 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route element={<NotFound />} />
       </Routes>
-      {/* <Footer />  */}
-      {/* Footer will be displayed on all pages */}
     </Router>
   );
 }

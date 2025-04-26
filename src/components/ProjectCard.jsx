@@ -3,7 +3,6 @@ import {
   deleteProjectById,
   editProjectById,
 } from "../services/ProjectServices";
-import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { ProjectState, CurrentProject } from "../data/atom";
 import { useNavigate } from "react-router-dom";

@@ -1,15 +1,11 @@
 import React from "react";
 import GanttChart from "../components/GanttChart";
 import TaskToolbar from "../components/TaskToolbar";
-import { useRecoilValue } from "recoil";
-import { ProjectState } from "../data/atom";
 import { useParams } from "react-router-dom";
 
 const Graph = () => {
   const params = useParams();
   const project_id = params.projectId;
-
-  // const projectId = useRecoilValue(ProjectState);
 
   return (
     <div>

@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { fetchProjectById } from "../../services/ProjectServices";
-import { ProjectState } from "../../data/atom";
-import { useRecoilValue } from "recoil";
 
 const ProjectInfo = ({ project_id, show, onClose }) => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const projectId = useRecoilValue(ProjectState);
 
   useEffect(() => {
     const getProject = async (project_id) => {

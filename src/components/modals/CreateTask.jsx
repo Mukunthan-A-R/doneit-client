@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { createTask } from "../../services/TaskServices";
-import { useRecoilValue } from "recoil";
-import { ProjectState } from "../../data/atom";
 
 const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
-  const currentProjectId = useRecoilValue(ProjectState);
-
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",

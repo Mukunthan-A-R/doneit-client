@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 import CalendarCard from "../components/CalendarCard";
 import TaskToolbar from "../components/TaskToolbar";
-
 import { fetchTasks } from "../services/TaskServices";
-import { useParams } from "react-router-dom";
 import { fetchProjectById } from "../services/ProjectServices";
 
 const ProjectCalendar = () => {
