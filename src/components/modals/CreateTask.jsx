@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createTask } from "../../services/TaskServices";
 
 const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
+  const [loadingData, setLoadingData] = useState(false);
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
@@ -87,6 +88,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoadingData(true);
 
     if (!validateForm()) {
       return;
@@ -107,6 +109,8 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
     } catch (error) {
       console.error("Error creating task:", error);
       alert("Failed to create task.");
+    } finally {
+      setLoadingData(true);
     }
   };
 
@@ -251,9 +255,10 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             </button>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              disabled={loadingData}
+              className={`bg-blue-500 text-white px-4 py-2 rounded disabled:bg-blue-300 disabled:cursor-not-allowed`}
             >
-              Create Task
+              {loadingData ? "Creating..." : "Create Task"}
             </button>
           </div>
         </form>
