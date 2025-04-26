@@ -2,26 +2,38 @@ import React, { useState, useEffect } from "react";
 
 import CalendarCard from "../components/CalendarCard";
 import TaskToolbar from "../components/TaskToolbar";
-import TaskToolKit from "../components/TaskToolKit";
 
-import { useRecoilValue } from "recoil";
-import { CurrentProject } from "../data/atom";
 import { fetchTasks } from "../services/TaskServices";
 import { useParams } from "react-router-dom";
+import { fetchProjectById } from "../services/ProjectServices";
 
 const ProjectCalendar = () => {
   const params = useParams();
   const project_id = params.projectId;
 
-  const [trigger, setTrigger] = useState(1);
   const [graphData, setGraphData] = useState({});
-  const currentProject = useRecoilValue(CurrentProject);
-
-  const handleCreateTask = () => {
-    setTrigger(trigger + 1);
-  };
+  const [ProjectData, setProjectData] = useState({
+    id: null,
+    name: "",
+    description: "",
+    project_id: null,
+    start_date: null,
+    end_date: null,
+    priority: "",
+    status: "",
+  });
 
   useEffect(() => {
+    if (project_id) {
+      const loadProject = async () => {
+        const tasks = await fetchProjectById(project_id);
+        setProjectData(tasks.data);
+        console.log("projects");
+        console.log(tasks.data);
+      };
+      loadProject();
+    }
+
     if (project_id) {
       const loadTasks = async () => {
         const tasks = await fetchTasks(project_id);
@@ -34,6 +46,9 @@ const ProjectCalendar = () => {
     }
   }, [project_id]);
 
+  console.log("ProjectData");
+  console.log(ProjectData);
+
   return (
     <div className="min-h-screen flex">
       <div className={`lg:block w-1/6 bg-blue-900 p-4`}>
@@ -42,8 +57,8 @@ const ProjectCalendar = () => {
       </div>
       <div className="w-full lg:w-5/6 bg-white p-6">
         <CalendarCard
-          startDate={currentProject.start_date}
-          endDate={currentProject.end_date}
+          startDate={ProjectData.start_date}
+          endDate={ProjectData.end_date}
           tasksByDate={graphData}
         />
       </div>
