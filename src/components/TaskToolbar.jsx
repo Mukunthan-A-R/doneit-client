@@ -2,26 +2,59 @@ import React from "react";
 import MenuItem from "./modals/MenuItem";
 import { Link } from "react-router-dom";
 
+import { RxDashboard } from "react-icons/rx";
+import { FaTasks } from "react-icons/fa";
+import { SiSimpleanalytics } from "react-icons/si";
+import { MdTimeline } from "react-icons/md";
+import { IoCalendarClearOutline } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
+
 const TaskToolbar = () => {
   return (
     <ul className="py-6">
-      <Link to="/dashboard">
+      <Link
+        to="/dashboard"
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <RxDashboard size={20} />
         <MenuItem text="Dashboard" />
       </Link>
-      <Link to="/tasks">
+      <Link
+        to="/tasks"
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <FaTasks size={20} />
         <MenuItem text="Task Tracker" />
       </Link>
-      <Link to="/analytics">
+      <Link
+        to="/analytics"
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <SiSimpleanalytics size={20} />
         <MenuItem text="Analysis" />
       </Link>
-      <Link to="/graph">
+      <Link
+        to="/graph"
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <MdTimeline size={20} />
         <MenuItem text="Graph" />
       </Link>
-      <Link to="/project-calendar">
+      <Link
+        to="/project-calendar"
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <IoCalendarClearOutline size={20} />
         <MenuItem text="Calendar" />
       </Link>
-      <MenuItem text="Format Tasks" />
-      <MenuItem text="Settings" />
+      {/* <MenuItem text="Format Tasks" /> */}
+      <Link
+        to="/settings"
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <IoSettingsOutline size={20} />
+        <MenuItem text="Settings" />
+      </Link>
     </ul>
   );
 };
