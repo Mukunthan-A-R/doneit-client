@@ -91,6 +91,7 @@ const TaskCardHolder = ({ project_id, value }) => {
     try {
       await deleteTask(taskId);
       setTrigger((prev) => !prev);
+      alert("The Task is Deleted Successfully");
     } catch (error) {
       console.error("Error deleting task:", error);
     }
