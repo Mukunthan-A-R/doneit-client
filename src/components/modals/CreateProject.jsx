@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { createProject } from "../../services/ProjectServices";
 
-const CreateProject = ({ showModal, setShowModal ,user_id , handleTrigger}) => {
+const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
   if (!showModal) return null;
 
   // State to store form data and validation errors
+  const [loadingData, setLoadingData] = useState(false);
   const [projectData, setProjectData] = useState({
     name: "",
     description: "",
@@ -80,6 +81,7 @@ const CreateProject = ({ showModal, setShowModal ,user_id , handleTrigger}) => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoadingData(true);
 
     // Validate form
     const validationErrors = validateForm();
@@ -99,6 +101,8 @@ const CreateProject = ({ showModal, setShowModal ,user_id , handleTrigger}) => {
       }
     } catch (error) {
       console.error("Failed to create project:", error);
+    } finally {
+      setLoadingData(false);
     }
   };
 
@@ -253,9 +257,10 @@ const CreateProject = ({ showModal, setShowModal ,user_id , handleTrigger}) => {
             </button>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              disabled={loadingData}
+              className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-blue-300 disabled:cursor-not-allowed"
             >
-              Create
+              {loadingData ? "Creating..." : "Create Project"}
             </button>
           </div>
         </form>
