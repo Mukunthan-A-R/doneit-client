@@ -149,7 +149,7 @@ const TaskCard = ({
           <p className="text-red-500">{remainingTime.message}</p>
         )}
       </span>
-      <p className="text-sm text-gray-600">Duration: {timeDuration}</p>
+      <p className="text-sm text-gray-600">Work Hours: {timeDuration} hrs</p>
 
       {/* Notification Popup */}
       {notification && (
@@ -175,7 +175,7 @@ const calculateRemainingTime = (endDate) => {
 
   const diffInMilliseconds = end - currentDate;
   if (diffInMilliseconds <= 0) {
-    return { message: "The project has ended", timeOver: true };
+    return { message: "The Task has ended", timeOver: true };
   }
 
   const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
@@ -192,7 +192,7 @@ const calculateRemainingTime = (endDate) => {
     hours: remainingHours,
     minutes: remainingMinutes,
     seconds: remainingSeconds,
-    message: "Time remaining",
+    message: "Time Remaining :",
     timeOver: false,
   };
 };
