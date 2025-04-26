@@ -58,9 +58,12 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
     }
 
     // Check if time duration is filled and valid
-    if (taskData.time_duration <= 0) {
+    if (
+      parseInt(taskData.time_duration) <= 0 ||
+      parseInt(taskData.time_duration) > 24
+    ) {
       newErrors.time_duration =
-        "Time duration is required and must be greater than 0.";
+        "Working hours per day is required and must be greater than 0 and less than 24";
       formIsValid = false;
     }
 
@@ -187,7 +190,7 @@ const CreateTask = ({ show, onClose, onCreateTask }) => {
               htmlFor="time_duration"
               className="block text-sm font-semibold"
             >
-              Time Duration (in hours)
+              Work hours per day (in Hrs)
             </label>
             <input
               type="number"
