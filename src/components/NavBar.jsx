@@ -111,12 +111,14 @@ function Navbar() {
         <div className="md:hidden mt-4 space-y-2">
           <Link
             to="/"
+            onClick={toggleMenu}
             className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
           >
             Home
           </Link>
           <Link
             to="/dashboard"
+            onClick={toggleMenu}
             className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
           >
             Dashboard
@@ -125,6 +127,7 @@ function Navbar() {
           {!isLoggedIn ? (
             <Link
               to="/login"
+              onClick={toggleMenu}
               className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
             >
               Login
@@ -133,6 +136,7 @@ function Navbar() {
             <>
               <Link
                 to="/user-dashboard"
+                onClick={toggleMenu}
                 className="block px-4 py-2 text-gray-300 hover:bg-gray-700 rounded"
               >
                 User Dashboard
