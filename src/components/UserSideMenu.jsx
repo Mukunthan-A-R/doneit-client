@@ -25,7 +25,7 @@ const UserSideMenu = () => {
   };
 
   return (
-    <aside className="w-64 bg-blue-900 text-white flex-shrink-0">
+    <aside className="w-64 bg-blue-900 h-full text-white flex-shrink-0">
       <div className="p-6 text-center text-2xl font-bold border-b border-blue-800">
         TaskBoard
       </div>

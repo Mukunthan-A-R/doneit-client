@@ -13,8 +13,8 @@ const UserDashboard = () => {
   const userDatas = useRecoilValue(userData);
   const [projects, setProjects] = useState([]);
   const [totalProjects, setTotalProjects] = useState([]);
-  const [completedProjects, setCompletedProjects] = useState(0); // New state for completed projects
-  const [overdueProjects, setOverdueProjects] = useState(0); // New state for overdue projects
+  const [completedProjects, setCompletedProjects] = useState(0);
+  const [overdueProjects, setOverdueProjects] = useState(0);
   const [showEditModal, setShowEditModal] = useState(false);
   const [todaysTasks, setTodaysTasks] = useState([]);
   const [userDetails, setUserDetails] = useState({
@@ -30,13 +30,15 @@ const UserDashboard = () => {
     user_id: userDatas.user_id,
   });
 
+  // State to handle the side menu visibility on small screens
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     const loadProjects = async () => {
-      const projectData = await fetchProjects(userDatas.user_id); // fetch + get returned data
+      const projectData = await fetchProjects(userDatas.user_id);
       setTotalProjects(projectData.data.length);
 
       if (projectData.status === 404) {
-        // Handle the case when the fetch returns status 404
         console.error("Error: " + projectData.message);
         return;
       }
@@ -48,7 +50,7 @@ const UserDashboard = () => {
         return project.status === "active" && endDate >= currentDate;
       });
 
-      setProjects(ongoingProjects); // store the filtered 'ongoing' projects in state
+      setProjects(ongoingProjects);
 
       // Calculate completed and overdue projects
       let completedCount = 0;
@@ -65,8 +67,8 @@ const UserDashboard = () => {
         }
       });
 
-      setCompletedProjects(completedCount); // Set the completed projects count
-      setOverdueProjects(overdueCount); // Set the overdue projects count
+      setCompletedProjects(completedCount);
+      setOverdueProjects(overdueCount);
     };
 
     loadProjects();
@@ -93,7 +95,7 @@ const UserDashboard = () => {
         const data = await fetchTasksByUserId(user.user_id);
         setTodaysTasks(data.data || []);
       } catch (err) {
-        console.error("Error fetching user tasks:", err.message); // Log error
+        console.error("Error fetching user tasks:", err.message);
       }
     };
 
@@ -101,9 +103,26 @@ const UserDashboard = () => {
   }, [user.user_id]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100 text-gray-800 font-sans">
-      {/* Sidebar */}
-      <UserSideMenu></UserSideMenu>
+    <div className="relative flex h-screen overflow-hidden bg-gray-100 text-gray-800 font-sans">
+      {/* Sidebar: Slide-in menu for small screens with backdrop blur */}
+      <div
+        className={`fixed lg:block w-64 bg-white shadow-md z-40 transition-transform duration-300 transform ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 backdrop-blur-md`} // Added backdrop blur effect here
+        style={{ height: "100vh" }} // Set height to 100vh for full screen height
+      >
+        <UserSideMenu />
+      </div>
+
+      {/* Button to toggle sidebar on small screens, placed inside the page */}
+      <div className="lg:hidden fixed top-22 left-3 z-50">
+        <button
+          className="bg-blue-600 text-white p-2 rounded-md"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+        >
+          {isMenuOpen ? "Close" : "Menu"}
+        </button>
+      </div>
 
       {showEditModal && (
         <EditUserModal
@@ -116,7 +135,7 @@ const UserDashboard = () => {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col mt-10 ml-0 lg:ml-64">
         {/* User Info Section */}
         <section className="bg-white mx-6 mt-6 p-6 rounded-lg shadow flex items-center justify-between border-l-4 border-blue-700">
           <div className="flex items-center space-x-4">
@@ -152,12 +171,12 @@ const UserDashboard = () => {
             {[
               { title: "Projects Today", count: projects.length },
               { title: "Total Projects", count: totalProjects },
-              { title: "Completed", count: completedProjects }, // Updated with completedProjects state
+              { title: "Completed", count: completedProjects },
               {
                 title: "Overdue",
                 count: overdueProjects,
                 color: "text-red-600",
-              }, // Updated with overdueProjects state
+              },
             ].map((item, index) => (
               <div
                 key={index}
@@ -166,11 +185,7 @@ const UserDashboard = () => {
                 <h2 className="text-gray-700 text-lg font-semibold">
                   {item.title}
                 </h2>
-                <p
-                  className={`text-3xl mt-2 ${
-                    item.color ? item.color : "text-blue-800"
-                  }`}
-                >
+                <p className={`text-3xl mt-2 ${item.color || "text-blue-800"}`}>
                   {item.count}
                 </p>
               </div>
