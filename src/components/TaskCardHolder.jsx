@@ -28,10 +28,7 @@ const TaskCardHolder = ({ project_id, value }) => {
           return;
         }
 
-        const fetchedTasks = await fetchTasks(
-          project_id
-          // `${activeProjectId}?_=${Date.now()}`
-        );
+        const fetchedTasks = await fetchTasks(project_id);
         if (isMounted) {
           setTasks(fetchedTasks.data);
         }
@@ -78,7 +75,7 @@ const TaskCardHolder = ({ project_id, value }) => {
     const response = await editProjectById(fallbackProjectId, editData);
     if (response) {
       alert(
-        "Project marked as completed !\n Please go to the Project Dashboard to see the changes !"
+        "Project marked as completed! Please go to the Project Dashboard to see the changes!"
       );
     }
   };
