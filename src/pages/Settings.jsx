@@ -33,11 +33,11 @@ const Settings = () => {
 
       {/* Mobile Navbar Panel */}
       <div
-        className={`fixed top-0 left-0 h-full w-2/3 max-w-xs bg-blue-900 text-white p-4 z-30 transform transition-transform duration-300 ease-in-out 
+        className={`fixed top-0 left-0 h-full w-2/3 max-w-xs bg-blue-900 text-black p-4 z-30 transform transition-transform duration-300 ease-in-out 
         ${isNavOpen ? "translate-x-0" : "-translate-x-full"} lg:hidden`}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Project Toolbar</h2>
+          <h2 className="text-xl font-semibold text-white">Project Toolbar</h2>
           <button
             onClick={() => setIsNavOpen(false)}
             className="text-white text-2xl"
@@ -54,7 +54,7 @@ const Settings = () => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex lg:flex-col lg:w-1/5 bg-blue-900 text-white h-screen">
+      <div className="hidden lg:flex lg:flex-col lg:w-1/5 bg-blue-900 text-black h-screen">
         <h2 className="text-white p-6 text-center text-2xl font-bold border-b border-blue-800">
           Project Toolbar
         </h2>
