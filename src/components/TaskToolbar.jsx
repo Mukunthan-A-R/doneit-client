@@ -8,6 +8,7 @@ import { SiSimpleanalytics } from "react-icons/si";
 import { MdTimeline } from "react-icons/md";
 import { IoCalendarClearOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
+import { AiOutlineUserAdd } from "react-icons/ai";
 
 const TaskToolbar = ({ project_id }) => {
   return (
@@ -46,6 +47,13 @@ const TaskToolbar = ({ project_id }) => {
       >
         <IoCalendarClearOutline size={20} />
         <MenuItem text="Calendar" />
+      </Link>
+      <Link
+        to={`/adduser/${project_id}`}
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <AiOutlineUserAdd size={20} />
+        <MenuItem text="Add User" />
       </Link>
       {/* <MenuItem text="Format Tasks" /> */}
       <Link
