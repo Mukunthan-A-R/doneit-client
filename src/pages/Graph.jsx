@@ -41,7 +41,7 @@ const Graph = () => {
       <div className="flex flex-col lg:flex-row flex-grow">
         {/* Sidebar (desktop view) */}
         <div className="lg:block w-1/6 bg-blue-900 p-4 hidden lg:block">
-          <h2 className="text-white">Task Toolbar</h2>
+          <h2 className="text-white text-xl font-medium">Task Toolbar</h2>
           <TaskToolbar project_id={project_id}></TaskToolbar>
         </div>
 
