@@ -13,6 +13,7 @@ import SignupPage from "./pages/SignupPage";
 import UserDashboard from "./pages/UserDashboard";
 import ProjectCalendar from "./pages/ProjectCalendar";
 import Settings from "./pages/Settings";
+import AddProjectUser from "./pages/AddProjectUser";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           element={<ProjectCalendar />}
         />
         <Route path="/graph/:projectId" element={<Graph />} />
+        <Route path="/adduser/:projectId" element={<AddProjectUser />} />
         <Route exact path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
