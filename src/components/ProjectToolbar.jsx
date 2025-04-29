@@ -33,7 +33,7 @@ const ProjectToolbar = ({ user_id, handleTrigger }) => {
 
   return (
     <>
-      <ul className="py-6 text-white">
+      <ul className="py-6 text-white h-screen">
         <Link
           to="/dashboard"
           className="flex  hover:bg-blue-800 items-center pl-4"

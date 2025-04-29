@@ -7,27 +7,25 @@ import SettingsPage from "../components/SettingsPage";
 
 const Settings = () => {
   const [trigger, setTrigger] = useState(1);
-  const [isNavOpen, setIsNavOpen] = useState(false); // ✅ One useState for navbar
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   const navigate = useNavigate();
   const currentUserData = useRecoilValue(userData);
-  console.log(currentUserData);
 
   useEffect(() => {
     const token = localStorage.getItem("x-auth-token");
-
     if (!token) {
       navigate("/login");
     }
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
       {/* Mobile Menu Button */}
-      <div>
+      <div className="lg:hidden">
         <button
           onClick={() => setIsNavOpen(true)}
-          className="lg:hidden bg-blue-900 text-white px-4 py-2 m-4 rounded z-20"
+          className="bg-blue-900 text-white px-4 py-2 m-4 rounded z-20"
         >
           ☰ Menu
         </button>
@@ -56,7 +54,7 @@ const Settings = () => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className={`lg:block w-1/6 bg-blue-900 p-4 hidden lg:block`}>
+      <div className="hidden lg:flex lg:flex-col lg:w-1/5 bg-blue-900 text-white h-screen">
         <h2 className="text-white p-6 text-center text-2xl font-bold border-b border-blue-800">
           Project Toolbar
         </h2>
@@ -68,8 +66,8 @@ const Settings = () => {
         />
       </div>
 
-      {/* Main Content */}
-      <div className="w-full lg:w-5/6 bg-white p-6">
+      {/* Main Content Area */}
+      <div className="flex-1 p-6 bg-white">
         <h1 className="text-2xl font-semibold pb-4">Your Settings!</h1>
         <SettingsPage />
       </div>
