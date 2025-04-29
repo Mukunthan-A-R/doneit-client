@@ -11,7 +11,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 
 const TaskToolbar = ({ project_id }) => {
   return (
-    <ul className="py-6">
+    <ul className="py-6 h-screen">
       <Link
         to="/dashboard"
         className="flex text-white hover:bg-blue-800 items-center pl-4"
