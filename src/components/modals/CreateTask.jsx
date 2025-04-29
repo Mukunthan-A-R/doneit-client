@@ -41,43 +41,41 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
       end_date: "",
     };
 
-    // Check if title is at least 5 characters and not empty
     if (taskData.title.trim() === "" || taskData.title.length < 5) {
       newErrors.title = "Title is required and must be at least 5 characters.";
       formIsValid = false;
     }
 
-    // Check if description is at least 5 characters and not empty
     if (taskData.description.trim() === "" || taskData.description.length < 5) {
       newErrors.description =
         "Description is required and must be at least 5 characters.";
       formIsValid = false;
     }
 
-    // Check if time duration is filled and valid
     if (
       parseInt(taskData.time_duration) <= 0 ||
       parseInt(taskData.time_duration) > 24
     ) {
       newErrors.time_duration =
-        "Working hours per day is required and must be greater than 0 and less than 24";
+        "Working hours per day is required and must be greater than 0 and less than 24.";
       formIsValid = false;
     }
 
-    // Check if start date is filled
     if (taskData.start_date.trim() === "") {
       newErrors.start_date = "Start date is required.";
       formIsValid = false;
     }
 
-    // Check if end date is filled
     if (taskData.end_date.trim() === "") {
       newErrors.end_date = "End date is required.";
       formIsValid = false;
     }
 
-    // Ensure start date is before end date
-    if (new Date(taskData.start_date) > new Date(taskData.end_date)) {
+    if (
+      taskData.start_date &&
+      taskData.end_date &&
+      new Date(taskData.start_date) > new Date(taskData.end_date)
+    ) {
       newErrors.end_date = "End date must be later than start date.";
       formIsValid = false;
     }
@@ -88,14 +86,15 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoadingData(true);
 
-    if (!validateForm()) {
+    const isValid = validateForm();
+    if (!isValid) {
       return;
     }
 
+    setLoadingData(true);
+
     try {
-      // Optional: convert date-only to ISO if backend expects a datetime
       const formattedTaskData = {
         ...taskData,
         start_date: `${taskData.start_date}T00:00:00Z`,
@@ -110,7 +109,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
       console.error("Error creating task:", error);
       alert("Failed to create task.");
     } finally {
-      setLoadingData(true);
+      setLoadingData(false);
     }
   };
 
@@ -122,7 +121,6 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
         <h2 className="text-2xl font-semibold mb-4">Create Task</h2>
 
         <form onSubmit={handleSubmit}>
-          {/* Task Title */}
           <div className="mb-4">
             <label htmlFor="title" className="block text-sm font-semibold">
               Task Title
@@ -141,7 +139,6 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Task Description */}
           <div className="mb-4">
             <label
               htmlFor="description"
@@ -162,7 +159,6 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Task Status */}
           <div className="mb-4">
             <label htmlFor="status" className="block text-sm font-semibold">
               Status
@@ -184,7 +180,6 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Time Duration */}
           <div className="mb-4">
             <label
               htmlFor="time_duration"
@@ -206,7 +201,6 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Start Date (date-only input) */}
           <div className="mb-4">
             <label htmlFor="start_date" className="block text-sm font-semibold">
               Start Date
@@ -225,7 +219,6 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* End Date (date-only input) */}
           <div className="mb-4">
             <label htmlFor="end_date" className="block text-sm font-semibold">
               End Date
@@ -244,7 +237,6 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
-          {/* Form Actions */}
           <div className="flex justify-end space-x-2">
             <button
               type="button"
