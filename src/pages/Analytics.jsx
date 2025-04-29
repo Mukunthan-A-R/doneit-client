@@ -10,6 +10,7 @@ const Analytics = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const currentProject = useRecoilValue(ProjectState);
+  const [isNavOpen, setIsNavOpen] = useState(false); // ✅ One useState for navbar
 
   const params = useParams();
   const project_id = params.projectId;
@@ -54,9 +55,36 @@ const Analytics = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800 flex flex-col">
+      {/* Responsive Navbar Toggle */}
+      <div>
+        <button
+          onClick={() => setIsNavOpen(true)}
+          className="lg:hidden bg-blue-900 text-white px-4 py-2 m-4 rounded z-20"
+        >
+          ☰ Menu
+        </button>
+      </div>
+
+      {/* Responsive Navbar Panel */}
+      <div
+        className={`fixed top-0 left-0 h-full w-2/3 max-w-xs bg-blue-900 text-white p-4 z-30 transform transition-transform duration-300 ease-in-out 
+        ${isNavOpen ? "translate-x-0" : "-translate-x-full"} lg:hidden`}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Dashboard Menu</h2>
+          <button
+            onClick={() => setIsNavOpen(false)}
+            className="text-white text-2xl"
+          >
+            ✕
+          </button>
+        </div>
+        <TaskToolbar project_id={project_id} />
+      </div>
+
       <div className="flex flex-col lg:flex-row flex-grow">
         {/* Sidebar */}
-        <div className={`lg:block w-1/6 bg-blue-900 p-4`}>
+        <div className={`lg:block w-1/6 bg-blue-900 p-4 hidden lg:block`}>
           <h2 className="text-white">Task Toolbar</h2>
           <TaskToolbar project_id={project_id}></TaskToolbar>
         </div>
@@ -72,7 +100,7 @@ const Analytics = () => {
             </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
             {/* Pie Chart */}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold text-center mb-4">
@@ -111,7 +139,7 @@ const Analytics = () => {
             </div>
           </div>
 
-          {/* Summary Table - Professional & Themed */}
+          {/* Summary Table */}
           <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold text-blue-900 border-b-2 border-blue-700 pb-2 mb-4">
               Summary Overview
