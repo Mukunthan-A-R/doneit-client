@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const TASK_API_URL =
-  "https://task-manager-server-ugiw.onrender.com/api/usertasks/user";
+const TASK_API_URL = "http://localhost:3000/api/usertasks/user";
 
 export const fetchTasksByUserId = async (userId) => {
   try {

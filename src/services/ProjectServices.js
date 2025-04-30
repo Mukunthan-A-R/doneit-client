@@ -1,10 +1,12 @@
 import axios from "axios";
 
-const API_URL = "https://task-manager-server-ugiw.onrender.com/api/project";
+const API_URL = "http://localhost:3000/api/project";
 
 export const fetchProjects = async (user_id) => {
   try {
-    const response = await axios.get(`https://task-manager-server-ugiw.onrender.com/project/${user_id}`);
+    const response = await axios.get(
+      `http://localhost:3000/project/${user_id}`
+    );
     return response.data;
   } catch (error) {
     // If the response is 404 (no projects), return empty array
@@ -12,12 +14,14 @@ export const fetchProjects = async (user_id) => {
       return {
         success: false,
         status: 404,
-        data: []
+        data: [],
       };
     }
 
     // Throw other errors (like network/server issues)
-    throw new Error(error.message || "An error occurred while fetching projects.");
+    throw new Error(
+      error.message || "An error occurred while fetching projects."
+    );
   }
 };
 export const fetchProjectById = async (projectId) => {
@@ -47,10 +51,7 @@ export const createProject = async (projectData) => {
 
 export const editProjectById = async (projectId, projectData) => {
   try {
-    const response = await axios.put(
-      `${API_URL}/${projectId}`,
-      projectData
-    );
+    const response = await axios.put(`${API_URL}/${projectId}`, projectData);
     return response.data;
   } catch (error) {
     console.error("Error updating project:", error);
@@ -75,7 +76,7 @@ export const deleteAllProjects = async () => {
 export const deleteProjectById = async (projectId) => {
   try {
     const response = await axios.delete(
-      `https://task-manager-server-ugiw.onrender.com/api/project/${projectId}`
+      `http://localhost:3000/api/project/${projectId}`
     );
     console.log("Project Deleted:", response.data);
     return response.data;

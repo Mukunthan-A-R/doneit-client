@@ -1,9 +1,9 @@
 import axios from "axios";
-const API_URL = "https://task-manager-server-ugiw.onrender.com/api";
+const API_URL = "http://localhost:3000/api";
 
 export const fetchTasks = async (project_id) => {
   try {
-    const url = `https://task-manager-server-ugiw.onrender.com/api/tasks/${project_id}`;
+    const url = `http://localhost:3000/api/tasks/${project_id}`;
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
