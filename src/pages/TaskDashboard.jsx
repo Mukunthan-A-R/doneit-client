@@ -15,15 +15,17 @@ const TaskDashboard = () => {
 
   return (
     <div className="min-h-screen flex">
-      <div className={`lg:block w-1/6 bg-blue-900 p-4`}>
-        <h2 className="text-white">Task Toolbar</h2>
-        <TaskToolbar project_id={project_id}></TaskToolbar>
-      </div>
-      <div>
-        <TaskToolKit
-          project_id={project_id}
-          onCreateTask={handleCreateTask}
-        ></TaskToolKit>
+      <div className="w-1/6 flex">
+        <div className={`lg:block bg-blue-900 p-4`}>
+          <h2 className="text-white text-xl font-medium">Task Toolbar</h2>
+          <TaskToolbar project_id={project_id}></TaskToolbar>
+        </div>
+        <div>
+          <TaskToolKit
+            project_id={project_id}
+            onCreateTask={handleCreateTask}
+          ></TaskToolKit>
+        </div>
       </div>
       <div className="w-full lg:w-5/6 bg-white p-6">
         <h1 className="text-2xl font-semibold pb-4">Your Tasks Tracker !</h1>
