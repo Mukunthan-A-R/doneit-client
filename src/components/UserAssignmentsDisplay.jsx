@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAssignmentsByProjectId } from "../services/collaboratorUserData";
 import { fetchUserById } from "../services/UserData";
+import { useParams } from "react-router-dom";
 
 const UserAssignmentsDisplay = ({ projectId, reloadAssignments }) => {
   const [assignments, setAssignments] = useState([]);
@@ -8,15 +9,27 @@ const UserAssignmentsDisplay = ({ projectId, reloadAssignments }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const params = useParams();
+  const project_id = parseInt(params.projectId);
+
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
         setLoading(true);
         const response = await getAssignmentsByProjectId(projectId);
+        console.log(response);
+
+        const ResData = response.data;
+
+        const filterData = ResData.filter(
+          (item) => item.project_id === project_id
+        );
+
+        console.log(filterData);
 
         if (response.success) {
-          setAssignments(response.data || []);
-          fetchUserDetails(response.data || []);
+          setAssignments(filterData || []);
+          fetchUserDetails(filterData || []);
         } else {
           setError(response.message || "Failed to load assignments");
         }
