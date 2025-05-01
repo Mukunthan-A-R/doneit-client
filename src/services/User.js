@@ -1,7 +1,7 @@
 // registerUser.js
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/register";
+const API_URL = "https://task-manager-server-ugiw.onrender.com/api/register";
 
 export const registerUser = async (userData) => {
   try {
@@ -16,7 +16,7 @@ export const registerUser = async (userData) => {
   }
 };
 
-const API_URL_login = "http://localhost:3000/login";
+const API_URL_login = "https://task-manager-server-ugiw.onrender.com/login";
 
 export const loginUser = async (credentials) => {
   try {
@@ -27,3 +27,5 @@ export const loginUser = async (credentials) => {
     throw error;
   }
 };
+
+// https://task-manager-server-ugiw.onrender.com

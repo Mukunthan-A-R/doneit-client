@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Base URL for collaboration projects API
-const API_URL = "http://localhost:3000/api/collab-projects";
+const API_URL =
+  "https://task-manager-server-ugiw.onrender.com/api/collab-projects";
 
 // Function to fetch all projects a user is collaborating on
 export const getCollaboratedProjects = async (userId) => {

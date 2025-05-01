@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Base URL for the API
-const apiUrl = "http://localhost:3000/api/collab";
+const apiUrl = "https://task-manager-server-ugiw.onrender.com/api/collab";
 
 // 1. Get all assignments by project_id
 export const getAssignmentsByProjectId = async (projectId) => {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const USER_API_URL = "http://localhost:3000/api/user";
+const USER_API_URL = "https://task-manager-server-ugiw.onrender.com/api/user";
 
 export const fetchUserById = async (userId) => {
   try {

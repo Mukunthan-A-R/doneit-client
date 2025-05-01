@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/project";
+const API_URL = "https://task-manager-server-ugiw.onrender.com/api/project";
 
 export const fetchProjects = async (user_id) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/project/${user_id}`
+      `https://task-manager-server-ugiw.onrender.com/project/${user_id}`
     );
     return response.data;
   } catch (error) {
@@ -76,7 +76,7 @@ export const deleteAllProjects = async () => {
 export const deleteProjectById = async (projectId) => {
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/project/${projectId}`
+      `https://task-manager-server-ugiw.onrender.com/api/project/${projectId}`
     );
     console.log("Project Deleted:", response.data);
     return response.data;

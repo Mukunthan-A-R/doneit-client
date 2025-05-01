@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Define the API URL (email will be dynamic in the path)
-const API_URL = "http://localhost:3000/api/userEmail";
+const API_URL = "https://task-manager-server-ugiw.onrender.com/api/userEmail";
 
 // Function to fetch user by email
 export const getUserByEmail = async (email) => {
