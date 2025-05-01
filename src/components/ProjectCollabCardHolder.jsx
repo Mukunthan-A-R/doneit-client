@@ -33,24 +33,6 @@ const ProjectCollabCardHolder = ({ user_id, trigger }) => {
     if (currentUserId) fetchProjects();
   }, [currentUserId, trigger, editTrigger]);
 
-  //   useEffect(() => {
-  //     const getProjects = async () => {
-  //       try {
-  //         const data = await fetchProjects(currentUserId);
-  //         setProjects(data.data);
-  //       } catch (err) {
-  //         if (err.response && err.response.status === 404) {
-  //           setProjects([]); // No projects found
-  //         } else {
-  //           setError(err.message);
-  //         }
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
-  //     getProjects();
-  //   }, [currentUserId, trigger, editTrigger]);
-
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
       prevProjects.filter((project) => project.project_id !== projectId)
