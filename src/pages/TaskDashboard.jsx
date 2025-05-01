@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TaskToolbar from "../components/TaskToolbar";
 import TaskCardHolder from "../components/TaskCardHolder";
 import TaskToolKit from "../components/TaskToolKit";
 import { useParams } from "react-router-dom";
 
+import { useRecoilValue } from "recoil";
+import { userData } from "../data/atom";
+import { getCollaboratedProjects } from "../services/getCollaboratedProjects";
+
 const TaskDashboard = () => {
   const [trigger, setTrigger] = useState(1);
+  const [userRole, setUserRole] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const currentUserData = useRecoilValue(userData);
 
   const handleCreateTask = () => {
     setTrigger(trigger + 1);
@@ -14,6 +20,26 @@ const TaskDashboard = () => {
 
   const params = useParams();
   const project_id = params.projectId;
+
+  const currentUserId = currentUserData.user_id;
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const { data } = await getCollaboratedProjects(currentUserId);
+        const project = data.find((p) => p.project_id === parseInt(project_id));
+        setUserRole(project.role);
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+          console.log("No data");
+        } else {
+          console.log(err.message);
+        }
+      }
+    };
+
+    if (currentUserId) fetchProjects();
+  }, [currentUserId]);
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row relative overflow-x-hidden">
@@ -95,7 +121,11 @@ const TaskDashboard = () => {
         <h1 className="text-2xl font-semibold pb-4 pt-14 lg:pt-0">
           Your Tasks Tracker !
         </h1>
-        <TaskCardHolder project_id={project_id} value={trigger} />
+        <TaskCardHolder
+          userRole={userRole}
+          project_id={project_id}
+          value={trigger}
+        />
       </div>
     </div>
   );

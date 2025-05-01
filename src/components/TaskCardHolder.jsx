@@ -6,7 +6,7 @@ import { ProjectState } from "../data/atom";
 import TaskCard from "./TaskCard";
 import { editProjectById, fetchProjectById } from "../services/ProjectServices";
 
-const TaskCardHolder = ({ project_id, value }) => {
+const TaskCardHolder = ({ project_id, value, userRole }) => {
   const { projectId } = useParams();
   const fallbackProjectId = useRecoilValue(ProjectState);
   const activeProjectId = projectId || fallbackProjectId;
@@ -136,6 +136,7 @@ const TaskCardHolder = ({ project_id, value }) => {
       )}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 p-8 min-h-screen bg-gray-50">
         <TaskColumn
+          userRole={userRole}
           title="Not Started"
           bg="bg-gradient-to-b from-red-500 to-red-400"
           tasks={notStartedTasks}
@@ -145,6 +146,7 @@ const TaskCardHolder = ({ project_id, value }) => {
         />
 
         <TaskColumn
+          userRole={userRole}
           title="In Progress"
           bg="bg-gradient-to-b from-blue-500 to-blue-400"
           tasks={inProgressTasks}
@@ -154,6 +156,7 @@ const TaskCardHolder = ({ project_id, value }) => {
         />
 
         <TaskColumn
+          userRole={userRole}
           title="Completed"
           bg="bg-gradient-to-b from-green-500 to-green-400"
           tasks={completedTasks}
@@ -176,6 +179,7 @@ const TaskColumn = ({
   onEditClick,
   onDelete,
   onStatusChange,
+  userRole,
 }) => (
   <div
     className={`${bg} text-white p-4 rounded-md shadow-lg flex flex-col h-[80vh]`}
@@ -199,6 +203,7 @@ const TaskColumn = ({
             onEditClick={onEditClick}
             onhandleDelete={onDelete}
             onStatusChange={onStatusChange}
+            userRole={userRole}
           />
         ))
       )}

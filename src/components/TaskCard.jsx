@@ -13,6 +13,7 @@ const TaskCard = ({
   onhandleDelete,
   onStatusChange,
   project_id,
+  userRole,
 }) => {
   const remainingTime = calculateRemainingTime(endDate);
   const endTime = formatDate(endDate);
@@ -165,9 +166,11 @@ const TaskCard = ({
     <div className="p-4 my-4 bg-white rounded-lg shadow-lg relative">
       {/* 3-Dot Menu */}
       <div className="absolute top-2 right-2">
-        <button className="text-black font-bold pr-2" onClick={toggleMenu}>
-          <span className="text-xl">...</span>
-        </button>
+        {userRole !== "client" && (
+          <button className="text-black font-bold pr-2" onClick={toggleMenu}>
+            <span className="text-xl">...</span>
+          </button>
+        )}
 
         {menuVisible && (
           <div
