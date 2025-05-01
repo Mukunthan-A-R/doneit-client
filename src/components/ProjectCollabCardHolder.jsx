@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ProjectCard from "./ProjectCard";
 import { fetchProjects } from "../services/ProjectServices";
 import { getCollaboratedProjects } from "../services/getCollaboratedProjects";
+import ProjectCollabCard from "./ProjectCollabCard";
 
 const ProjectCollabCardHolder = ({ user_id, trigger }) => {
   const [projects, setProjects] = useState([]);
@@ -51,7 +52,7 @@ const ProjectCollabCardHolder = ({ user_id, trigger }) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {projects.map((project) => (
-            <ProjectCard
+            <ProjectCollabCard
               handleEditTrigger={() => {
                 setEditTrigger(editTrigger + 1);
               }}
