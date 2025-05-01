@@ -1,55 +1,53 @@
 import React, { useState, useEffect } from "react";
-import { getAssignmentsByProjectId } from "../services/collaboratorUserData"; // assuming you have this function
-import { fetchUserById } from "../services/UserData"; // assuming you have the fetchUserById function
+import { getAssignmentsByProjectId } from "../services/collaboratorUserData";
+import { fetchUserById } from "../services/UserData";
 
-const UserAssignmentsDisplay = ({ projectId, userId }) => {
+const UserAssignmentsDisplay = ({ projectId, reloadAssignments }) => {
   const [assignments, setAssignments] = useState([]);
-  const [users, setUsers] = useState({}); // To store user data by userId
+  const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch assignments when the component mounts
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        setLoading(true); // Start loading
+        setLoading(true);
         const response = await getAssignmentsByProjectId(projectId);
 
         if (response.success) {
           setAssignments(response.data || []);
-          fetchUserDetails(response.data || []); // Fetch user details for each assignment
+          fetchUserDetails(response.data || []);
         } else {
           setError(response.message || "Failed to load assignments");
         }
       } catch (err) {
         setError("Error fetching assignments");
       } finally {
-        setLoading(false); // End loading
+        setLoading(false);
       }
     };
 
-    // Function to fetch user details for each assignment
     const fetchUserDetails = async (assignmentsData) => {
       const userPromises = assignmentsData.map(async (assignment) => {
-        try {
-          const userData = await fetchUserById(assignment.user_id);
-          setUsers((prevUsers) => ({
-            ...prevUsers,
-            [assignment.user_id]: userData.data, // Storing user data by user_id
-          }));
-        } catch (err) {
-          console.error("Error fetching user data:", err);
+        if (!users[assignment.user_id]) {
+          try {
+            const userData = await fetchUserById(assignment.user_id);
+            setUsers((prevUsers) => ({
+              ...prevUsers,
+              [assignment.user_id]: userData.data,
+            }));
+          } catch (err) {
+            console.error("Error fetching user data:", err);
+          }
         }
       });
 
-      // Wait for all user fetch requests to complete
       await Promise.all(userPromises);
     };
 
     fetchAssignments();
-  }, [projectId, userId]); // Re-run the effect when projectId changes
+  }, [projectId, reloadAssignments]); // Re-run the effect when projectId or reloadAssignments changes
 
-  // Render the component
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h2 className="text-2xl font-semibold text-center mb-6">
@@ -57,21 +55,13 @@ const UserAssignmentsDisplay = ({ projectId, userId }) => {
       </h2>
 
       {loading && (
-        <div className="text-center text-gray-500">
-          <p>Loading assignments...</p>
-        </div>
+        <p className="text-center text-gray-500">Loading assignments...</p>
       )}
-
-      {error && !loading && (
-        <div className="text-center text-red-500">
-          <p>{error}</p>
-        </div>
-      )}
-
+      {error && !loading && <p className="text-center text-red-500">{error}</p>}
       {!loading && !error && assignments.length === 0 && (
-        <div className="text-center text-gray-500">
-          <p>No assignments found for this project.</p>
-        </div>
+        <p className="text-center text-gray-500">
+          No assignments found for this project.
+        </p>
       )}
 
       {!loading && !error && assignments.length > 0 && (
@@ -89,7 +79,7 @@ const UserAssignmentsDisplay = ({ projectId, userId }) => {
             </thead>
             <tbody>
               {assignments.map((assignment) => {
-                const user = users[assignment.user_id]; // Get user data for this assignment
+                const user = users[assignment.user_id];
                 return (
                   <tr key={assignment.assignment_id} className="border-b">
                     <td className="px-6 py-4">

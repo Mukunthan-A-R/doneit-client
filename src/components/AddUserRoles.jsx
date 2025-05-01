@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { getUserByEmail } from "../services/UserEmail";
-
 import { useParams } from "react-router-dom";
 import { createAssignment } from "../services/collaboratorUserData";
 import UserAssignmentsDisplay from "./UserAssignmentsDisplay";
@@ -11,8 +10,9 @@ const AddUserRoles = () => {
   const [role, setRole] = useState("member");
   const [userDetails, setUserDetails] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
+  const [reloadAssignments, setReloadAssignments] = useState(false); // Add a state to trigger re-fetching assignments
 
-  const project_id = useParams();
+  const { projectId } = useParams(); // Using destructuring for better readability
 
   useEffect(() => {
     if (email) {
@@ -20,7 +20,6 @@ const AddUserRoles = () => {
         try {
           const data = await getUserByEmail(email.trim());
           setUserId(data.data.user_id);
-
           setUserDetails(data);
           setUserNotFound(false);
         } catch (error) {
@@ -45,13 +44,16 @@ const AddUserRoles = () => {
       try {
         const newUser = {
           user_id: userId,
-          project_id: project_id.projectId,
+          project_id: projectId,
           role: role,
           status: "pending",
         };
 
         const response = await createAssignment(newUser);
         console.log("Assignment created successfully:", response);
+
+        // After adding a user, trigger a re-fetch of assignments
+        setReloadAssignments((prev) => !prev); // This will toggle the state and trigger a re-render of the UserAssignmentsDisplay
 
         setEmail("");
         setRole("member");
@@ -112,7 +114,11 @@ const AddUserRoles = () => {
             <p className="text-green-600 text-sm mt-2">User found!</p>
           )}
         </form>
-        <UserAssignmentsDisplay projectId={project_id}></UserAssignmentsDisplay>
+        {/* Pass the reloadAssignments state to UserAssignmentsDisplay to trigger re-fetch */}
+        <UserAssignmentsDisplay
+          projectId={projectId}
+          reloadAssignments={reloadAssignments}
+        />
       </div>
     </div>
   );
