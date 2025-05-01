@@ -4,7 +4,7 @@ import { MdInfoOutline } from "react-icons/md";
 import ProjectInfo from "./modals/ProjectInfo";
 import CreateTask from "./modals/CreateTask"; // Import the new task creation component
 
-const TaskToolKit = ({ project_id, onCreateTask }) => {
+const TaskToolKit = ({ project_id, onCreateTask, userRole }) => {
   const [showInfo, setShowInfo] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false); // State to toggle CreateTask visibility
   const [hoveredButton, setHoveredButton] = useState(null); // State to track hovered button
@@ -38,23 +38,25 @@ const TaskToolKit = ({ project_id, onCreateTask }) => {
         </div>
 
         {/* Trigger CreateTask Button */}
-        <div
-          className="relative"
-          onMouseEnter={() => setHoveredButton("createTask")}
-          onMouseLeave={() => setHoveredButton(null)}
-        >
-          <button
-            onClick={() => setShowCreateTask(true)}
-            className="flex items-center justify-center hover:bg-blue-700 transition duration-300 rounded-full"
+        {userRole !== "client" && userRole !== "member" && (
+          <div
+            className="relative"
+            onMouseEnter={() => setHoveredButton("createTask")}
+            onMouseLeave={() => setHoveredButton(null)}
           >
-            <IoMdAddCircleOutline size={30} />
-          </button>
-          {hoveredButton === "createTask" && (
-            <div className="absolute left-full top-0 bg-blue-800 text-white text-sm p-1 rounded-md w-48 ml-2">
-              {toolDescriptions.createTask}
-            </div>
-          )}
-        </div>
+            <button
+              onClick={() => setShowCreateTask(true)}
+              className="flex items-center justify-center hover:bg-blue-700 transition duration-300 rounded-full"
+            >
+              <IoMdAddCircleOutline size={30} />
+            </button>
+            {hoveredButton === "createTask" && (
+              <div className="absolute left-full top-0 bg-blue-800 text-white text-sm p-1 rounded-md w-48 ml-2">
+                {toolDescriptions.createTask}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Show the ProjectInfo modal */}

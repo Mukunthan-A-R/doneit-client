@@ -85,6 +85,7 @@ const TaskDashboard = () => {
           <TaskToolbar project_id={project_id} />
           <div>
             <TaskToolKit
+              userRole={userRole}
               project_id={project_id}
               onCreateTask={handleCreateTask}
             />
