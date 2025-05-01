@@ -6,6 +6,7 @@ import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
 
 import { useNavigate } from "react-router-dom";
+import ProjectCollabCardHolder from "../components/ProjectCollabCardHolder";
 
 const Dashboard = () => {
   const [trigger, setTrigger] = useState(1);
@@ -100,6 +101,17 @@ const Dashboard = () => {
             user_id={currentUserData.user_id}
           />
         )}
+        <div className="bg-red-300">
+          <h1 className="text-2xl font-semibold pb-4 pt-14 lg:pt-0">
+            Your Collab Projects !
+          </h1>
+          {trigger && (
+            <ProjectCollabCardHolder
+              trigger={trigger}
+              user_id={currentUserData.user_id}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
