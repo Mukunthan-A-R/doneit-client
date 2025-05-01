@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { FiEdit, FiTrash } from "react-icons/fi";
 import { getUserByEmail } from "../services/UserEmail";
 
+import { useParams } from "react-router-dom";
+import { createAssignment } from "../services/collaboratorUserData";
+
 const AddUserRoles = () => {
+  const [userId, setUserId] = useState(null);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("member");
-  const [users, setUsers] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
+
+  const project_id = useParams();
 
   useEffect(() => {
     if (email) {
       const fetchUser = async () => {
         try {
           const data = await getUserByEmail(email.trim());
+          setUserId(data.data.user_id);
+
           setUserDetails(data);
           setUserNotFound(false);
         } catch (error) {
@@ -31,36 +37,28 @@ const AddUserRoles = () => {
   const handleEmailChange = (event) => setEmail(event.target.value);
   const handleRoleChange = (event) => setRole(event.target.value);
 
-  const handleAddUser = (event) => {
+  const handleAddUser = async (event) => {
     event.preventDefault();
 
-    if (userDetails && !users.some((user) => user.email === email)) {
-      setUsers([
-        ...users,
-        {
-          email: userDetails.email,
-          role,
-          name: userDetails.name,
-          addedAt: new Date().toLocaleString(),
-        },
-      ]);
-      setEmail("");
-      setRole("member");
-      setUserDetails(null);
-      setUserNotFound(false);
-    }
-  };
+    if (userDetails) {
+      try {
+        const newUser = {
+          user_id: userId,
+          project_id: project_id.projectId,
+          role: role,
+          status: "pending",
+        };
 
-  const handleDeleteUser = (email) => {
-    setUsers(users.filter((user) => user.email !== email));
-  };
+        const response = await createAssignment(newUser);
+        console.log("Assignment created successfully:", response);
 
-  const handleEditUser = (email) => {
-    const userToEdit = users.find((user) => user.email === email);
-    if (userToEdit) {
-      setEmail(userToEdit.email);
-      setRole(userToEdit.role);
-      handleDeleteUser(email);
+        setEmail("");
+        setRole("member");
+        setUserDetails(null);
+        setUserNotFound(false);
+      } catch (error) {
+        console.error("Error adding user:", error);
+      }
     }
   };
 
@@ -104,7 +102,6 @@ const AddUserRoles = () => {
             </button>
           </div>
 
-          {/* Validation Messages */}
           {userNotFound && (
             <p className="text-red-500 text-sm mt-2">
               No user found with this email.
@@ -114,52 +111,6 @@ const AddUserRoles = () => {
             <p className="text-green-600 text-sm mt-2">User found!</p>
           )}
         </form>
-      </div>
-
-      {/* Display Users */}
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold">Added Users</h2>
-        <div className="mt-4 space-y-4">
-          {users.length > 0 ? (
-            users.map((user, index) => (
-              <div
-                key={index}
-                className="flex justify-between items-center p-4 bg-gray-50 shadow-lg rounded-lg hover:bg-gray-100 transition-all duration-200 ease-in-out"
-              >
-                <div>
-                  <div className="text-lg font-semibold">{user.email}</div>
-                  <div className="text-sm text-gray-500">{user.role}</div>
-                  {user.name && (
-                    <div className="text-sm text-gray-700">
-                      Name: {user.name}
-                    </div>
-                  )}
-                  <div className="text-xs text-gray-400 mt-1">
-                    {user.addedAt}
-                  </div>
-                </div>
-                <div className="flex space-x-3">
-                  <button
-                    onClick={() => handleEditUser(user.email)}
-                    className="text-blue-500 hover:text-blue-700 transition-colors duration-200"
-                    aria-label="Edit user"
-                  >
-                    <FiEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteUser(user.email)}
-                    className="text-red-500 hover:text-red-700 transition-colors duration-200"
-                    aria-label="Delete user"
-                  >
-                    <FiTrash />
-                  </button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="p-4 text-gray-500">No users added yet.</div>
-          )}
-        </div>
       </div>
     </div>
   );
