@@ -3,6 +3,7 @@ import { getUserByEmail } from "../services/UserEmail";
 
 import { useParams } from "react-router-dom";
 import { createAssignment } from "../services/collaboratorUserData";
+import UserAssignmentsDisplay from "./UserAssignmentsDisplay";
 
 const AddUserRoles = () => {
   const [userId, setUserId] = useState(null);
@@ -111,6 +112,7 @@ const AddUserRoles = () => {
             <p className="text-green-600 text-sm mt-2">User found!</p>
           )}
         </form>
+        <UserAssignmentsDisplay projectId={project_id}></UserAssignmentsDisplay>
       </div>
     </div>
   );
