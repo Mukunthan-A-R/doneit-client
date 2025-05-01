@@ -101,7 +101,7 @@ const Dashboard = () => {
             user_id={currentUserData.user_id}
           />
         )}
-        <div className="bg-red-300">
+        <div className="mt-8">
           <h1 className="text-2xl font-semibold pb-4 pt-14 lg:pt-0">
             Your Collab Projects !
           </h1>
