@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { getUserByEmail } from "../services/UserEmail";
 import { useParams } from "react-router-dom";
-import { createAssignment } from "../services/collaboratorUserData";
+import {
+  createAssignment,
+  getAssignmentsByProjectId,
+} from "../services/collaboratorUserData";
 import UserAssignmentsDisplay from "./UserAssignmentsDisplay";
+
+import { useRecoilValue } from "recoil";
+import { userData } from "../data/atom";
 
 const AddUserRoles = () => {
   const [userId, setUserId] = useState(null);
@@ -11,8 +17,38 @@ const AddUserRoles = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
   const [reloadAssignments, setReloadAssignments] = useState(false); // Add a state to trigger re-fetching assignments
+  const [userRole, setUserRole] = useState("");
 
-  const { projectId } = useParams(); // Using destructuring for better readability
+  const { projectId } = useParams();
+
+  const currentUserData = useRecoilValue(userData);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const response = await getAssignmentsByProjectId(projectId);
+        const ResData = response.data;
+
+        let filterData = ResData.filter(
+          (item) => item.project_id === parseInt(projectId)
+        );
+
+        filterData = filterData.filter(
+          (item) => item.user_id === parseInt(currentUserData.user_id)
+        );
+
+        if (response.success) {
+          setUserRole(filterData[0].role);
+          // console.log("filterData in the outer level");
+          // console.log(filterData);
+        }
+      } catch (err) {
+        // setError("Error fetching assignments");
+      }
+    };
+
+    fetchAssignments();
+  }, [projectId]);
 
   useEffect(() => {
     if (email) {
@@ -65,61 +101,68 @@ const AddUserRoles = () => {
     }
   };
 
+  console.log("userRole");
+  console.log(userRole);
+
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-semibold text-center mb-6">
-        Add Users by Email & Role
-      </h1>
+      {!["member", "client"].includes(userRole) && (
+        <>
+          <h1 className="text-3xl font-semibold text-center mb-6">
+            Add Users by Email & Role
+          </h1>
 
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <form onSubmit={handleAddUser} className="space-y-4">
-          <div className="flex flex-col md:flex-row items-center space-x-4 space-y-4 md:space-y-0">
-            <input
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              className="w-full md:w-1/2 p-2 border border-gray-300 rounded-lg"
-              placeholder="Enter user's email"
-              required
-            />
-            <select
-              value={role}
-              onChange={handleRoleChange}
-              className="w-full md:w-1/4 p-2 border border-gray-300 rounded-lg"
-            >
-              <option value="admin">Admin</option>
-              <option value="manager">Manager</option>
-              <option value="member">Member</option>
-              <option value="client">Client</option>
-            </select>
-            <button
-              type="submit"
-              disabled={!userDetails}
-              className={`w-full md:w-1/4 px-4 py-2 rounded-lg text-white ${
-                userDetails
-                  ? "bg-blue-600 hover:bg-blue-700"
-                  : "bg-gray-400 cursor-not-allowed"
-              }`}
-            >
-              Add User
-            </button>
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <form onSubmit={handleAddUser} className="space-y-4">
+              <div className="flex flex-col md:flex-row items-center space-x-4 space-y-4 md:space-y-0">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  className="w-full md:w-1/2 p-2 border border-gray-300 rounded-lg"
+                  placeholder="Enter user's email"
+                  required
+                />
+                <select
+                  value={role}
+                  onChange={handleRoleChange}
+                  className="w-full md:w-1/4 p-2 border border-gray-300 rounded-lg"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="manager">Manager</option>
+                  <option value="member">Member</option>
+                  <option value="client">Client</option>
+                </select>
+                <button
+                  type="submit"
+                  disabled={!userDetails}
+                  className={`w-full md:w-1/4 px-4 py-2 rounded-lg text-white ${
+                    userDetails
+                      ? "bg-blue-600 hover:bg-blue-700"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  Add User
+                </button>
+              </div>
+
+              {userNotFound && (
+                <p className="text-red-500 text-sm mt-2">
+                  No user found with this email.
+                </p>
+              )}
+              {userDetails && !userNotFound && (
+                <p className="text-green-600 text-sm mt-2">User found!</p>
+              )}
+            </form>
           </div>
-
-          {userNotFound && (
-            <p className="text-red-500 text-sm mt-2">
-              No user found with this email.
-            </p>
-          )}
-          {userDetails && !userNotFound && (
-            <p className="text-green-600 text-sm mt-2">User found!</p>
-          )}
-        </form>
-        {/* Pass the reloadAssignments state to UserAssignmentsDisplay to trigger re-fetch */}
-        <UserAssignmentsDisplay
-          projectId={projectId}
-          reloadAssignments={reloadAssignments}
-        />
-      </div>
+        </>
+      )}
+      {/* Pass the reloadAssignments state to UserAssignmentsDisplay to trigger re-fetch */}
+      <UserAssignmentsDisplay
+        projectId={projectId}
+        reloadAssignments={reloadAssignments}
+      />
     </div>
   );
 };
