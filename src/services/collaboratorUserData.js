@@ -7,7 +7,7 @@ const apiUrl = "https://task-manager-server-ugiw.onrender.com/api/collab";
 export const getAssignmentsByProjectId = async (projectId) => {
   try {
     // Make GET request to fetch assignments by project_id
-    const response = await axios.get(`${apiUrl}/${projectId}`, {
+    const response = await axios.get(apiUrl, {
       params: { project_id: projectId }, // Sending project_id as a query param
     });
 

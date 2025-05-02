@@ -26,10 +26,19 @@ const UserAssignmentsDisplay = ({
       try {
         setLoading(true);
         const response = await getAssignmentsByProjectId(projectId);
+        console.log(response);
+
+        const ResData = response.data;
+
+        const filterData = ResData.filter(
+          (item) => item.project_id === project_id
+        );
+
+        console.log(filterData);
 
         if (response.success) {
-          setAssignments(response.data || []);
-          fetchUserDetails(response.data || []);
+          setAssignments(filterData || []);
+          fetchUserDetails(filterData || []);
         } else {
           setError(response.message || "Failed to load assignments");
         }
