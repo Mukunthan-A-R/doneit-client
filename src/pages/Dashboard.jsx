@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
   const currentUserData = useRecoilValue(userData);
-  // console.log(currentUserData);
+  console.log(currentUserData);
 
   useEffect(() => {
     const token = localStorage.getItem("x-auth-token");
@@ -92,7 +92,10 @@ const Dashboard = () => {
           )}
         </button>
 
-        <h1 className="text-2xl font-semibold pb-4 pt-14 lg:pt-0">
+        <h1 className="text-xl font-medium pb-4 pt-14 lg:pt-0">
+          Welcome {currentUserData.name} !
+        </h1>
+        <h1 className="text-xl font-semibold pb-4 pt-2 lg:pt-0">
           Your Projects !
         </h1>
         {trigger && (
@@ -102,7 +105,7 @@ const Dashboard = () => {
           />
         )}
         <div className="mt-8">
-          <h1 className="text-2xl font-semibold pb-4 pt-14 lg:pt-0">
+          <h1 className="text-xl font-semibold pb-4 pt-2 lg:pt-0">
             Your Collab Projects !
           </h1>
           {trigger && (
