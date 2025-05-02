@@ -9,6 +9,8 @@ import UserAssignmentsDisplay from "./UserAssignmentsDisplay";
 
 import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
+import { fetchProjectById } from "../services/ProjectServices";
+import { fetchUserById } from "../services/UserData";
 
 const AddUserRoles = () => {
   const [userId, setUserId] = useState(null);
@@ -18,6 +20,7 @@ const AddUserRoles = () => {
   const [userNotFound, setUserNotFound] = useState(false);
   const [reloadAssignments, setReloadAssignments] = useState(false); // Add a state to trigger re-fetching assignments
   const [userRole, setUserRole] = useState("");
+  const [ownerEmail, setOwnerEmail] = useState("");
 
   const { projectId } = useParams();
 
@@ -51,8 +54,29 @@ const AddUserRoles = () => {
   }, [projectId]);
 
   useEffect(() => {
+    const fetchProjectBuId = async () => {
+      try {
+        const response = await fetchProjectById(projectId);
+        const ProjectOwner = await fetchUserById(response.data.created);
+        setOwnerEmail(ProjectOwner.data.email);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchProjectBuId();
+  }, [projectId]);
+
+  useEffect(() => {
     if (email) {
       const fetchUser = async () => {
+        if (ownerEmail.trim() === email.trim()) {
+          alert(
+            `The email ${email.trim()} you are trying to add is the owner of the project ! \n
+            You can't assign roles to owner of the Project !`
+          );
+          return;
+        }
         try {
           const data = await getUserByEmail(email.trim());
           setUserId(data.data.user_id);
