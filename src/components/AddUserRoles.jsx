@@ -6,9 +6,11 @@ import {
   getAssignmentsByProjectId,
 } from "../services/collaboratorUserData";
 import UserAssignmentsDisplay from "./UserAssignmentsDisplay";
+import { fetchProjectById } from "../services/ProjectServices";
 
 import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
+import { fetchUserById } from "../services/UserData";
 
 const AddUserRoles = () => {
   const [userId, setUserId] = useState(null);
@@ -18,9 +20,9 @@ const AddUserRoles = () => {
   const [userNotFound, setUserNotFound] = useState(false);
   const [reloadAssignments, setReloadAssignments] = useState(false); // Add a state to trigger re-fetching assignments
   const [userRole, setUserRole] = useState("");
+  const [projectOwner, setProjectOwner] = useState(null);
 
   const { projectId } = useParams();
-
   const currentUserData = useRecoilValue(userData);
 
   useEffect(() => {
@@ -39,8 +41,6 @@ const AddUserRoles = () => {
 
         if (response.success) {
           setUserRole(filterData[0].role);
-          // console.log("filterData in the outer level");
-          // console.log(filterData);
         }
       } catch (err) {
         // setError("Error fetching assignments");
@@ -51,8 +51,28 @@ const AddUserRoles = () => {
   }, [projectId]);
 
   useEffect(() => {
+    const fetchProjectCreator = async () => {
+      try {
+        const response = await fetchProjectById(projectId);
+        const ProjectOwner = await fetchUserById(response.data.created);
+        setProjectOwner(ProjectOwner.data.email);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchProjectCreator();
+  }, []);
+
+  useEffect(() => {
     if (email) {
       const fetchUser = async () => {
+        if (projectOwner.trim() === email.trim()) {
+          alert(
+            `The email ${email.trim()} you are trying add is already owner of the project`
+          );
+          return;
+        }
         try {
           const data = await getUserByEmail(email.trim());
           setUserId(data.data.user_id);
@@ -101,8 +121,8 @@ const AddUserRoles = () => {
     }
   };
 
-  console.log("userRole");
-  console.log(userRole);
+  // console.log("userRole");
+  // console.log(userRole);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
