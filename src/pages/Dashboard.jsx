@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
   const currentUserData = useRecoilValue(userData);
-  console.log(currentUserData);
+  // console.log(currentUserData);
 
   useEffect(() => {
     const token = localStorage.getItem("x-auth-token");
