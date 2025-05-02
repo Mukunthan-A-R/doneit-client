@@ -148,24 +148,27 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
 
   return (
     <>
-      <div className="flex gap-2 mt-4 lg:mt-0">
+      <div className="flex flex-col sm:flex-row  gap-2 mt-8 lg:mt-0">
         <h2 className="text-2xl font-medium ">{project.name}</h2>
-        <p className="mt-2">
-          ( {formatDate(project.start_date)} to {formatDate(project.end_date)} )
-        </p>
-        <p className="font-medium flex items-center mt-2">
-          <span
-            className={` px-2 py-1 rounded-full text-white text-xs font-semibold ${
-              project.priority === "low"
-                ? "bg-green-500"
-                : project.priority === "medium"
-                ? "bg-orange-500"
-                : "bg-yellowgreen"
-            }`}
-          >
-            {project.priority}
-          </span>
-        </p>
+        <span className="flex gap-2">
+          <p className="mt-2">
+            ( {formatDate(project.start_date)} to {formatDate(project.end_date)}{" "}
+            )
+          </p>
+          <p className="font-medium flex items-center mt-2">
+            <span
+              className={` px-2 py-1 rounded-full text-white text-xs font-semibold ${
+                project.priority === "low"
+                  ? "bg-green-500"
+                  : project.priority === "medium"
+                  ? "bg-orange-500"
+                  : "bg-yellowgreen"
+              }`}
+            >
+              {project.priority}
+            </span>
+          </p>
+        </span>
       </div>
       <p className="font-medium">Description : {project.description}</p>
       <p className="font-medium"> Status : {project.status}</p>
