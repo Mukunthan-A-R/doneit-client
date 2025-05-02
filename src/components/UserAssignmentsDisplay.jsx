@@ -11,6 +11,7 @@ const UserAssignmentsDisplay = ({
   projectId,
   reloadAssignments,
   setReloadAssignments,
+  userRole,
 }) => {
   const [assignments, setAssignments] = useState([]);
   const [users, setUsers] = useState({});
@@ -118,7 +119,9 @@ const UserAssignmentsDisplay = ({
                 <th className="px-4 py-3 text-left text-gray-700">
                   Assigned At
                 </th>
-                <th className="px-4 py-3 text-left text-gray-700">Delete</th>
+                {!["member", "client"].includes(userRole) && (
+                  <th className="px-4 py-3 text-left text-gray-700">Delete</th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -136,17 +139,19 @@ const UserAssignmentsDisplay = ({
                     <td className="px-4 py-4">
                       {new Date(assignment.assigned_at).toLocaleDateString()}
                     </td>
-                    <td>
-                      <div className="flex items-center justify-center h-full py-4">
-                        <MdDelete
-                          onClick={() =>
-                            handleDelete(parseInt(assignment.assignment_id))
-                          }
-                          color="red"
-                          size={20}
-                        />
-                      </div>
-                    </td>
+                    {!["member", "client"].includes(userRole) && (
+                      <td>
+                        <div className="flex items-center justify-center h-full py-4">
+                          <MdDelete
+                            onClick={() =>
+                              handleDelete(parseInt(assignment.assignment_id))
+                            }
+                            color="red"
+                            size={20}
+                          />
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 );
               })}
