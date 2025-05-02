@@ -162,7 +162,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
                   ? "bg-green-500"
                   : project.priority === "medium"
                   ? "bg-orange-500"
-                  : "bg-yellowgreen"
+                  : "bg-red-500"
               }`}
             >
               {project.priority}
