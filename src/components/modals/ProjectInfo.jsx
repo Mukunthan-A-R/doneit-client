@@ -13,7 +13,7 @@ const ProjectInfo = ({ project_id, show, onClose }) => {
           setLoading(true);
           const data = await fetchProjectById(project_id);
           setProject(data);
-          console.log(data);
+          // console.log(data);
         } catch (err) {
           setError(err.message);
         } finally {
@@ -25,7 +25,7 @@ const ProjectInfo = ({ project_id, show, onClose }) => {
     getProject(project_id);
   }, []);
 
-  console.log(project);
+  // console.log(project);
 
   if (!show) return null;
 

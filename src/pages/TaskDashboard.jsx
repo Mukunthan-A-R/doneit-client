@@ -28,7 +28,9 @@ const TaskDashboard = () => {
       try {
         const { data } = await getCollaboratedProjects(currentUserId);
         const project = data.find((p) => p.project_id === parseInt(project_id));
-        setUserRole(project.role);
+        if (project) {
+          setUserRole(project.role);
+        }
       } catch (err) {
         if (err.response && err.response.status === 404) {
           console.log("No data");
@@ -119,9 +121,6 @@ const TaskDashboard = () => {
 
       {/* Main Content */}
       <div className="w-full lg:w-5/6 bg-white p-6">
-        <h1 className="text-2xl font-semibold pb-4 pt-14 lg:pt-0">
-          Your Tasks Tracker !
-        </h1>
         <TaskCardHolder
           userRole={userRole}
           project_id={project_id}

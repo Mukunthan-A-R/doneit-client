@@ -11,6 +11,16 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
   const fallbackProjectId = useRecoilValue(ProjectState);
   const activeProjectId = projectId || fallbackProjectId;
 
+  const [project, setProject] = useState({
+    created: 0,
+    description: "",
+    end_date: "2025-01-01T00:00:00.000Z",
+    name: "",
+    priority: "",
+    project_id: 58,
+    start_date: "2025-01-01T00:00:00.000Z",
+    status: "",
+  });
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -52,6 +62,21 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
       setLoading(false);
     };
   }, [activeProjectId, trigger, value]);
+
+  useEffect(() => {
+    const getProject = async (project_id) => {
+      if (project_id) {
+        try {
+          const { data } = await fetchProjectById(project_id);
+          setProject(data);
+        } catch (err) {
+          setError(err.message);
+        }
+      }
+    };
+
+    getProject(project_id);
+  }, []);
 
   const handleStatusChange = (taskId, newStatus) => {
     setTasks((prevTasks) =>
@@ -122,7 +147,29 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
   }
 
   return (
-    <div className="bg-red-400">
+    <>
+      <div className="flex gap-2 mt-4 lg:mt-0">
+        <h2 className="text-2xl font-medium ">{project.name}</h2>
+        <p className="mt-2">
+          ( {formatDate(project.start_date)} to {formatDate(project.end_date)} )
+        </p>
+        <p className="font-medium flex items-center mt-2">
+          <span
+            className={` px-2 py-1 rounded-full text-white text-xs font-semibold ${
+              project.priority === "low"
+                ? "bg-green-500"
+                : project.priority === "medium"
+                ? "bg-orange-500"
+                : "bg-yellowgreen"
+            }`}
+          >
+            {project.priority}
+          </span>
+        </p>
+      </div>
+      <p className="font-medium">Description : {project.description}</p>
+      <p className="font-medium"> Status : {project.status}</p>
+
       {allTasksCompleted && (
         <div className="col-span-3 text-center p-4 bg-green-200 text-green-800 rounded-md">
           <p>🎉 All tasks are completed! 🎉</p>
@@ -165,7 +212,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
           onStatusChange={handleStatusChange}
         />
       </div>
-    </div>
+    </>
   );
 };
 
@@ -179,7 +226,7 @@ const TaskColumn = ({
   onEditClick,
   onDelete,
   onStatusChange,
-  userRole,
+  userRole = "",
 }) => (
   <div
     className={`${bg} text-white p-4 rounded-md shadow-lg flex flex-col h-[80vh]`}
@@ -210,3 +257,8 @@ const TaskColumn = ({
     </div>
   </div>
 );
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB");
+};
