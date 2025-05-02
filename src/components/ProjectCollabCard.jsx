@@ -74,8 +74,8 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
   const truncate = (str, max = 20) =>
     str.length > max ? str.slice(0, max) + "..." : str;
 
-  console.log("project.role");
-  console.log(project.role);
+  // console.log("project.role");
+  // console.log(project.role);
 
   return (
     <>

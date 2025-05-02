@@ -11,15 +11,15 @@ const ProjectCollabCardHolder = ({ user_id, trigger }) => {
   const [editTrigger, setEditTrigger] = useState(1);
 
   const currentUserId = parseInt(user_id);
-  console.log("projects");
-  console.log(projects);
+  // console.log("projects");
+  // console.log(projects);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const data = await getCollaboratedProjects(currentUserId);
         setProjects(data.data);
-        console.log("Collaborated Projects:", data);
+        // console.log("Collaborated Projects:", data);
       } catch (err) {
         if (err.response && err.response.status === 404) {
           setProjects([]); // No projects found
