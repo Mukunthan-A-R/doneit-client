@@ -50,7 +50,7 @@ const TaskDashboard = () => {
           fixed top-0 h-full 
           ${isSidebarOpen ? "left-0" : "-left-full"} 
           transition-all duration-300 z-20
-          lg:static lg:h-auto lg:w-1/6 lg:block
+          lg:static lg:h-auto lg:w-3/12  lg:block
         `}
       >
         {/* Sidebar Header with Close icon */}

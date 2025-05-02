@@ -122,7 +122,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
   }
 
   return (
-    <>
+    <div className="bg-red-400">
       {allTasksCompleted && (
         <div className="col-span-3 text-center p-4 bg-green-200 text-green-800 rounded-md">
           <p>🎉 All tasks are completed! 🎉</p>
@@ -134,7 +134,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
           </button>
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 p-8 min-h-screen bg-gray-50">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 py-8 px-3 md:px-0 min-h-screen bg-gray-50">
         <TaskColumn
           userRole={userRole}
           title="Not Started"
@@ -165,7 +165,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
           onStatusChange={handleStatusChange}
         />
       </div>
-    </>
+    </div>
   );
 };
 
