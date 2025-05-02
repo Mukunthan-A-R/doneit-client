@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { getAssignmentsByProjectId } from "../services/collaboratorUserData";
+import {
+  deleteAssignmentById,
+  getAssignmentsByProjectId,
+} from "../services/collaboratorUserData";
 import { fetchUserById } from "../services/UserData";
 import { useParams } from "react-router-dom";
+import { MdDelete } from "react-icons/md";
 
-const UserAssignmentsDisplay = ({ projectId, reloadAssignments }) => {
+const UserAssignmentsDisplay = ({
+  projectId,
+  reloadAssignments,
+  setReloadAssignments,
+}) => {
   const [assignments, setAssignments] = useState([]);
   const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -61,6 +69,28 @@ const UserAssignmentsDisplay = ({ projectId, reloadAssignments }) => {
     fetchAssignments();
   }, [projectId, reloadAssignments]); // Re-run the effect when projectId or reloadAssignments changes
 
+  const handleDelete = async (assignmentId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this assignment?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const response = await deleteAssignmentById(assignmentId);
+      if (response.success) {
+        // Re-fetch the assignments after deletion
+        // reloadAssignments(); // This should be passed in as a prop
+        // fetchUserDetails(assignmentId);
+        setReloadAssignments(!reloadAssignments);
+      } else {
+        alert(response.message || "Failed to delete assignment.");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("An error occurred while deleting.");
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h2 className="text-2xl font-semibold text-center mb-6">
@@ -82,12 +112,13 @@ const UserAssignmentsDisplay = ({ projectId, reloadAssignments }) => {
           <table className="min-w-full table-auto">
             <thead className="bg-gray-100">
               <tr>
-                <th className="px-6 py-3 text-left text-gray-700">User</th>
-                <th className="px-6 py-3 text-left text-gray-700">Role</th>
-                <th className="px-6 py-3 text-left text-gray-700">Company</th>
-                <th className="px-6 py-3 text-left text-gray-700">
+                <th className="px-4 py-3 text-left text-gray-700">User</th>
+                <th className="px-4 py-3 text-left text-gray-700">Role</th>
+                <th className="px-4 py-3 text-left text-gray-700">Company</th>
+                <th className="px-4 py-3 text-left text-gray-700">
                   Assigned At
                 </th>
+                <th className="px-4 py-3 text-left text-gray-700">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -95,15 +126,26 @@ const UserAssignmentsDisplay = ({ projectId, reloadAssignments }) => {
                 const user = users[assignment.user_id];
                 return (
                   <tr key={assignment.assignment_id} className="border-b">
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       {user ? user.name : "Loading..."}
                     </td>
-                    <td className="px-6 py-4">{assignment.role}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">{assignment.role}</td>
+                    <td className="px-4 py-4">
                       {user ? user.company : "Loading..."}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       {new Date(assignment.assigned_at).toLocaleDateString()}
+                    </td>
+                    <td>
+                      <div className="flex items-center justify-center h-full py-4">
+                        <MdDelete
+                          onClick={() =>
+                            handleDelete(parseInt(assignment.assignment_id))
+                          }
+                          color="red"
+                          size={20}
+                        />
+                      </div>
                     </td>
                   </tr>
                 );

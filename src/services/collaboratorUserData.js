@@ -38,3 +38,17 @@ export const createAssignment = async (assignmentData) => {
     };
   }
 };
+
+// 3. Delete an assignment by ID (DELETE request)
+export const deleteAssignmentById = async (assignmentId) => {
+  try {
+    const response = await axios.delete(`${apiUrl}/${assignmentId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting assignment:", error);
+    return {
+      success: false,
+      message: error.response?.data?.message || error.message,
+    };
+  }
+};

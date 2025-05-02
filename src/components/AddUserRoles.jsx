@@ -162,6 +162,7 @@ const AddUserRoles = () => {
       <UserAssignmentsDisplay
         projectId={projectId}
         reloadAssignments={reloadAssignments}
+        setReloadAssignments={setReloadAssignments}
       />
     </div>
   );
