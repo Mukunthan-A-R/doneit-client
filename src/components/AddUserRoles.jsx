@@ -26,14 +26,10 @@ const AddUserRoles = () => {
   const currentUserData = useRecoilValue(userData);
 
   useEffect(() => {
-    const fetchAssignments = async () => {
+    const fetchAssignmentById = async () => {
       try {
         const response = await getAssignmentsByProjectId(projectId);
         const ResData = response.data;
-
-        let filterData = ResData.filter(
-          (item) => item.project_id === parseInt(projectId)
-        );
 
         filterData = filterData.filter(
           (item) => item.user_id === parseInt(currentUserData.user_id)
@@ -47,7 +43,7 @@ const AddUserRoles = () => {
       }
     };
 
-    fetchAssignments();
+    fetchAssignmentById();
   }, [projectId]);
 
   useEffect(() => {
