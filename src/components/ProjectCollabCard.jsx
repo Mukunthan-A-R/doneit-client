@@ -22,8 +22,6 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  console.log(project.project_id);
-
   const handleDelete = async () => {
     try {
       await deleteProjectById(project.project_id);
