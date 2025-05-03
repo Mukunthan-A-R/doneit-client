@@ -33,17 +33,13 @@ const AddUserRoles = () => {
         const ResData = response.data;
 
         let filterData = ResData.filter(
-          (item) => item.project_id === parseInt(projectId)
-        );
-
-        filterData = filterData.filter(
           (item) => item.user_id === parseInt(currentUserData.user_id)
         );
 
         if (response.success) {
           setUserRole(filterData[0].role);
           // console.log("filterData in the outer level");
-          // console.log(filterData);
+          // console.log(filterData[0].role);
         }
       } catch (err) {
         // setError("Error fetching assignments");
