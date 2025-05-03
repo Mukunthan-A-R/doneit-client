@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   deleteProjectById,
   editProjectById,
+  fetchProjectById,
 } from "../services/ProjectServices";
 import { useRecoilState } from "recoil";
 import { ProjectState, CurrentProject } from "../data/atom";
@@ -21,6 +22,8 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
     setIsDropdownOpen((prev) => !prev);
   };
 
+  console.log(project.project_id);
+
   const handleDelete = async () => {
     try {
       await deleteProjectById(project.project_id);
@@ -34,24 +37,29 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
 
   const handleEdit = async () => {
     try {
-      // Call the editProjectById function with the edited data
-      const updatedProject = await editProjectById(project.project_id, {
-        name: editedProjectData.name,
-        description: editedProjectData.description,
-        start_date: editedProjectData.start_date,
-        end_date: editedProjectData.end_date,
-        status: editedProjectData.status,
-        priority: editedProjectData.priority,
-        created: project.created, // Assume "created" remains unchanged, hence it is passed as is
-      });
-      setCurrentProject(project.project_id);
-      console.log("Project updated successfully:", updatedProject);
-      setIsEditing(false); // Close the edit mode after successful update
-      // location.reload();
-      handleEditTrigger();
-    } catch (error) {
-      console.error("Error updating project:", error);
-      alert("Error updating project!");
+      const projectOwner = await fetchProjectById(project.project_id);
+      try {
+        // Call the editProjectById function with the edited data
+        const updatedProject = await editProjectById(project.project_id, {
+          name: editedProjectData.name,
+          description: editedProjectData.description,
+          start_date: editedProjectData.start_date,
+          end_date: editedProjectData.end_date,
+          status: editedProjectData.status,
+          priority: editedProjectData.priority,
+          created: projectOwner.data.created, // Assume "created" remains unchanged, hence it is passed as is
+        });
+        setCurrentProject(project.project_id);
+        console.log("Project updated successfully:", updatedProject);
+        setIsEditing(false); // Close the edit mode after successful update
+        // location.reload();
+        handleEditTrigger();
+      } catch (error) {
+        console.error("Error updating project:", error);
+        alert("Error updating project!");
+      }
+    } catch (err) {
+      console.log("Error Update", err);
     }
   };
 
