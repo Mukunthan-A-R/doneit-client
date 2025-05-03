@@ -55,6 +55,9 @@ const AddUserRoles = () => {
         const response = await fetchProjectById(projectId);
         const ProjectOwner = await fetchUserById(response.data.created);
         setOwnerEmail(ProjectOwner.data.email);
+        if (ProjectOwner.data.user_id === currentUserData.user_id) {
+          setUserRole("admin");
+        }
       } catch (err) {
         console.log(err);
       }
@@ -121,12 +124,12 @@ const AddUserRoles = () => {
     }
   };
 
-  // console.log("userRole");
-  // console.log(userRole);
+  console.log("userRole");
+  console.log(userRole);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      {!["member", "client"].includes(userRole) && (
+      {!["member", "client", ""].includes(userRole) && (
         <>
           <h1 className="text-3xl font-semibold text-center mb-6">
             Add Users by Email & Role
