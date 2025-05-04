@@ -1,12 +1,16 @@
 import axios from "axios";
 
-const API_URL = "https://task-manager-server-ugiw.onrender.com/api/project";
+const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
+
+if (!apiUrl) {
+  throw new Error("API URL is not defined in the environment variables.");
+}
+
+const API_URL = `${apiUrl}/api/project`;
 
 export const fetchProjects = async (user_id) => {
   try {
-    const response = await axios.get(
-      `https://task-manager-server-ugiw.onrender.com/project/${user_id}`
-    );
+    const response = await axios.get(`${apiUrl}/project/${user_id}`);
     return response.data;
   } catch (error) {
     // If the response is 404 (no projects), return empty array
@@ -75,9 +79,7 @@ export const deleteAllProjects = async () => {
 
 export const deleteProjectById = async (projectId) => {
   try {
-    const response = await axios.delete(
-      `https://task-manager-server-ugiw.onrender.com/api/project/${projectId}`
-    );
+    const response = await axios.delete(`${apiUrl}/api/project/${projectId}`);
     console.log("Project Deleted:", response.data);
     return response.data;
   } catch (error) {

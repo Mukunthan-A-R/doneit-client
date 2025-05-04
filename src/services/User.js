@@ -1,7 +1,12 @@
 // registerUser.js
 import axios from "axios";
+const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
 
-const API_URL = "https://task-manager-server-ugiw.onrender.com/api/register";
+if (!apiUrl) {
+  throw new Error("API URL is not defined in the environment variables.");
+}
+
+const API_URL = `${apiUrl}api/register`;
 
 export const registerUser = async (userData) => {
   try {
@@ -16,7 +21,7 @@ export const registerUser = async (userData) => {
   }
 };
 
-const API_URL_login = "https://task-manager-server-ugiw.onrender.com/login";
+const API_URL_login = `${apiUrl}/login`;
 
 export const loginUser = async (credentials) => {
   try {

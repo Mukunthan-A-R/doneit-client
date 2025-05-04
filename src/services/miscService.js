@@ -1,7 +1,12 @@
 import axios from "axios";
 
-const TASK_API_URL =
-  "https://task-manager-server-ugiw.onrender.com/api/usertasks/user";
+const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
+
+if (!apiUrl) {
+  throw new Error("API URL is not defined in the environment variables.");
+}
+
+const TASK_API_URL = `${apiUrl}/api/usertasks/user`;
 
 export const fetchTasksByUserId = async (userId) => {
   try {

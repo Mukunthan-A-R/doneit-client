@@ -1,7 +1,13 @@
 import axios from "axios";
 
+const ApiUrl = import.meta.env.VITE_DONE_IT_API_URL;
+
+if (!ApiUrl) {
+  throw new Error("API URL is not defined in the environment variables.");
+}
+
 // Base URL for the API
-const apiUrl = "https://task-manager-server-ugiw.onrender.com/api/collab";
+const apiUrl = `${ApiUrl}/api/collab`;
 
 // 1. Get all assignments by project_id
 export const getAssignmentsByProjectId = async (projectId) => {
