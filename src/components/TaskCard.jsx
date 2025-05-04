@@ -14,6 +14,8 @@ const TaskCard = ({
   onStatusChange,
   project_id,
   userRole,
+  projectStartDate,
+  projectEndDate,
 }) => {
   const remainingTime = calculateRemainingTime(endDate);
   const endTime = formatDate(endDate);
@@ -299,6 +301,8 @@ const TaskCard = ({
                   name="start_date"
                   value={formData.start_date}
                   onChange={handleInputChange}
+                  min={formatInputDate(projectStartDate)}
+                  max={formatInputDate(projectEndDate)}
                   className="w-full p-2 mt-1 border border-gray-300 rounded-md text-black"
                 />
                 {errors.start_date && (
@@ -317,6 +321,8 @@ const TaskCard = ({
                   name="end_date"
                   value={formData.end_date}
                   onChange={handleInputChange}
+                  min={formatInputDate(projectStartDate)}
+                  max={formatInputDate(projectEndDate)}
                   className="w-full p-2 mt-1 border border-gray-300 rounded-md text-black"
                 />
                 {errors.end_date && (
