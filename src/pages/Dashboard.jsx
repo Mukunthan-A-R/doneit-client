@@ -35,7 +35,7 @@ const Dashboard = () => {
           lg:static lg:h-auto lg:w-1/6 lg:block
         `}
       >
-        <h2 className="text-white p-6 text-center text-2xl font-bold border-b border-blue-800">
+        <h2 className="text-white p-6 font-sans text-center text-2xl font-medium ">
           Project Toolbar
         </h2>
         <ProjectToolbar
