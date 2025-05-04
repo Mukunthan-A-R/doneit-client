@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createTask } from "../../services/TaskServices";
+import { fetchProjectById } from "../../services/ProjectServices";
 
 const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
+  const [taskLine, setTaskLine] = useState(null);
   const [loadingData, setLoadingData] = useState(false);
+
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
@@ -21,6 +24,22 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
     start_date: "",
     end_date: "",
   });
+
+  useEffect(() => {
+    const getProject = async () => {
+      try {
+        const { data } = await fetchProjectById(project_id);
+        setTaskLine({
+          start_date: data.start_date,
+          end_date: data.end_date,
+        });
+      } catch (err) {
+        console.log("Error", err);
+      }
+    };
+
+    getProject();
+  }, [project_id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +76,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
       parseInt(taskData.time_duration) > 24
     ) {
       newErrors.time_duration =
-        "Working hours per day is required and must be greater than 0 and less than 24.";
+        "Working hours per day must be between 1 and 24.";
       formIsValid = false;
     }
 
@@ -71,13 +90,28 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
       formIsValid = false;
     }
 
-    if (
-      taskData.start_date &&
-      taskData.end_date &&
-      new Date(taskData.start_date) > new Date(taskData.end_date)
-    ) {
+    const taskStart = new Date(taskData.start_date);
+    const taskEnd = new Date(taskData.end_date);
+
+    if (taskStart > taskEnd) {
       newErrors.end_date = "End date must be later than start date.";
       formIsValid = false;
+    }
+
+    if (taskLine) {
+      const projectStart = new Date(taskLine.start_date);
+      const projectEnd = new Date(taskLine.end_date);
+
+      if (taskStart < projectStart || taskStart > projectEnd) {
+        newErrors.start_date =
+          "Start date must be within the project timeline.";
+        formIsValid = false;
+      }
+
+      if (taskEnd < projectStart || taskEnd > projectEnd) {
+        newErrors.end_date = "End date must be within the project timeline.";
+        formIsValid = false;
+      }
     }
 
     setErrors(newErrors);
@@ -86,11 +120,8 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const isValid = validateForm();
-    if (!isValid) {
-      return;
-    }
+    if (!isValid) return;
 
     setLoadingData(true);
 
@@ -121,6 +152,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
         <h2 className="text-2xl font-semibold mb-4">Create Task</h2>
 
         <form onSubmit={handleSubmit}>
+          {/* Title */}
           <div className="mb-4">
             <label htmlFor="title" className="block text-sm font-semibold">
               Task Title
@@ -139,6 +171,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
+          {/* Description */}
           <div className="mb-4">
             <label
               htmlFor="description"
@@ -159,6 +192,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
+          {/* Status */}
           <div className="mb-4">
             <label htmlFor="status" className="block text-sm font-semibold">
               Status
@@ -180,6 +214,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
+          {/* Time Duration */}
           <div className="mb-4">
             <label
               htmlFor="time_duration"
@@ -201,6 +236,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             )}
           </div>
 
+          {/* Start Date */}
           <div className="mb-4">
             <label htmlFor="start_date" className="block text-sm font-semibold">
               Start Date
@@ -213,12 +249,15 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
               onChange={handleInputChange}
               className="mt-2 p-2 border border-gray-300 rounded w-full"
               required
+              min={taskLine?.start_date?.slice(0, 10)}
+              max={taskLine?.end_date?.slice(0, 10)}
             />
             {errors.start_date && (
               <p className="text-red-600 text-sm">{errors.start_date}</p>
             )}
           </div>
 
+          {/* End Date */}
           <div className="mb-4">
             <label htmlFor="end_date" className="block text-sm font-semibold">
               End Date
@@ -231,12 +270,15 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
               onChange={handleInputChange}
               className="mt-2 p-2 border border-gray-300 rounded w-full"
               required
+              min={taskLine?.start_date?.slice(0, 10)}
+              max={taskLine?.end_date?.slice(0, 10)}
             />
             {errors.end_date && (
               <p className="text-red-600 text-sm">{errors.end_date}</p>
             )}
           </div>
 
+          {/* Buttons */}
           <div className="flex justify-end space-x-2">
             <button
               type="button"
@@ -248,7 +290,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             <button
               type="submit"
               disabled={loadingData}
-              className={`bg-blue-500 text-white px-4 py-2 rounded disabled:bg-blue-300 disabled:cursor-not-allowed`}
+              className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-blue-300"
             >
               {loadingData ? "Creating..." : "Create Task"}
             </button>
