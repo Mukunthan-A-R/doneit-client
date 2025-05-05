@@ -11,7 +11,7 @@ const GanttChart = ({ projectId }) => {
     const getTasks = async () => {
       try {
         const data = await fetchTasks(projectId);
-        setTasks(data.data); // ✅ FIXED: accessing the actual task array
+        setTasks(data.data);
 
         if (data.data.length > 0) {
           const earliest = data.data.reduce((min, task) =>
@@ -20,8 +20,12 @@ const GanttChart = ({ projectId }) => {
           setBaseDate(new Date(earliest.start_date));
         }
       } catch (err) {
-        console.error(err);
-        setError("Failed to load tasks.");
+        if (err.response.status == 404) {
+          setTasks([]);
+          setError("No tasks found for this project !");
+        } else {
+          setError("Currently no graphs Avaliable");
+        }
       }
     };
 
@@ -99,7 +103,9 @@ const GanttChart = ({ projectId }) => {
                     left: `${(colStart / NUM_DAYS) * 100}%`,
                     width: `${(colSpan / NUM_DAYS) * 100}%`,
                   }}
-                  title={`${task.title} (${formatDate(task.start_date)} → ${formatDate(task.end_date)})`}
+                  title={`${task.title} (${formatDate(
+                    task.start_date
+                  )} → ${formatDate(task.end_date)})`}
                 />
               </div>
             </div>
