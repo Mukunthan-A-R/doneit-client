@@ -116,9 +116,12 @@ const LoginPage = () => {
                 />
                 Remember me
               </label>
-              <a href="#" className="text-blue-600 hover:underline">
+              <Link
+                to="/password-reset"
+                className="text-blue-600 hover:underline"
+              >
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             <button

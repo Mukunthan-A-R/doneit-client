@@ -14,6 +14,7 @@ import UserDashboard from "./pages/UserDashboard";
 import ProjectCalendar from "./pages/ProjectCalendar";
 import Settings from "./pages/Settings";
 import AddProjectUser from "./pages/AddProjectUser";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route exact path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/password-reset" element={<ResetPassword />} />
         <Route path="/settings" element={<Settings />} />
         <Route element={<NotFound />} />
       </Routes>
