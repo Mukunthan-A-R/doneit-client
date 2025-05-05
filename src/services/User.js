@@ -6,7 +6,7 @@ if (!apiUrl) {
   throw new Error("API URL is not defined in the environment variables.");
 }
 
-const API_URL = `${apiUrl}api/register`;
+const API_URL = `${apiUrl}/api/register`;
 
 export const registerUser = async (userData) => {
   try {

@@ -66,8 +66,8 @@ const SignupPage = () => {
     if (!validate()) return; // If validation fails, prevent form submission
 
     const payload = {
-      name: formData.first_name,
-      last_name: formData.last_name,
+      name: formData.first_name + " " + formData.last_name,
+      // last_name: formData.last_name,
       email: formData.email,
       password: formData.password,
       role: formData.role,
@@ -81,12 +81,14 @@ const SignupPage = () => {
     try {
       const response = await registerUser(payload); // Send data using the registerUser function
       console.log("User registered:", response);
-      setSuccessMessage("Registration successful! Please Login"); // Set success message
+      setSuccessMessage(
+        "Registration successful! Activation Mail has been sent to your account !"
+      ); // Set success message
 
       // Show success popup for 1 second and redirect
       setTimeout(() => {
         navigate("/login"); // Redirect to login page
-      }, 1000); // 1 second delay
+      }, 3000);
 
       setFormData({
         first_name: "",
