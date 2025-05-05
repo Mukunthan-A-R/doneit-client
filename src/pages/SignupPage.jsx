@@ -48,6 +48,8 @@ const SignupPage = () => {
 
     if (!formData.role.trim()) {
       newErrors.role = "Role is required";
+    } else if (formData.role.trim().length < 2) {
+      newErrors.role = "Role must be at least 2 characters";
     }
 
     if (formData.company && formData.company.trim().length < 3) {
