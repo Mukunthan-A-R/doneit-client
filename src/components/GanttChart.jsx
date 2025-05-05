@@ -61,7 +61,7 @@ const GanttChart = ({ projectId }) => {
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-7xl mx-auto mt-10 border border-gray-200">
       <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-        Your Project Graph
+        12 Day Project Graph
       </h2>
 
       {/* Grid Header */}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import GanttChart from "../components/GanttChart";
 import TaskToolbar from "../components/TaskToolbar";
 import { useParams } from "react-router-dom";
+import GanttChartTimeLine from "../components/GanttChartTimeLine";
 
 const Graph = () => {
   const params = useParams();
@@ -49,6 +50,7 @@ const Graph = () => {
         <div className="w-full lg:w-5/6 bg-white p-6">
           <h1 className="text-2xl font-semibold pb-4">Your Projects !</h1>
           <GanttChart projectId={project_id}></GanttChart>
+          <GanttChartTimeLine projectId={project_id}></GanttChartTimeLine>
         </div>
       </div>
     </div>
