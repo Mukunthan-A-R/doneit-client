@@ -50,6 +50,10 @@ const SignupPage = () => {
       newErrors.role = "Role is required";
     }
 
+    if (formData.company && formData.company.trim().length < 3) {
+      newErrors.company = "Company name must be at least 3 characters";
+    }
+
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
@@ -101,7 +105,9 @@ const SignupPage = () => {
     } catch (error) {
       console.error("Registration failed:", error);
       setErrorMessage(
-        "An error occurred during registration. Please try again."
+        error.response.data.message ||
+          error.response.data ||
+          "An error occurred during registration. Please try again."
       ); // Set error message
     } finally {
       setLoading(false); // Reset loading state
@@ -247,6 +253,9 @@ const SignupPage = () => {
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Your Company Name"
               />
+              {errors.company && (
+                <p className="text-red-500 text-sm mt-1">{errors.company}</p>
+              )}
             </div>
 
             {/* Submit Button */}
