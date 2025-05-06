@@ -48,12 +48,20 @@ const ProductivityBoost = () => {
               </span>
               .
             </p>
+            <br />
+            <p className="text-gray-700 text-lg leading-relaxed">
+              Done It is an innovative work management software that helps teams{" "}
+              <strong>track tasks</strong>, manage deadlines, and{" "}
+              <strong>collaborate on projects</strong> seamlessly. Our task
+              management tools are designed for remote teams, startups, and
+              growing businesses.
+            </p>
           </div>
           <div className="lg:w-1/2 w-full">
             <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md">
               <img
                 src={GraphImg}
-                alt="Productivity Statistics"
+                alt="Analytics and reporting dashboard for project progress tracking"
                 className="object-cover w-full h-auto max-h-80 xl:max-h-72 2xl:max-h-64 transition duration-300 ease-in-out"
               />
             </div>
@@ -85,7 +93,7 @@ const ProductivityBoost = () => {
             <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md">
               <img
                 src={PaperWork}
-                alt="Team Focus and Planning"
+                alt="Project planning board with deadlines and milestones"
                 className="object-cover w-full h-auto max-h-80 xl:max-h-72 2xl:max-h-64 transition duration-300 ease-in-out"
               />
             </div>

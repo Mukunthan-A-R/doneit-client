@@ -37,7 +37,7 @@ const HomeBanner = ({ onLearnMoreClick }) => {
         <div className="w-full max-w-md">
           <img
             src={BannerImg}
-            alt="Person working illustration"
+            alt="Team collaboration workspace with shared task lists"
             className="w-full h-auto object-contain"
           />
         </div>
