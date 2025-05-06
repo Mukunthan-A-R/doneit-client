@@ -83,9 +83,11 @@ const TaskDashboard = () => {
           </button>
         </div>
 
-        <div className="flex justify-between">
-          <TaskToolbar project_id={project_id} />
-          <div>
+        <div className="flex justify-between items-start">
+          <div className="w-full">
+            <TaskToolbar project_id={project_id} />
+          </div>
+          <div className="flex justify-end items-start">
             <TaskToolKit
               userRole={userRole}
               project_id={project_id}
