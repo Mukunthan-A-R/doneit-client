@@ -3,7 +3,6 @@ import GanttChart from "../components/GanttChart";
 import TaskToolbar from "../components/TaskToolbar";
 import { useParams } from "react-router-dom";
 import GanttChartTimeLine from "../components/GanttChartTimeLine";
-import BurndownChart from "../components/BurnDownChart";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 
 const Graph = () => {
@@ -54,7 +53,6 @@ const Graph = () => {
           <ProjectTitleCard project_id={project_id}></ProjectTitleCard>
           <GanttChart projectId={project_id}></GanttChart>
           <GanttChartTimeLine projectId={project_id}></GanttChartTimeLine>
-          <BurndownChart projectId={project_id}></BurndownChart>
         </div>
       </div>
     </div>
