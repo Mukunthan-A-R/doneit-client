@@ -117,34 +117,37 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
-      <div className="max-w-4xl w-full bg-gray-50 rounded-2xl shadow-xl overflow-hidden grid lg:grid-cols-2">
-        <div className="hidden lg:flex flex-col justify-center items-center bg-blue-900 text-white p-10">
-          <h1 className="text-4xl font-extrabold mb-2">Done it</h1>
-          <p className="text-blue-100 text-lg mb-4 italic">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-4 py-12">
+      <div className="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden grid lg:grid-cols-2">
+        {/* Left Side Illustration */}
+        <div className="hidden lg:flex flex-col justify-center items-center bg-blue-900 text-white px-10 py-12">
+          <h1 className="text-5xl font-extrabold mb-3 tracking-tight">
+            Done it
+          </h1>
+          <p className="text-blue-100 text-lg mb-5 italic">
             Your smart task companion
           </p>
-          <p className="text-blue-100 text-center max-w-xs">
+          <p className="text-blue-100 text-center max-w-xs leading-relaxed">
             Create an account and start organizing your life, one task at a
             time.
           </p>
           <img
-            src="https://via.placeholder.com/300x200?text=Get+Started"
+            src="https://cdn.pixabay.com/photo/2017/10/10/21/47/laptop-2838921_640.jpg"
             alt="Signup illustration"
-            className="mt-8 rounded-md"
+            className="mt-10 rounded-lg shadow-md"
           />
         </div>
 
-        {/* Signup Form */}
-        <div className="flex flex-col justify-center px-8 py-12">
-          <h2 className="text-2xl font-bold text-blue-900 mb-6">
+        {/* Right Side Form */}
+        <div className="flex flex-col justify-center px-8 py-12 sm:px-12">
+          <h2 className="text-3xl font-semibold text-blue-900 mb-8">
             Create your Done it account
           </h2>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* First Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 First Name
               </label>
               <input
@@ -152,9 +155,9 @@ const SignupPage = () => {
                 name="first_name"
                 value={formData.first_name}
                 onChange={handleChange}
-                className={`mt-1 w-full px-4 py-2 border ${
+                className={`w-full px-4 py-2.5 border ${
                   errors.first_name ? "border-red-500" : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
                 placeholder="John"
               />
               {errors.first_name && (
@@ -164,7 +167,7 @@ const SignupPage = () => {
 
             {/* Last Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Last Name
               </label>
               <input
@@ -172,9 +175,9 @@ const SignupPage = () => {
                 name="last_name"
                 value={formData.last_name}
                 onChange={handleChange}
-                className={`mt-1 w-full px-4 py-2 border ${
+                className={`w-full px-4 py-2.5 border ${
                   errors.last_name ? "border-red-500" : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition`}
                 placeholder="Doe"
               />
               {errors.last_name && (
@@ -184,7 +187,7 @@ const SignupPage = () => {
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
               </label>
               <input
@@ -192,9 +195,9 @@ const SignupPage = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`mt-1 w-full px-4 py-2 border ${
+                className={`w-full px-4 py-2.5 border ${
                   errors.email ? "border-red-500" : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition`}
                 placeholder="you@example.com"
               />
               {errors.email && (
@@ -204,7 +207,7 @@ const SignupPage = () => {
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
               <input
@@ -212,9 +215,9 @@ const SignupPage = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`mt-1 w-full px-4 py-2 border ${
+                className={`w-full px-4 py-2.5 border ${
                   errors.password ? "border-red-500" : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition`}
                 placeholder="••••••••"
               />
               {errors.password && (
@@ -224,7 +227,7 @@ const SignupPage = () => {
 
             {/* Role */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Role
               </label>
               <input
@@ -232,9 +235,9 @@ const SignupPage = () => {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className={`mt-1 w-full px-4 py-2 border ${
+                className={`w-full px-4 py-2.5 border ${
                   errors.role ? "border-red-500" : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition`}
                 placeholder="e.g. user, admin"
               />
               {errors.role && (
@@ -244,15 +247,17 @@ const SignupPage = () => {
 
             {/* Company (optional) */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Company
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Company <span className="text-gray-400">(optional)</span>
               </label>
               <input
                 type="text"
                 name="company"
                 value={formData.company}
                 onChange={handleChange}
-                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-4 py-2.5 border ${
+                  errors.company ? "border-red-500" : "border-gray-300"
+                } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition`}
                 placeholder="Your Company Name"
               />
               {errors.company && (
@@ -263,8 +268,8 @@ const SignupPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-blue-700 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition"
-              disabled={loading} // Disable while loading
+              className="w-full py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-md text-base font-semibold tracking-wide transition disabled:opacity-50"
+              disabled={loading}
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
@@ -272,16 +277,22 @@ const SignupPage = () => {
 
           {/* Success/Error Messages */}
           {successMessage && (
-            <p className="text-green-600 mt-4">{successMessage}</p>
+            <p className="text-green-600 text-sm mt-4 text-center">
+              {successMessage}
+            </p>
           )}
-          {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-red-600 text-sm mt-4 text-center">
+              {errorMessage}
+            </p>
+          )}
 
           {/* Already have an account */}
           <p className="text-sm text-gray-600 mt-6 text-center">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-blue-600 font-medium hover:underline"
+              className="text-blue-600 font-medium hover:underline transition"
             >
               Sign in here
             </Link>
