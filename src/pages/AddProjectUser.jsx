@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AddUserRoles from "../components/AddUserRoles";
 import TaskToolbar from "../components/TaskToolbar";
 import { useParams } from "react-router-dom";
+import ProjectTitleCard from "../components/ProjectTitleCard";
 
 const AddProjectUser = () => {
   const params = useParams();
@@ -47,7 +48,8 @@ const AddProjectUser = () => {
 
         {/* Main Content */}
         <div className="w-full lg:w-5/6 bg-white p-6">
-          <h1 className="text-2xl font-semibold pb-4">Your Projects !</h1>
+          {/* Project Title Card */}
+          <ProjectTitleCard project_id={project_id}></ProjectTitleCard>
           <AddUserRoles></AddUserRoles>
         </div>
       </div>

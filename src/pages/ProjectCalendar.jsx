@@ -5,6 +5,7 @@ import CalendarCard from "../components/CalendarCard";
 import TaskToolbar from "../components/TaskToolbar";
 import { fetchTasks } from "../services/TaskServices";
 import { fetchProjectById } from "../services/ProjectServices";
+import ProjectTitleCard from "../components/ProjectTitleCard";
 
 const ProjectCalendar = () => {
   const params = useParams();
@@ -73,6 +74,8 @@ const ProjectCalendar = () => {
 
       {/* Main Content */}
       <div className="flex-1 p-6 bg-white">
+        {/* Project Title Card */}
+        <ProjectTitleCard project_id={project_id}></ProjectTitleCard>
         <CalendarCard
           startDate={ProjectData.start_date}
           endDate={ProjectData.end_date}

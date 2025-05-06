@@ -5,6 +5,7 @@ import TaskToolbar from "../components/TaskToolbar";
 import { useRecoilValue } from "recoil";
 import { ProjectState } from "../data/atom";
 import { useParams } from "react-router-dom";
+import ProjectTitleCard from "../components/ProjectTitleCard";
 
 const Analytics = () => {
   const [tasks, setTasks] = useState([]);
@@ -91,6 +92,9 @@ const Analytics = () => {
 
         {/* Main Content */}
         <main className="p-6 w-full lg:w-10/12">
+          {/* Project Title Card */}
+          <ProjectTitleCard project_id={project_id}></ProjectTitleCard>
+
           {/* Header */}
           <header className="bg-blue-950 text-white py-4 px-6 shadow-md flex items-center justify-between">
             <h1 className="text-2xl font-semibold">📊 Project Analytics</h1>

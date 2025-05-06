@@ -3,6 +3,8 @@ import GanttChart from "../components/GanttChart";
 import TaskToolbar from "../components/TaskToolbar";
 import { useParams } from "react-router-dom";
 import GanttChartTimeLine from "../components/GanttChartTimeLine";
+import BurndownChart from "../components/BurnDownChart";
+import ProjectTitleCard from "../components/ProjectTitleCard";
 
 const Graph = () => {
   const params = useParams();
@@ -48,9 +50,11 @@ const Graph = () => {
 
         {/* Main Content */}
         <div className="w-full lg:w-5/6 bg-white p-6">
-          <h1 className="text-2xl font-semibold pb-4">Your Projects !</h1>
+          {/* Project Title Card */}
+          <ProjectTitleCard project_id={project_id}></ProjectTitleCard>
           <GanttChart projectId={project_id}></GanttChart>
           <GanttChartTimeLine projectId={project_id}></GanttChartTimeLine>
+          <BurndownChart projectId={project_id}></BurndownChart>
         </div>
       </div>
     </div>
