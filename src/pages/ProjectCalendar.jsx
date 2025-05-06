@@ -55,12 +55,13 @@ const ProjectCalendar = () => {
       </div>
 
       {/* Sidebar */}
+
       <div
         className={`fixed top-0 left-0 h-full w-2/3 max-w-xs bg-blue-900 text-white p-4 z-30 transform transition-transform duration-300 ease-in-out 
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
         lg:static lg:translate-x-0 lg:w-1/5 lg:flex lg:flex-col`}
       >
-        <div className="flex justify-between items-center lg:block">
+        <div className="flex justify-between items-center lg:block ">
           <h2 className="text-xl font-semibold mb-4">Task Toolbar</h2>
           <button
             onClick={() => setIsSidebarOpen(false)}
@@ -70,6 +71,7 @@ const ProjectCalendar = () => {
           </button>
         </div>
         <TaskToolbar project_id={project_id} />
+        <div className="min-h-screen bg-blue-900"></div>
       </div>
 
       {/* Main Content */}
