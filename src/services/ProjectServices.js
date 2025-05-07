@@ -1,27 +1,28 @@
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
-let token = null;
-
-try {
-  const userDataString = localStorage.getItem("userData");
-  if (userDataString) {
-    const userData = JSON.parse(userDataString);
-    token = userData?.token || null;
-  }
-} catch (error) {
-  console.error("Error parsing userData from localStorage:", error);
-  // You can also implement additional error handling here
-}
-
 if (!apiUrl) {
   throw new Error("API URL is not defined in the environment variables.");
 }
 
 const API_URL = `${apiUrl}/api/project`;
 
+// ✅ Helper function to always get the latest token
+const getToken = () => {
+  try {
+    const userDataString = localStorage.getItem("userData");
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      return userData?.token || localStorage.getItem("x-auth-token");
+    }
+  } catch (error) {
+    console.error("Error parsing token from localStorage:", error);
+  }
+  return null;
+};
+
 export const fetchProjects = async (user_id) => {
-  console.log(token);
+  const token = getToken();
   try {
     const response = await axios.get(`${apiUrl}/project/${user_id}`, {
       headers: {
@@ -31,7 +32,6 @@ export const fetchProjects = async (user_id) => {
 
     return response.data;
   } catch (error) {
-    // If the response is 404 (no projects), return empty array
     if (error.response && error.response.status === 404) {
       return {
         success: false,
@@ -39,14 +39,14 @@ export const fetchProjects = async (user_id) => {
         data: [],
       };
     }
-
-    // Throw other errors (like network/server issues)
     throw new Error(
       error.message || "An error occurred while fetching projects."
     );
   }
 };
+
 export const fetchProjectById = async (projectId) => {
+  const token = getToken();
   try {
     const response = await axios.get(`${API_URL}/${projectId}`, {
       headers: {
@@ -60,6 +60,7 @@ export const fetchProjectById = async (projectId) => {
 };
 
 export const createProject = async (projectData) => {
+  const token = getToken();
   try {
     const response = await axios.post(API_URL, projectData, {
       headers: {
@@ -81,6 +82,7 @@ export const createProject = async (projectData) => {
 };
 
 export const editProjectById = async (projectId, projectData) => {
+  const token = getToken();
   try {
     const response = await axios.put(`${API_URL}/${projectId}`, projectData, {
       headers: {
@@ -95,16 +97,17 @@ export const editProjectById = async (projectId, projectData) => {
 };
 
 export const deleteAllProjects = async () => {
-  // user id
+  const token = getToken();
   const user = {
-    user_id: 1,
+    user_id: 1, // replace with dynamic user_id if needed
   };
 
   try {
-    const response = await axios.delete(API_URL, user, {
+    const response = await axios.delete(API_URL, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      data: user,
     });
     return response.data;
   } catch (error) {
@@ -113,8 +116,9 @@ export const deleteAllProjects = async () => {
 };
 
 export const deleteProjectById = async (projectId) => {
+  const token = getToken();
   try {
-    const response = await axios.delete(`${apiUrl}/api/project/${projectId}`, {
+    const response = await axios.delete(`${API_URL}/${projectId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -123,5 +127,6 @@ export const deleteProjectById = async (projectId) => {
     return response.data;
   } catch (error) {
     console.error("Error deleting project:", error);
+    throw error;
   }
 };
