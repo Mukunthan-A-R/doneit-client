@@ -1,6 +1,18 @@
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
+let token = null;
+
+try {
+  const userDataString = localStorage.getItem("userData");
+  if (userDataString) {
+    const userData = JSON.parse(userDataString);
+    token = userData?.token || null;
+  }
+} catch (error) {
+  console.error("Error parsing userData from localStorage:", error);
+  // You can also implement additional error handling here
+}
 
 if (!apiUrl) {
   throw new Error("API URL is not defined in the environment variables.");
@@ -11,7 +23,11 @@ const API_URL = `${apiUrl}/api`;
 export const fetchTasks = async (project_id) => {
   try {
     const url = `${apiUrl}/api/tasks/${project_id}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (error.response.status === 404) {
@@ -25,7 +41,11 @@ export const fetchTasks = async (project_id) => {
 
 export const updateTask = async (taskId, taskData) => {
   try {
-    const response = await axios.put(`${API_URL}/task/${taskId}`, taskData);
+    const response = await axios.put(`${API_URL}/task/${taskId}`, taskData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error updating task:", error);
@@ -35,7 +55,11 @@ export const updateTask = async (taskId, taskData) => {
 
 export const createTask = async (taskData) => {
   try {
-    const response = await axios.post(`${API_URL}/task`, taskData);
+    const response = await axios.post(`${API_URL}/task`, taskData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error creating task:", error);
@@ -46,7 +70,11 @@ export const createTask = async (taskData) => {
 // New function to delete a task
 export const deleteTask = async (taskId) => {
   try {
-    const response = await axios.delete(`${API_URL}/task/${taskId}`);
+    const response = await axios.delete(`${API_URL}/task/${taskId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error deleting task:", error);
