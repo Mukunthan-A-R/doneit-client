@@ -2,16 +2,23 @@ import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
 let token = null;
+getAuthToken();
 
-try {
-  const userDataString = localStorage.getItem("userData");
-  if (userDataString) {
-    const userData = JSON.parse(userDataString);
-    token = userData?.token || null;
+// localStorage.getItem("x-auth-token");
+
+function getAuthToken() {
+  try {
+    const userDataString = localStorage.getItem("userData");
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      token = userData?.token || localStorage.getItem("x-auth-token");
+      // console.log(userDataString);
+      // console.log(token);
+    }
+  } catch (error) {
+    console.error("Error parsing userData from localStorage:", error);
+    // You can also implement additional error handling here
   }
-} catch (error) {
-  console.error("Error parsing userData from localStorage:", error);
-  // You can also implement additional error handling here
 }
 
 if (!apiUrl) {
@@ -23,6 +30,8 @@ const API_URL = `${apiUrl}/api`;
 export const fetchTasks = async (project_id) => {
   try {
     const url = `${apiUrl}/api/tasks/${project_id}`;
+    // console.log(token);
+
     const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
