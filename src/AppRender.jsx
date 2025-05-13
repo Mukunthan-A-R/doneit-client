@@ -15,47 +15,12 @@ import ProjectCalendar from "./pages/ProjectCalendar";
 import Settings from "./pages/Settings";
 import AddProjectUser from "./pages/AddProjectUser";
 import ResetPassword from "./pages/ResetPassword";
-import { useEffect } from "react";
-
-import { fetchUserById } from "./services/UserData";
+import SessionTimeout from "./components/SessionTimeout";
 
 const AppRender = () => {
-  // console.log(localStorage.getItem("userData"));
-
-  // let user_id = null;
-  // try {
-  //   const userDataString = localStorage.getItem("userData");
-  //   if (userDataString) {
-  //     const userData = JSON.parse(userDataString);
-  //     user_id = userData.user_id;
-  //     // console.log("userData");
-  //     // console.log(userData);
-  //     // console.log(user_id);
-  //   }
-  // } catch (error) {
-  //   console.error("Error parsing token from localStorage:", error);
-  // }
-
-  // useEffect(() => {
-  //   const loadUserDetails = async () => {
-  //     try {
-  //       const response = await fetchUserById(user_id);
-  //       if (response.success && response.status === 200) {
-  //         console.log(response.data);
-  //       }
-  //     } catch (error) {
-  //       // console.log("Suma error");
-  //       // console.error("Error fetching user:", error);
-  //       // console.log("Suma error");
-  //       // console.log("Error :", error);
-  //     }
-  //   };
-
-  //   loadUserDetails();
-  // }, [user_id]);
-
   return (
     <Router>
+      <SessionTimeout />
       <NavBar></NavBar>
       <Routes>
         <Route exact path="/" element={<Home />} />
