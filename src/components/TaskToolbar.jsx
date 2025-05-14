@@ -9,6 +9,7 @@ import { MdTimeline } from "react-icons/md";
 import { IoCalendarClearOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { AiOutlineUserAdd } from "react-icons/ai";
+import { BiTask } from "react-icons/bi";
 
 const TaskToolbar = ({ project_id }) => {
   return (
@@ -47,6 +48,13 @@ const TaskToolbar = ({ project_id }) => {
       >
         <IoCalendarClearOutline size={20} />
         <MenuItem text="Calendar" />
+      </Link>
+      <Link
+        to={`/list/${project_id}`}
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <BiTask size={20} />
+        <MenuItem text="Task List" />
       </Link>
       <Link
         to={`/adduser/${project_id}`}
