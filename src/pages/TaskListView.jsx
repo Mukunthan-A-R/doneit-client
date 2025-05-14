@@ -9,6 +9,7 @@ import ProjectTitleCard from "../components/ProjectTitleCard";
 const TaskListView = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("all");
   const currentProject = useRecoilValue(ProjectState);
   const { projectId } = useParams();
 
@@ -25,6 +26,11 @@ const TaskListView = () => {
     getData();
   }, [projectId, currentProject]);
 
+  const filteredTasks =
+    statusFilter === "all"
+      ? tasks
+      : tasks.filter((task) => task.status === statusFilter);
+
   if (error) {
     return <div className="text-red-500 font-medium p-6">Error: {error}</div>;
   }
@@ -37,7 +43,7 @@ const TaskListView = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 text-gray-800 flex flex-col"
+      className="min-h-screen bg-gray-100 text-gray-800 flex flex-col"
       style={{
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
@@ -57,21 +63,35 @@ const TaskListView = () => {
           <ProjectTitleCard project_id={projectId} />
 
           {/* Header */}
-          <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-xl flex items-center justify-between mb-6">
+          <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
             <h1 className="text-2xl font-bold">📋 Task List</h1>
-            <div className="text-sm font-medium opacity-80">
-              Current Project:{" "}
-              <span className="font-semibold">{currentProject}</span>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <label className="text-sm font-medium opacity-90 flex items-center gap-2">
+                Filter by Status:
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="px-2 py-1 rounded bg-white text-gray-800 text-sm border border-gray-300"
+                >
+                  <option value="all">All</option>
+                  <option value="not started">Not Started</option>
+                  <option value="in progress">In Progress</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </label>
+              <div className="text-sm font-medium opacity-80">
+                Current Project:{" "}
+                <span className="font-semibold">{currentProject}</span>
+              </div>
             </div>
           </header>
 
           {/* Task List */}
-          <section className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-            <h2 className="text-xl font-semibold text-center mb-6 text-gray-900">
-              Your Tasks
-            </h2>
+          <section className="bg-white p-6 rounded-xl shadow-md">
+            <h2 className="text-xl font-semibold text-center mb-6">Tasks</h2>
             <div className="space-y-5">
-              {tasks.map((task, index) => (
+              {filteredTasks.map((task, index) => (
                 <TaskCard key={task.id ?? `task-${index}`} task={task} />
               ))}
             </div>
@@ -90,33 +110,25 @@ const TaskCard = ({ task }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow hover:shadow-md transition duration-300 transform hover:scale-[1.01] border border-gray-200 space-y-4">
-      {/* Title + Status */}
-      <div className="flex justify-between items-center">
+    <div className="bg-white p-5 rounded-lg shadow hover:shadow-md transition duration-300 transform hover:scale-[1.01] border border-gray-200">
+      <div className="flex justify-between items-start mb-2">
         <h4 className="text-lg font-semibold text-gray-900">{task.title}</h4>
         <span
-          className={`text-xs font-semibold px-3 py-1 rounded-full capitalize ${
+          className={`text-xs font-medium px-3 py-1 rounded-full capitalize ${
             statusStyles[task.status] || "bg-gray-100 text-gray-600"
           }`}
         >
           {task.status}
         </span>
       </div>
-
-      {/* Description */}
-      <p className="text-sm text-gray-700 leading-relaxed">
-        {task.description}
-      </p>
-
-      {/* Dates Footer */}
-      <div className="flex justify-between text-sm text-gray-500 pt-3 border-t border-gray-100">
+      <p className="text-sm text-gray-600 mb-3">{task.description}</p>
+      <div className="flex justify-between text-xs text-gray-500 mt-2 pt-2 border-t border-gray-200">
         <div>
-          <span className="font-medium text-gray-600">Start:</span>{" "}
-          {task.start_date ? formatDate(task.start_date) : "N/A"}
+          📅 Start:{" "}
+          {task.start_date ? formatDate(task.start_date) : "Not specified"}
         </div>
         <div>
-          <span className="font-medium text-gray-600">Due:</span>{" "}
-          {task.end_date ? formatDate(task.end_date) : "N/A"}
+          🗓️ Due: {task.end_date ? formatDate(task.end_date) : "Not specified"}
         </div>
       </div>
     </div>
