@@ -16,6 +16,7 @@ import Settings from "./pages/Settings";
 import AddProjectUser from "./pages/AddProjectUser";
 import ResetPassword from "./pages/ResetPassword";
 import SessionTimeout from "./components/SessionTimeout";
+import TaskListView from "./pages/TaskListView";
 
 const AppRender = () => {
   return (
@@ -29,6 +30,7 @@ const AppRender = () => {
         <Route path="/signup" element={<SignupPage />} />
         <Route exact path="/tasks/:projectId" element={<TaskDashboard />} />
         <Route exact path="/analytics/:projectId" element={<Analytics />} />
+        <Route exact path="/list/:projectId" element={<TaskListView />} />
         <Route
           exact
           path="/project-calendar/:projectId"
