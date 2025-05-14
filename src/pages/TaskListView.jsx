@@ -10,6 +10,7 @@ const TaskListView = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const currentProject = useRecoilValue(ProjectState);
   const { projectId } = useParams();
 
@@ -49,12 +50,62 @@ const TaskListView = () => {
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       }}
     >
+      {/* Mobile Menu Button */}
+      <div className="lg:hidden mt-4 ml-4">
+        <button
+          className="bg-blue-800 text-white px-4 py-2 rounded shadow"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          <span className="flex items-center">
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
+            Menu
+          </span>
+        </button>
+      </div>
+
       <div className="flex flex-col lg:flex-row flex-grow">
         {/* Sidebar */}
-        <aside className="lg:block w-1/6 bg-blue-900 p-4 hidden lg:block">
-          <h2 className="text-white text-lg font-semibold mb-4">
-            Task Toolbar
-          </h2>
+        <aside
+          className={`bg-blue-900 p-4 w-3/4 max-w-xs fixed top-0 h-full z-20 transition-all duration-300 ${
+            isSidebarOpen ? "left-0" : "-left-full"
+          } lg:static lg:h-auto lg:w-1/6 lg:block`}
+        >
+          {/* Sidebar Header with Close icon */}
+          <div className="flex items-center justify-between lg:justify-center mb-4">
+            <h2 className="text-white text-lg font-semibold">Task Toolbar</h2>
+            <button
+              className="lg:hidden text-white"
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
           <TaskToolbar project_id={projectId} />
         </aside>
 
@@ -80,10 +131,6 @@ const TaskListView = () => {
                   <option value="completed">Completed</option>
                 </select>
               </label>
-              {/* <div className="text-sm font-medium opacity-80">
-                Current Project:{" "}
-                <span className="font-semibold">{projectId}</span>
-              </div> */}
             </div>
           </header>
 
