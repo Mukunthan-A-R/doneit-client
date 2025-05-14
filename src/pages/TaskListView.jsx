@@ -80,10 +80,10 @@ const TaskListView = () => {
                   <option value="completed">Completed</option>
                 </select>
               </label>
-              <div className="text-sm font-medium opacity-80">
+              {/* <div className="text-sm font-medium opacity-80">
                 Current Project:{" "}
-                <span className="font-semibold">{currentProject}</span>
-              </div>
+                <span className="font-semibold">{projectId}</span>
+              </div> */}
             </div>
           </header>
 
