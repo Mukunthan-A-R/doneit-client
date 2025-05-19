@@ -1,29 +1,62 @@
-import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
+const STORAGE_KEY = "done_it_session_key";
 
 const SessionTimeout = ({ timeout = 15 * 60 * 1000 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const timerRef = useRef(null);
+  const [showPopup, setShowPopup] = useState(false);
 
-  // Reset timer
+  const hasAuthToken = () => {
+    return !!localStorage.getItem("x-auth-token");
+  };
+
+  const logout = () => {
+    setShowPopup(true);
+
+    setTimeout(() => {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem("x-auth-token");
+      localStorage.clear();
+      navigate("/login");
+    }, 2000);
+  };
+
   const resetTimer = () => {
+    if (!hasAuthToken()) return;
+
     if (timerRef.current) clearTimeout(timerRef.current);
+    const expiryTime = Date.now() + timeout;
+    localStorage.setItem(STORAGE_KEY, expiryTime.toString());
+
     timerRef.current = setTimeout(logout, timeout);
   };
 
-  // Logout function
-  const logout = () => {
-    alert("Session expired due to inactivity.");
-    // Clear session, tokens, etc.
-    localStorage.clear();
-    navigate("/login");
-  };
+  useEffect(() => {
+    if (!hasAuthToken()) return;
+
+    const expiryTimeStr = localStorage.getItem(STORAGE_KEY);
+    const now = Date.now();
+
+    if (expiryTimeStr) {
+      const expiryTime = parseInt(expiryTimeStr, 10);
+      const remainingTime = expiryTime - now;
+
+      if (remainingTime <= 0) {
+        logout();
+      } else {
+        timerRef.current = setTimeout(logout, remainingTime);
+      }
+    } else {
+      resetTimer();
+    }
+  }, [location]);
 
   useEffect(() => {
-    // Start the timer when component mounts
-    resetTimer();
+    if (!hasAuthToken()) return;
 
-    // Events that count as activity
     const events = ["mousemove", "keydown", "scroll", "click"];
     for (const event of events) {
       window.addEventListener(event, resetTimer);
@@ -37,7 +70,11 @@ const SessionTimeout = ({ timeout = 15 * 60 * 1000 }) => {
     };
   }, []);
 
-  return null; // This component doesn't render anything
+  return showPopup ? (
+    <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 animate-fade">
+      Session ended. Please log in again.
+    </div>
+  ) : null;
 };
 
 export default SessionTimeout;
