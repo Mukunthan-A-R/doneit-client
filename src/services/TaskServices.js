@@ -34,13 +34,20 @@ export const fetchTasks = async (project_id) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log(response);
     return response.data;
   } catch (error) {
+    if (error.response?.status === 403) {
+      // console.log(error.response.data);
+      throw error.response.data;
+    }
+
     if (error.response?.status === 404) {
       const errorData = new Error("No tasks found for this project ID");
       errorData.response = error.response.data;
       throw errorData;
     }
+
     throw new Error("An error occurred while fetching the tasks");
   }
 };

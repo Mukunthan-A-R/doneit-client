@@ -43,6 +43,8 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
           setTasks(fetchedTasks.data);
         }
       } catch (err) {
+        setError(err.message);
+
         if (isMounted) {
           setError(err.message);
         }
@@ -70,7 +72,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
           const { data } = await fetchProjectById(project_id);
           setProject(data);
         } catch (err) {
-          setError(err.message);
+          setError(err);
         }
       }
     };
@@ -134,6 +136,10 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
 
   if (loading) {
     return <p className="text-blue-500">Loading tasks...</p>;
+  }
+
+  if (error === "Access denied") {
+    return <p className="text-red-500">Access Forbidden ! URL not found !</p>;
   }
 
   if (!loading && tasks.length === 0) {
