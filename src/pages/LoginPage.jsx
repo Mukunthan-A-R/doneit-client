@@ -36,6 +36,10 @@ const LoginPage = () => {
         loggedIn: true,
       };
 
+      if (!response.user.is_activated) {
+        setError("Please Activate your Account !");
+      }
+
       // ✅ Update Recoil and let atom persist to localStorage
       setUser(userPayload);
 
