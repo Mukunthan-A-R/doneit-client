@@ -23,6 +23,7 @@ const LoginPage = () => {
     try {
       const response = await loginUser({ email, password });
 
+      // console.log(response);
       const token = response.token;
 
       // Store token in local storage (optional, but used elsewhere)
@@ -38,6 +39,7 @@ const LoginPage = () => {
 
       if (!response.user.is_activated) {
         setError("Please Activate your Account !");
+        return;
       }
 
       // ✅ Update Recoil and let atom persist to localStorage
