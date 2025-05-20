@@ -4,6 +4,7 @@ import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
 import { useNavigate } from "react-router-dom";
 import SettingsPage from "../components/SettingsPage";
+import GeneralSettingsPanel from "../components/GeneralSettingsPanel";
 
 const Settings = () => {
   const [trigger, setTrigger] = useState(1);
@@ -70,6 +71,11 @@ const Settings = () => {
       <div className="flex-1 p-6 bg-white">
         <h1 className="text-2xl font-semibold pb-4">Your Settings!</h1>
         <SettingsPage />
+        <div className="flex flex-col w-full  p-6 ">
+          <div className="flex-1 w-full">
+            <GeneralSettingsPanel />
+          </div>
+        </div>
       </div>
     </div>
   );
