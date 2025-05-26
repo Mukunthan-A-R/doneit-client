@@ -57,8 +57,8 @@ const Settings = () => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex lg:flex-col lg:w-1/5 bg-blue-900 text-black h-screen">
-        <h2 className="text-white p-6 text-center text-2xl font-bold border-b border-blue-800">
+      <div className="hidden lg:flex lg:flex-col lg:w-1/5 bg-blue-900 h-full">
+        <h2 className="text-white p-6 pb-0 text-center text-2xl font-medium">
           Project Toolbar
         </h2>
         <ProjectToolbar
