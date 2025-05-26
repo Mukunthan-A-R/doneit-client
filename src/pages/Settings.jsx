@@ -7,6 +7,7 @@ import SettingsPage from "../components/SettingsPage";
 import GeneralSettingsPanel from "../components/GeneralSettingsPanel";
 import ExportProjects from "../components/ExportProjects";
 import LogoutButton from "../components/LogoutButton";
+import ChangePasswordModal from "../components/ChangePasswordModal";
 
 const Settings = () => {
   const [trigger, setTrigger] = useState(1);
@@ -78,6 +79,9 @@ const Settings = () => {
             <GeneralSettingsPanel />
           </div>
           <ExportProjects></ExportProjects>
+          <ChangePasswordModal
+            userId={currentUserData.user_id}
+          ></ChangePasswordModal>
           <LogoutButton></LogoutButton>
         </div>
       </div>
