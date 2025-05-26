@@ -5,6 +5,7 @@ import { userData } from "../data/atom";
 import { useNavigate } from "react-router-dom";
 import SettingsPage from "../components/SettingsPage";
 import GeneralSettingsPanel from "../components/GeneralSettingsPanel";
+import ExportProjects from "../components/ExportProjects";
 
 const Settings = () => {
   const [trigger, setTrigger] = useState(1);
@@ -75,6 +76,7 @@ const Settings = () => {
           <div className="flex-1 w-full">
             <GeneralSettingsPanel />
           </div>
+          <ExportProjects></ExportProjects>
         </div>
       </div>
     </div>
