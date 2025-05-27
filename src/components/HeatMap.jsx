@@ -176,7 +176,7 @@ const HeatMap = ({ projectId }) => {
                           title={`${isoDate}\n${(tasksByDate[isoDate] || [])
                             .map((task) => `• ${task.title}`)
                             .join("\n")}`}
-                          className="w-14 h-14 rounded-md flex items-center justify-center cursor-pointer"
+                          className="w-14 h-14 rounded-md flex items-center justify-center cursor-pointer transform transition-transform duration-100 ease-in-out hover:scale-110"
                           style={{
                             backgroundColor: color,
                             border: inRange ? "1px solid #d1d5db" : "none",
@@ -254,7 +254,7 @@ const HeatMap = ({ projectId }) => {
                   {totalTasks}
                 </td>
               </tr>
-              <tr className="even:bg-blue-50">
+              {/* <tr className="even:bg-blue-50">
                 <td className="px-4 py-3 font-medium">Completed Tasks</td>
                 <td className="px-4 py-3 text-green-700 font-semibold">
                   {completed}
@@ -271,7 +271,7 @@ const HeatMap = ({ projectId }) => {
                 <td className="px-4 py-3 text-red-600 font-semibold">
                   {notStarted}
                 </td>
-              </tr>
+              </tr> */}
               <tr className="even:bg-blue-50">
                 <td className="px-4 py-3 font-medium">Active Days</td>
                 <td className="px-4 py-3 text-blue-800 font-semibold">
