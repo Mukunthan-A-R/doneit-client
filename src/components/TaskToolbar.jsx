@@ -10,7 +10,7 @@ import { IoCalendarClearOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BiTask } from "react-icons/bi";
-
+import { PiFireSimpleBold } from "react-icons/pi";
 const TaskToolbar = ({ project_id }) => {
   return (
     <ul className="py-6 h-screen">
@@ -41,6 +41,13 @@ const TaskToolbar = ({ project_id }) => {
       >
         <MdTimeline size={20} />
         <MenuItem text="Graph" />
+      </Link>
+      <Link
+        to={`/heat-map/${project_id}`}
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <PiFireSimpleBold size={20} />
+        <MenuItem text="Heat Map" />
       </Link>
       <Link
         to={`/project-calendar/${project_id}`}

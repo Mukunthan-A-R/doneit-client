@@ -17,6 +17,7 @@ import AddProjectUser from "./pages/AddProjectUser";
 import ResetPassword from "./pages/ResetPassword";
 import SessionTimeout from "./components/SessionTimeout";
 import TaskListView from "./pages/TaskListView";
+import HeatMapPage from "./pages/HeatMapPage";
 
 const AppRender = () => {
   return (
@@ -37,6 +38,7 @@ const AppRender = () => {
           element={<ProjectCalendar />}
         />
         <Route path="/graph/:projectId" element={<Graph />} />
+        <Route path="/heat-map/:projectId" element={<HeatMapPage />} />
         <Route path="/adduser/:projectId" element={<AddProjectUser />} />
         <Route exact path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/about" element={<About />} />
