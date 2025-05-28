@@ -127,7 +127,7 @@ const HeatMap = ({ projectId }) => {
 
   return (
     <div className="w-full flex flex-col items-center py-8 px-4">
-      <div className="bg-white shadow-lg rounded-xl border border-gray-200 p-6 w-full max-w-full overflow-auto">
+      <div className="bg-white shadow-lg rounded-xl border border-gray-200 p-6 w-full max-w-full overflow-x-auto overflow-y-hidden">
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
           Project Task Heatmap
         </h2>
@@ -235,78 +235,74 @@ const HeatMap = ({ projectId }) => {
       </div>
 
       {/* Summary Card */}
-      <div className="mt-8 bg-white p-6 rounded-lg shadow-md w-full ">
+      <div className="mt-8 bg-white p-6 rounded-lg shadow-md w-full max-w-full overflow-x-auto">
         <h3 className="text-xl font-semibold text-blue-900 border-b-2 border-blue-700 pb-2 mb-4">
           Summary Overview
         </h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-gray-800">
-            <thead className="bg-blue-900 text-white uppercase text-xs tracking-wider">
-              <tr>
-                <th className="text-left px-4 py-3">Metric</th>
-                <th className="text-left px-4 py-3">Value</th>
-              </tr>
-            </thead>
-            <tbody>
+        <table className="min-w-full text-sm text-gray-800">
+          <thead className="bg-blue-900 text-white uppercase text-xs tracking-wider">
+            <tr>
+              <th className="text-left px-4 py-3">Metric</th>
+              <th className="text-left px-4 py-3">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="even:bg-blue-50">
+              <td className="px-4 py-3 font-medium">Total Tasks</td>
+              <td className="px-4 py-3 text-blue-900 font-semibold">
+                {totalTasks}
+              </td>
+            </tr>
+            <tr className="even:bg-blue-50">
+              <td className="px-4 py-3 font-medium">Active Days</td>
+              <td className="px-4 py-3 text-blue-800 font-semibold">
+                {activeDays}
+              </td>
+            </tr>
+            <tr className="even:bg-blue-50">
+              <td className="px-4 py-3 font-medium">Average Tasks/Day</td>
+              <td className="px-4 py-3 text-blue-800 font-semibold">
+                {avgTasksPerDay}
+              </td>
+            </tr>
+            {peakDate && (
               <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Total Tasks</td>
-                <td className="px-4 py-3 text-blue-900 font-semibold">
-                  {totalTasks}
+                <td className="px-4 py-3 font-medium">Most Active Day</td>
+                <td className="px-4 py-3 text-indigo-700 font-semibold">
+                  {peakDate.date} ({peakDate.count} tasks)
                 </td>
               </tr>
-              {/* <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Completed Tasks</td>
-                <td className="px-4 py-3 text-green-700 font-semibold">
-                  {completed}
-                </td>
-              </tr>
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Remaining Tasks</td>
-                <td className="px-4 py-3 text-yellow-700 font-semibold">
-                  {remaining}
-                </td>
-              </tr>
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Not Started Tasks</td>
-                <td className="px-4 py-3 text-red-600 font-semibold">
-                  {notStarted}
-                </td>
-              </tr> */}
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Active Days</td>
-                <td className="px-4 py-3 text-blue-800 font-semibold">
-                  {activeDays}
-                </td>
-              </tr>
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Average Tasks/Day</td>
-                <td className="px-4 py-3 text-blue-800 font-semibold">
-                  {avgTasksPerDay}
-                </td>
-              </tr>
-              {peakDate && (
-                <tr className="even:bg-blue-50">
-                  <td className="px-4 py-3 font-medium">Most Active Day</td>
-                  <td className="px-4 py-3 text-indigo-700 font-semibold">
-                    {peakDate.date} ({peakDate.count} tasks)
-                  </td>
-                </tr>
-              )}
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Idle Days</td>
-                <td className="px-4 py-3 text-red-700 font-semibold">
-                  {idleDays.join(", ") || "None"}
-                </td>
-              </tr>
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Days with Less Work</td>
-                <td className="px-4 py-3 text-yellow-700 font-semibold">
-                  {lightWorkDays.join(", ") || "None"}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+            )}
+            <tr className="even:bg-blue-50">
+              <td className="px-4 py-3 font-medium">Idle Days</td>
+              <td className="px-4 py-3 text-red-700 font-semibold">
+                {idleDays.length}{" "}
+                {idleDays.length > 0 && (
+                  <span className=" text-indigo-700 max-w-xs break-words">
+                    {"("}
+                    {idleDays.join(", ")}
+                    {")"}
+                  </span>
+                )}
+              </td>
+            </tr>
+            <tr className="even:bg-blue-50">
+              <td className="px-4 py-3 font-medium">
+                Light Work Days (1-2 tasks)
+              </td>
+              <td className="px-4 py-3 text-green-700 font-semibold">
+                {lightWorkDays.length}
+                {lightWorkDays.length > 0 && (
+                  <span className=" text-indigo-700 max-w-xs break-words">
+                    {" ("}
+                    {lightWorkDays.join(", ")}
+                    {")"}
+                  </span>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
