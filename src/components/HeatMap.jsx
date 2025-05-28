@@ -133,7 +133,7 @@ const HeatMap = ({ projectId }) => {
         </h2>
         <div className="flex justify-center">
           <div className="flex">
-            <div className="flex flex-col mr-4 w-20">
+            <div className="flex flex-col justify-between space-y-[15px] pr-1 mt-12">
               {weekChunks.map((week, i) => {
                 const month = week[0].toLocaleString("default", {
                   month: "short",
@@ -141,7 +141,7 @@ const HeatMap = ({ projectId }) => {
                 return (
                   <div
                     key={i}
-                    className="h-14 flex items-center justify-end text-lg text-gray-600 pr-3"
+                    className="text-md font-medium text-gray-500 h-[30px] flex items-center justify-end pr-2"
                   >
                     {month}
                   </div>
