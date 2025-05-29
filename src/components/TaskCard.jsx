@@ -216,7 +216,7 @@ const TaskCard = ({
             </button>
             <button
               className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => onhandleDelete(task_id)}
+              onClick={() => onhandleDelete(task_id, title)}
             >
               Delete
             </button>

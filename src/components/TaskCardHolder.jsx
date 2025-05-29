@@ -2,14 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { deleteTask, fetchTasks } from "../services/TaskServices";
 import { useRecoilValue } from "recoil";
-import { ProjectState } from "../data/atom";
+import { ProjectState, userData } from "../data/atom";
 import TaskCard from "./TaskCard";
 import { editProjectById, fetchProjectById } from "../services/ProjectServices";
+import { createActivityLog } from "../services/projectActivity";
 
 const TaskCardHolder = ({ project_id, value, userRole }) => {
   const { projectId } = useParams();
   const fallbackProjectId = useRecoilValue(ProjectState);
   const activeProjectId = projectId || fallbackProjectId;
+
+  const currentUserData = useRecoilValue(userData);
+  const currentUserId = currentUserData?.user_id;
 
   const [project, setProject] = useState({
     created: 0,
@@ -111,15 +115,36 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
     console.log("Edit task with ID:", taskId);
   };
 
-  const handleDelete = async (taskId) => {
+  const handleDelete = async (taskId, taskTitle) => {
     try {
       await deleteTask(taskId);
       setTrigger((prev) => !prev);
       alert("The Task is Deleted Successfully");
+
+      // Log delete activity
+      await createActivityLog({
+        user_id: currentUserId,
+        project_id: activeProjectId,
+        task_id: taskId,
+        action: "delete",
+        context: {
+          title: taskTitle,
+        },
+      });
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
+
+  // const handleDelete = async (taskId) => {
+  //   try {
+  //     await deleteTask(taskId);
+  //     setTrigger((prev) => !prev);
+  //     alert("The Task is Deleted Successfully");
+  //   } catch (error) {
+  //     console.error("Error deleting task:", error);
+  //   }
+  // };
 
   const notStartedTasks = tasks.filter((task) => task.status === "not started");
   const inProgressTasks = tasks.filter((task) => task.status === "in progress");
