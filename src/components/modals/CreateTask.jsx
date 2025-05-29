@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { userData } from "../../data/atom"; // Adjust path if needed
 import { createTask } from "../../services/TaskServices";
 import { fetchProjectById } from "../../services/ProjectServices";
+import { createActivityLog } from "../../services/projectActivity"; // You said you'll create this service
 
 const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
+  const currentUserData = useRecoilValue(userData);
+  const user_id = currentUserData?.user_id;
+
   const [taskLine, setTaskLine] = useState(null);
   const [loadingData, setLoadingData] = useState(false);
 
@@ -134,6 +140,18 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
 
       const newTask = await createTask(formattedTaskData);
       console.log("Task created successfully:", newTask);
+
+      // Create activity log after task creation
+      await createActivityLog({
+        user_id,
+        project_id: newTask.data.project_id,
+        task_id: newTask.data.task_id,
+        action: "create",
+        context: {
+          title: newTask.data.title,
+        },
+      });
+
       onClose();
       onCreateTask();
     } catch (error) {
@@ -290,7 +308,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
             <button
               type="submit"
               disabled={loadingData}
-              className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-blue-300"
+              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50"
             >
               {loadingData ? "Creating..." : "Create Task"}
             </button>
