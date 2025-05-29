@@ -1,17 +1,6 @@
 import axios from "axios";
-const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
-let token = null;
 
-try {
-  const userDataString = localStorage.getItem("userData");
-  if (userDataString) {
-    const userData = JSON.parse(userDataString);
-    token = userData?.token || null;
-  }
-} catch (error) {
-  console.error("Error parsing userData from localStorage:", error);
-  // You can also implement additional error handling here
-}
+const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
 
 if (!apiUrl) {
   throw new Error("API URL is not defined in the environment variables.");
@@ -20,13 +9,27 @@ if (!apiUrl) {
 // Define the API URL (email will be dynamic in the path)
 const API_URL = `${apiUrl}/api/userEmail`;
 
+// ✅ Helper to dynamically fetch the latest token from localStorage
+const getAuthHeaders = () => {
+  try {
+    const userDataString = localStorage.getItem("userData");
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      return {
+        Authorization: `Bearer ${userData?.token || ""}`,
+      };
+    }
+  } catch (error) {
+    console.error("Error parsing userData from localStorage:", error);
+  }
+  return {};
+};
+
 // Function to fetch user by email
 export const getUserByEmail = async (email) => {
   try {
     const response = await axios.get(`${API_URL}/${email}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: getAuthHeaders(),
     });
     return response.data;
   } catch (error) {
