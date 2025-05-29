@@ -70,6 +70,22 @@ const TaskCard = ({
     };
     try {
       await updateTask(task_id, updatedTaskData);
+
+      console.log("updatedTaskData");
+      console.log(updatedTaskData);
+
+      await createActivityLog({
+        user_id: currentUserId,
+        project_id: updatedTaskData.project_id,
+        task_id: task_id,
+        action: "status-change",
+        context: {
+          oldStatus: status,
+          newStatus: updatedTaskData.status,
+          title: updatedTaskData.title,
+        },
+      });
+
       setNotification({
         type: "success",
         message: "Status updated successfully!",
