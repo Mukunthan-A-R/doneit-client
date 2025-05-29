@@ -70,6 +70,13 @@ const TaskToolbar = ({ project_id }) => {
         <AiOutlineUserAdd size={20} />
         <MenuItem text="Add User" />
       </Link>
+      <Link
+        to={`/transaction/${project_id}`}
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <AiOutlineUserAdd size={20} />
+        <MenuItem text="Transactions" />
+      </Link>
       {/* <MenuItem text="Format Tasks" /> */}
       <Link
         to="/settings"
