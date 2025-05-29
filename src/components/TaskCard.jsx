@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { updateTask } from "../services/TaskServices";
+import { createActivityLog } from "../services/projectActivity";
+import { useRecoilValue } from "recoil";
+import { userData } from "../data/atom";
 
 const TaskCard = ({
   task_id,
@@ -17,6 +20,9 @@ const TaskCard = ({
   projectStartDate,
   projectEndDate,
 }) => {
+  const currentUserData = useRecoilValue(userData);
+  const currentUserId = currentUserData?.user_id;
+
   const remainingTime = calculateRemainingTime(endDate);
   const endTime = formatDate(endDate);
   const startTime = formatDate(startDate);
@@ -146,6 +152,19 @@ const TaskCard = ({
     try {
       const updatedTaskData = { ...formData, project_id };
       await updateTask(task_id, updatedTaskData);
+
+      await createActivityLog({
+        user_id: currentUserId,
+        project_id: updatedTaskData.project_id,
+        task_id: task_id,
+        action: "update",
+        context: {
+          field: "title",
+          // newValue: updatedTaskData.title, // get the new value from formData or updatedTaskData
+          title: updatedTaskData.title,
+        },
+      });
+
       setNotification({
         type: "success",
         message: "Task updated successfully!",
