@@ -47,17 +47,15 @@ const TransactionAnalytics = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans flex flex-col">
-      {/* Mobile Navbar */}
-      <header className="lg:hidden bg-blue-900 text-white shadow-md px-5 py-3 flex items-center justify-between sticky top-0 z-50">
-        <h1 className="font-bold text-lg">WorkTrack Pro</h1>
+      {/* Navbar for mobile only with properly sized hamburger button */}
+      <div>
         <button
           onClick={() => setIsNavOpen(true)}
-          aria-label="Open menu"
-          className="text-white text-2xl focus:outline-none focus:ring-2 focus:ring-white rounded"
+          className="lg:hidden bg-blue-900 text-white px-4 py-2 m-4 rounded z-20"
         >
-          ☰
+          ☰ Menu
         </button>
-      </header>
+      </div>
 
       {/* Sidebar Overlay for Mobile */}
       {isNavOpen && (
@@ -71,10 +69,13 @@ const TransactionAnalytics = () => {
       {/* Sidebar Panel for Mobile */}
       <aside
         className={`fixed top-0 left-0 h-full w-64 bg-blue-900 text-white p-6 z-50 transform transition-transform duration-300 ease-in-out shadow-lg
-          ${isNavOpen ? "translate-x-0" : "-translate-x-full"} lg:hidden`}
+    ${isNavOpen ? "translate-x-0" : "-translate-x-full"} lg:hidden`}
+        // removed paddingTop style completely
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold tracking-wide">Menu</h2>
+          <h2 className="text-2xl font-semibold tracking-wide m-0">
+            Task Toolbar
+          </h2>
           <button
             onClick={() => setIsNavOpen(false)}
             aria-label="Close menu"
@@ -86,17 +87,20 @@ const TransactionAnalytics = () => {
         <TaskToolbar project_id={projectId} />
       </aside>
 
-      <div className="flex flex-1 min-h-screen">
+      {/* Main layout container */}
+      <div className="flex flex-1 min-h-screen pt-14 lg:pt-0">
+        {/* pt-14 (56px) padding-top on mobile only */}
+
         {/* Sidebar Desktop */}
         <aside className="hidden lg:flex lg:flex-col lg:w-1/5 bg-blue-900 text-white p-6 shadow-lg">
-          <h2 className="text-2xl font-semibold mb-6 tracking-wide">
+          <h2 className="text-2xl font-semibold mb-6 tracking-wide ">
             Task Toolbar
           </h2>
           <TaskToolbar project_id={projectId} />
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 bg-white rounded-tl-3xl rounded-bl-3xl shadow-lg p-8 max-w-full overflow-x-auto">
+        <main className="flex-1 bg-white rounded-tl-3xl rounded-bl-3xl sm:pt-6 shadow-lg px-8 max-w-full overflow-x-auto">
           {/* Project Header */}
           <ProjectTitleCard project_id={projectId} />
 
