@@ -5,7 +5,6 @@ import { useRecoilValue } from "recoil";
 import { ProjectState } from "../data/atom";
 import { useParams } from "react-router-dom";
 import ProjectTitleCard from "../components/ProjectTitleCard";
-import ActivitySummaryDashboard from "../components/ActivitySummaryDashboard";
 import ExportLogs from "../components/ExportLogs";
 
 const TransactionHistory = () => {
@@ -66,29 +65,37 @@ const TransactionHistory = () => {
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800 flex flex-col font-sans">
       {/* Mobile Navbar */}
-      <div className="lg:hidden px-4 py-3 bg-blue-900 text-white shadow">
-        <button onClick={() => setIsNavOpen(true)} className="font-medium">
+      <div>
+        <button
+          onClick={() => setIsNavOpen(true)}
+          className="lg:hidden bg-blue-900 text-white px-4 py-2 m-4 rounded z-20"
+        >
           ☰ Menu
         </button>
       </div>
 
       {/* Sidebar Panel for Mobile */}
-      <div
-        className={`fixed top-0 left-0 h-full w-64 bg-blue-900 text-white p-4 z-40 transform transition-transform duration-300 ease-in-out \${
-          isNavOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:hidden`}
+      <aside
+        className={`fixed top-0 left-0 h-full w-64 bg-blue-900 text-white p-6 z-50 transform transition-transform duration-300 ease-in-out shadow-lg
+          ${isNavOpen ? "translate-x-0" : "-translate-x-full"} lg:hidden`}
       >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Menu</h2>
-          <button onClick={() => setIsNavOpen(false)} className="text-2xl">
-            ✕
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold tracking-wide m-0">
+            Task Toolbar
+          </h2>
+          <button
+            onClick={() => setIsNavOpen(false)}
+            aria-label="Close menu"
+            className="text-white text-3xl focus:outline-none focus:ring-2 focus:ring-white rounded"
+          >
+            &times;
           </button>
         </div>
         <TaskToolbar project_id={projectId} />
-      </div>
+      </aside>
 
       <div className="flex flex-1 flex-col lg:flex-row">
-        {/* Sidebar */}
+        {/* Sidebar for desktop */}
         <aside className="hidden lg:block w-1/6 bg-blue-900 text-white p-4 shadow-lg min-h-screen">
           <h2 className="text-lg font-semibold mb-4">Task Toolbar</h2>
           <TaskToolbar project_id={projectId} />
@@ -182,7 +189,7 @@ const TransactionHistory = () => {
             )}
           </section>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-6">
             <ExportLogs transactions={transactions} />
           </div>
         </main>
