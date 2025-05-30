@@ -29,8 +29,22 @@ const ActivitySummaryDashboard = ({ transactions }) => {
   }, {});
 
   const countByTask = transactions.reduce((acc, txn) => {
-    const task =
-      txn.description?.match(/task "?(.+?)"? (by|to)/)?.[1] || "Unknown";
+    let task = "Unknown";
+
+    if (txn.action === "status-change") {
+      // Strict extraction for status-change action
+      const match = txn.description?.match(/for task "([^"]+)"/);
+      if (match) {
+        task = match[1];
+      }
+    } else {
+      // Fallback extraction for other actions
+      const match = txn.description?.match(/task "?(.+?)"? (by|to)/);
+      if (match) {
+        task = match[1];
+      }
+    }
+
     acc[task] = (acc[task] || 0) + 1;
     return acc;
   }, {});
@@ -39,10 +53,12 @@ const ActivitySummaryDashboard = ({ transactions }) => {
     name,
     value,
   }));
+
   const userData = Object.entries(countByUser).map(([name, count]) => ({
     name,
     count,
   }));
+
   const taskData = Object.entries(countByTask).map(([name, count]) => ({
     name,
     count,
@@ -100,7 +116,7 @@ const ActivitySummaryDashboard = ({ transactions }) => {
       </div>
 
       {/* Bar Chart - Tasks with Most Changes */}
-      <div className="flex justify-center mt-10">
+      {/* <div className="flex justify-center mt-10">
         <div className="w-full max-w-3xl">
           <h3 className="text-lg font-medium mb-2 text-gray-700">
             Tasks with Most Changes
@@ -115,7 +131,7 @@ const ActivitySummaryDashboard = ({ transactions }) => {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </div> */}
 
       {/* Bar Chart - Action Counts */}
       <div className="flex justify-center mt-10">
