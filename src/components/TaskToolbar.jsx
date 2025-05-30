@@ -11,6 +11,9 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BiTask } from "react-icons/bi";
 import { PiFireSimpleBold } from "react-icons/pi";
+import { LuDatabase } from "react-icons/lu";
+import { VscPieChart } from "react-icons/vsc";
+
 const TaskToolbar = ({ project_id }) => {
   return (
     <ul className="py-6 h-screen">
@@ -74,8 +77,15 @@ const TaskToolbar = ({ project_id }) => {
         to={`/transaction/${project_id}`}
         className="flex text-white hover:bg-blue-800 items-center pl-4"
       >
-        <AiOutlineUserAdd size={20} />
-        <MenuItem text="Transactions" />
+        <LuDatabase size={20} />
+        <MenuItem text="Logs" />
+      </Link>
+      <Link
+        to={`/transaction-analytics/${project_id}`}
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+      >
+        <VscPieChart size={20} />
+        <MenuItem text="Insights" />
       </Link>
       {/* <MenuItem text="Format Tasks" /> */}
       <Link

@@ -182,16 +182,6 @@ const TransactionHistory = () => {
             )}
           </section>
 
-          {/* Add-ons */}
-          <section className="mt-10">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Activity Summary
-            </h2>
-            <div className="w-full max-w-6xl mx-auto px-4 mt-10">
-              <ActivitySummaryDashboard transactions={transactions} />
-            </div>
-          </section>
-
           <div className="flex justify-center">
             <ExportLogs transactions={transactions} />
           </div>

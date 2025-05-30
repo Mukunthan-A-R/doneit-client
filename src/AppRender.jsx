@@ -19,6 +19,7 @@ import SessionTimeout from "./components/SessionTimeout";
 import TaskListView from "./pages/TaskListView";
 import HeatMapPage from "./pages/HeatMapPage";
 import TransactionHistory from "./pages/TransactionHistory";
+import TransactionAnalytics from "./pages/TransactionAnalytics";
 
 const AppRender = () => {
   return (
@@ -32,16 +33,21 @@ const AppRender = () => {
         <Route path="/signup" element={<SignupPage />} />
         <Route exact path="/tasks/:projectId" element={<TaskDashboard />} />
         <Route exact path="/analytics/:projectId" element={<Analytics />} />
-        <Route
-          exact
-          path="/transaction/:projectId"
-          element={<TransactionHistory />}
-        />
         <Route exact path="/list/:projectId" element={<TaskListView />} />
         <Route
           exact
           path="/project-calendar/:projectId"
           element={<ProjectCalendar />}
+        />
+        <Route
+          exact
+          path="/transaction/:projectId"
+          element={<TransactionHistory />}
+        />
+        <Route
+          exact
+          path="/transaction-analytics/:projectId"
+          element={<TransactionAnalytics />}
         />
         <Route path="/graph/:projectId" element={<Graph />} />
         <Route path="/heat-map/:projectId" element={<HeatMapPage />} />
