@@ -87,6 +87,7 @@ const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors); // Show errors
+      setLoadingData(false);
       return;
     }
 
