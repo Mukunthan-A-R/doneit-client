@@ -85,7 +85,7 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
 
   return (
     <>
-      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-lg">
+      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl transition-shadow duration-300 hover:scale-105 transition-transform">
         {/* Menu Icon */}
         <div className="absolute top-3 right-3">
           {project.role === "admin" && (

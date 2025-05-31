@@ -76,7 +76,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
 
   return (
     <>
-      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-lg">
+      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl transition-shadow duration-300 hover:scale-105 transition-transform">
         {/* Menu Icon */}
         <div className="absolute top-3 right-3">
           <button
@@ -129,7 +129,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
         {/* Display Card Content */}
         {!isEditing && (
           <>
-            <div className="px-6 py-4">
+            <div className="px-6 py-4 ">
               <div className="flex items-center space-x-3">
                 {project.status === "active" ? (
                   <div className="w-4 h-4 rounded-full bg-green-600"></div>
