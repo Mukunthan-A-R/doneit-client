@@ -26,7 +26,7 @@ const AppRender = () => {
     <Router>
       <SessionTimeout />
       <NavBar></NavBar>
-      <div className="pt-14"></div>
+      {/* <div className="pt-14"></div> */}
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/dashboard" element={<Dashboard />} />
