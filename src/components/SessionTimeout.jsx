@@ -71,8 +71,14 @@ const SessionTimeout = ({ timeout = 15 * 60 * 1000 }) => {
   }, []);
 
   return showPopup ? (
-    <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 animate-fade">
-      Session ended. Please log in again.
+    <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg z-51 animate-fade flex items-center justify-between gap-4 min-w-[300px]">
+      <span>Session ended. Please log in again.</span>
+      <button
+        onClick={() => setShowPopup(false)}
+        className="text-white hover:text-gray-200 text-xl font-bold leading-none focus:outline-none"
+      >
+        &times;
+      </button>
     </div>
   ) : null;
 };
