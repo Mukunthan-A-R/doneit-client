@@ -97,7 +97,7 @@ const TransactionHistory = () => {
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* Sidebar for desktop */}
         <aside className="hidden lg:block w-1/6 bg-blue-900 text-white p-4 shadow-lg min-h-screen">
-          <h2 className="text-lg font-semibold mb-4">Task Toolbar</h2>
+          <h2 className="text-xl font-semibold">Task Toolbar</h2>
           <TaskToolbar project_id={projectId} />
         </aside>
 

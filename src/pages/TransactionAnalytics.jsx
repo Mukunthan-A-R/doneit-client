@@ -92,10 +92,8 @@ const TransactionAnalytics = () => {
         {/* pt-14 (56px) padding-top on mobile only */}
 
         {/* Sidebar Desktop */}
-        <aside className="hidden lg:flex lg:flex-col lg:w-1/5 bg-blue-900 text-white p-6 shadow-lg">
-          <h2 className="text-2xl font-semibold mb-6 tracking-wide ">
-            Task Toolbar
-          </h2>
+        <aside className="hidden lg:flex lg:flex-col lg:w-1/6 bg-blue-900 text-white p-4 shadow-lg">
+          <h2 className="text-xl font-semibold tracking-wide ">Task Toolbar</h2>
           <TaskToolbar project_id={projectId} />
         </aside>
 

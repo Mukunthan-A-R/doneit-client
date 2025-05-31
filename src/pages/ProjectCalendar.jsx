@@ -62,7 +62,7 @@ const ProjectCalendar = () => {
         lg:static lg:translate-x-0 lg:w-1/5 lg:flex lg:flex-col`}
       >
         <div className="flex justify-between items-center lg:block ">
-          <h2 className="text-xl font-semibold mb-4">Task Toolbar</h2>
+          <h2 className="text-xl font-semibold">Task Toolbar</h2>
           <button
             onClick={() => setIsSidebarOpen(false)}
             className="lg:hidden text-white text-xl"

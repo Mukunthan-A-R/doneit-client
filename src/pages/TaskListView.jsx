@@ -84,8 +84,8 @@ const TaskListView = () => {
           } lg:static lg:h-auto lg:w-1/6 lg:block`}
         >
           {/* Sidebar Header with Close icon */}
-          <div className="flex items-center justify-between lg:justify-center mb-4">
-            <h2 className="text-white text-lg font-semibold">Task Toolbar</h2>
+          <div className="flex items-center justify-between ">
+            <h2 className="text-white text-xl font-semibold">Task Toolbar</h2>
             <button
               className="lg:hidden text-white"
               onClick={() => setIsSidebarOpen(false)}
