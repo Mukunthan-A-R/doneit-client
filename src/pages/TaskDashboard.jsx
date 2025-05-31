@@ -56,9 +56,9 @@ const TaskDashboard = () => {
         `}
       >
         {/* Sidebar Header with Close icon */}
-        <div className="flex items-center justify-between lg:justify-center mb-4">
+        <div className="flex items-center justify-between lg:justify-center ">
           {/* Close icon (only visible on mobile) */}
-          <h2 className="text-white text-xl font-medium text-center w-full">
+          <h2 className="text-white text-xl font-medium w-full">
             Task Toolbar
           </h2>
 
