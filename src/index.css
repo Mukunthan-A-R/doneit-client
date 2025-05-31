@@ -8,3 +8,22 @@
 body {
   @apply font-sans;
 }
+
+/* Scrollbar styling for WebKit browsers */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full border-2 border-gray-100;
+}
+
+/* Firefox */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af #f3f4f6; /* gray-400 on gray-100 */
+}
