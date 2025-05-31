@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+/* Defining tailwind fonts */
+@theme {
+  --font-sans: "Manrope", sans-serif;
+}
+
+body {
+  @apply font-sans;
+}
