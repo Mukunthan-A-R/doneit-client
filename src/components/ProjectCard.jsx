@@ -185,7 +185,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
                   <span className="text-sm text-green-600">
                     Project Completed
                   </span>
-                  <div class="absolute bottom-18 right-[-1rem] rotate-[-20deg] text-green-600 border-2 border-green-600 px-3 py-1 font-bold text-sm uppercase opacity-80 pointer-events-none">
+                  <div className="absolute bottom-18 right-[-1rem] rotate-[-20deg] text-green-600 border-2 border-green-600 px-3 py-1 font-bold text-sm uppercase opacity-80 pointer-events-none">
                     Completed
                   </div>
                 </>
