@@ -13,6 +13,7 @@ import { BiTask } from "react-icons/bi";
 import { PiFireSimpleBold } from "react-icons/pi";
 import { LuDatabase } from "react-icons/lu";
 import { VscPieChart } from "react-icons/vsc";
+import { TbLogout2 } from "react-icons/tb";
 
 const TaskToolbar = ({ project_id }) => {
   return (
@@ -87,16 +88,36 @@ const TaskToolbar = ({ project_id }) => {
         <VscPieChart size={20} />
         <MenuItem text="Insights" />
       </Link>
-      {/* <MenuItem text="Format Tasks" /> */}
       <Link
+        className="flex text-white hover:bg-blue-800 items-center pl-4"
+        onClick={() => handleLogout()}
+      >
+        <TbLogout2 size={20} />
+        <MenuItem text="Logout" />
+      </Link>
+      {/* <MenuItem text="Format Tasks" /> */}
+      {/* <Link
         to="/settings"
         className="flex text-white hover:bg-blue-800 items-center pl-4"
       >
         <IoSettingsOutline size={20} />
         <MenuItem text="Settings" />
-      </Link>
+      </Link> */}
     </ul>
   );
 };
 
 export default TaskToolbar;
+
+const handleLogout = () => {
+  localStorage.removeItem("x-auth-token");
+  localStorage.removeItem("userData");
+  setUser({
+    token: null,
+    user_id: null,
+    name: "",
+    email: "",
+    loggedIn: false,
+  });
+  navigate("/login");
+};

@@ -66,9 +66,9 @@ const ActivitySummaryDashboard = ({ transactions }) => {
 
   return (
     <div className="bg-white rounded-xl shadow p-6 mt-8 w-full max-w-6xl mx-auto">
-      <h2 className="text-2xl font-semibold text-blue-900 mb-6 text-center">
+      {/* <h2 className="text-2xl font-semibold text-blue-900 mb-6 text-center">
         Activity Summary
-      </h2>
+      </h2> */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Pie Chart - Actions Distribution */}
