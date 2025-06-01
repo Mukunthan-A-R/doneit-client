@@ -62,7 +62,7 @@ const AppRender = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-serivce" element={<TermsOfService />} />
         <Route path="/password-reset" element={<ResetPassword />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/forgot-password/:token" element={<ForgotPassword />} />
         <Route path="/settings" element={<Settings />} />
         <Route element={<NotFound />} />
       </Routes>
