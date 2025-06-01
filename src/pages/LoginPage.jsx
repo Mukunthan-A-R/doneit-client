@@ -21,7 +21,10 @@ const LoginPage = () => {
     setLoading(true); // Set loading to true when form is submitted
 
     try {
-      const response = await loginUser({ email, password });
+      const response = await loginUser({
+        email: email.toLowerCase(),
+        password,
+      });
 
       // console.log(response);
       const token = response.token;
