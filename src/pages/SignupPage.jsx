@@ -74,7 +74,7 @@ const SignupPage = () => {
     const payload = {
       name: formData.first_name + " " + formData.last_name,
       // last_name: formData.last_name,
-      email: formData.email,
+      email: formData.email.toLowerCase(),
       password: formData.password,
       role: formData.role,
       company: formData.company,
@@ -228,7 +228,7 @@ const SignupPage = () => {
             {/* Role */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Role
+                Your Designation
               </label>
               <input
                 type="text"
