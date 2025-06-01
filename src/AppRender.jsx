@@ -20,6 +20,8 @@ import TaskListView from "./pages/TaskListView";
 import HeatMapPage from "./pages/HeatMapPage";
 import TransactionHistory from "./pages/TransactionHistory";
 import TransactionAnalytics from "./pages/TransactionAnalytics";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 const AppRender = () => {
   return (
@@ -56,6 +58,8 @@ const AppRender = () => {
         <Route exact path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-serivce" element={<TermsOfService />} />
         <Route path="/password-reset" element={<ResetPassword />} />
         <Route path="/settings" element={<Settings />} />
         <Route element={<NotFound />} />

@@ -20,11 +20,6 @@ const Footer = () => {
                   Careers
                 </a>
               </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-white">
-                  Press
-                </a>
-              </li>
             </ul>
           </div>
           <div>
@@ -33,13 +28,8 @@ const Footer = () => {
             </h3>
             <ul className="mt-4 space-y-2">
               <li>
-                <a href="#" className="text-gray-300 hover:text-white">
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-white">
-                  Safety Center
+                <a href="/contact" className="text-gray-300 hover:text-white">
+                  Contact Us
                 </a>
               </li>
               <li>
@@ -54,18 +44,24 @@ const Footer = () => {
               Legal
             </h3>
             <ul className="mt-4 space-y-2">
-              <li>
+              {/* <li>
                 <a href="#" className="text-gray-300 hover:text-white">
                   Cookies Policy
                 </a>
-              </li>
+              </li> */}
               <li>
-                <a href="#" className="text-gray-300 hover:text-white">
+                <a
+                  href="/privacy-policy"
+                  className="text-gray-300 hover:text-white"
+                >
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-white">
+                <a
+                  href="terms-serivce"
+                  className="text-gray-300 hover:text-white"
+                >
                   Terms of Service
                 </a>
               </li>
@@ -73,7 +69,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-10 border-t border-gray-700 pt-6 text-sm text-gray-400 text-center">
-          &copy; 2025 Your Company. All rights reserved.
+          &copy; 2025 Done It. All rights reserved.
         </div>
       </div>
     </footer>
