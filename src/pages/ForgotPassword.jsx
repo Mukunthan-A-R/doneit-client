@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function ForgotPassword() {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const { token } = useParams(); // <-- get token from URL path param
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,10 +28,10 @@ export default function ForgotPassword() {
     try {
       const res = await axios.post("/api/password-reset/confirm", {
         token,
-        password,
+        newPassword: password, // match your backend key (newPassword)
       });
 
-      if (res.data.success) {
+      if (res.data.message === "Password has been reset successfully") {
         setMessage("Password reset successfully. You can now log in.");
       } else {
         setError("Failed to reset password. Try again.");
@@ -115,7 +114,7 @@ export default function ForgotPassword() {
         </form>
       </main>
 
-      {/* Footer (optional) */}
+      {/* Footer */}
       <footer className="text-center py-4 text-gray-500 text-sm">
         © {new Date().getFullYear()} Done it Services. All rights reserved.
       </footer>
