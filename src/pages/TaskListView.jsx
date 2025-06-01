@@ -115,7 +115,7 @@ const TaskListView = () => {
 
           {/* Header */}
           <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
-            <h1 className="text-2xl font-bold"> Task List</h1>
+            <h1 className="text-2xl font-semibold"> Task List</h1>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <label className="text-sm font-medium opacity-90 flex items-center gap-2">
