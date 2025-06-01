@@ -22,6 +22,7 @@ import TransactionHistory from "./pages/TransactionHistory";
 import TransactionAnalytics from "./pages/TransactionAnalytics";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const AppRender = () => {
   return (
@@ -61,6 +62,7 @@ const AppRender = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-serivce" element={<TermsOfService />} />
         <Route path="/password-reset" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/settings" element={<Settings />} />
         <Route element={<NotFound />} />
       </Routes>
