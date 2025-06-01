@@ -238,7 +238,7 @@ const SignupPage = () => {
                 className={`w-full px-4 py-2.5 border ${
                   errors.role ? "border-red-500" : "border-gray-300"
                 } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition`}
-                placeholder="e.g. user, admin"
+                placeholder="e.g. Developer, Designer"
               />
               {errors.role && (
                 <p className="text-red-500 text-sm mt-1">{errors.role}</p>
@@ -248,7 +248,7 @@ const SignupPage = () => {
             {/* Company (optional) */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Company <span className="text-gray-400">(optional)</span>
+                Your Company
               </label>
               <input
                 type="text"
