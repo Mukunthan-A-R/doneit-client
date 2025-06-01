@@ -88,13 +88,6 @@ const TaskToolbar = ({ project_id }) => {
         <VscPieChart size={20} />
         <MenuItem text="Insights" />
       </Link>
-      <Link
-        className="flex text-white hover:bg-blue-800 items-center pl-4"
-        onClick={() => handleLogout()}
-      >
-        <TbLogout2 size={20} />
-        <MenuItem text="Logout" />
-      </Link>
       {/* <MenuItem text="Format Tasks" /> */}
       {/* <Link
         to="/settings"
@@ -108,16 +101,3 @@ const TaskToolbar = ({ project_id }) => {
 };
 
 export default TaskToolbar;
-
-const handleLogout = () => {
-  localStorage.removeItem("x-auth-token");
-  localStorage.removeItem("userData");
-  setUser({
-    token: null,
-    user_id: null,
-    name: "",
-    email: "",
-    loggedIn: false,
-  });
-  navigate("/login");
-};
