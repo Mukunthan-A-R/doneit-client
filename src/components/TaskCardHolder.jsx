@@ -204,6 +204,10 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
       <p className="font-medium">Description : {project.description}</p>
       <p className="font-medium"> Status : {project.status}</p>
 
+      <header className="bg-blue-950 text-white py-4 px-6  shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between my-4 mb-0 gap-4 md:gap-0">
+        <h1 className="text-2xl font-bold"> Task Tracker</h1>
+      </header>
+
       {allTasksCompleted && (
         <div className="col-span-3 text-center p-4 bg-green-200 text-green-800 rounded-md">
           <p>🎉 All tasks are completed! 🎉</p>

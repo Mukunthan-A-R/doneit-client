@@ -118,7 +118,7 @@ const TransactionAnalytics = () => {
           {!loading && !error && (
             <section className="mt-12 max-w-6xl mx-auto">
               <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
-                <h1 className="text-2xl font-bold">📋 Activity Summary</h1>
+                <h1 className="text-2xl font-bold">Transaction Log Summary</h1>
               </header>
 
               <ActivitySummaryDashboard transactions={transactions} />

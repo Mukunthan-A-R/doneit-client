@@ -97,7 +97,7 @@ const Analytics = () => {
 
           {/* Header */}
           <header className="bg-blue-950 text-white py-4 px-6 shadow-md flex items-center justify-between">
-            <h1 className="text-2xl font-semibold">📊 Project Analytics</h1>
+            <h1 className="text-2xl font-semibold"> Project Analytics</h1>
             <div className="text-sm font-medium opacity-80">
               Current Project:{" "}
               <span className="font-bold">{currentProject}</span>

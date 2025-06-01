@@ -105,6 +105,10 @@ const TransactionHistory = () => {
         <main className="w-full lg:w-10/12 px-4 py-6 max-w-7xl mx-auto">
           <ProjectTitleCard project_id={projectId} />
 
+          <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
+            <h1 className="text-2xl font-bold"> Project Logs</h1>
+          </header>
+
           {/* Filters */}
           <div className="bg-white rounded-xl shadow p-4 mt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2">

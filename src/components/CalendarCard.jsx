@@ -26,9 +26,6 @@ const CalendarCard = ({ startDate, endDate, tasksByDate = {} }) => {
       {/* Header */}
       <div className="flex justify-between items-start mb-6 flex-wrap">
         <div>
-          <h2 className="text-3xl font-semibold text-gray-900">
-            Project Calendar
-          </h2>
           <p className="text-sm text-gray-500">
             {format(start, "dd MMM yyyy")} — {format(end, "dd MMM yyyy")}
           </p>

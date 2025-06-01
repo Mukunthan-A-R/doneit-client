@@ -78,6 +78,11 @@ const ProjectCalendar = () => {
       <div className="flex-1 p-6 bg-white">
         {/* Project Title Card */}
         <ProjectTitleCard project_id={project_id}></ProjectTitleCard>
+
+        <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
+          <h1 className="text-2xl font-bold"> Project Calendar</h1>
+        </header>
+
         <CalendarCard
           startDate={ProjectData.start_date}
           endDate={ProjectData.end_date}
