@@ -6,6 +6,7 @@ import { ProjectState, userData } from "../data/atom";
 import TaskCard from "./TaskCard";
 import { editProjectById, fetchProjectById } from "../services/ProjectServices";
 import { createActivityLog } from "../services/projectActivity";
+import ProjectCompletedToast from "./modals/ProjectCompletedToast";
 
 const TaskCardHolder = ({ project_id, value, userRole }) => {
   const { projectId } = useParams();
@@ -29,6 +30,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -47,8 +49,6 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
           setTasks(fetchedTasks.data);
         }
       } catch (err) {
-        setError(err.message);
-
         if (isMounted) {
           setError(err.message);
         }
@@ -105,9 +105,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
     };
     const response = await editProjectById(fallbackProjectId, editData);
     if (response) {
-      alert(
-        "Project marked as completed! Please go to the Project Dashboard to see the changes!"
-      );
+      setShowToast(true);
     }
   };
 
@@ -119,6 +117,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
     try {
       await deleteTask(taskId);
       setTrigger((prev) => !prev);
+
       alert("The Task is Deleted Successfully");
 
       // Log delete activity
@@ -135,16 +134,6 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
       console.error("Error deleting task:", error);
     }
   };
-
-  // const handleDelete = async (taskId) => {
-  //   try {
-  //     await deleteTask(taskId);
-  //     setTrigger((prev) => !prev);
-  //     alert("The Task is Deleted Successfully");
-  //   } catch (error) {
-  //     console.error("Error deleting task:", error);
-  //   }
-  // };
 
   const notStartedTasks = tasks.filter((task) => task.status === "not started");
   const inProgressTasks = tasks.filter((task) => task.status === "in progress");
@@ -220,6 +209,14 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
             ✅ Mark Project as Completed
           </button>
         </div>
+      )}
+
+      {/* Toast */}
+      {showToast && (
+        <ProjectCompletedToast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+        />
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 py-8 px-3 md:px-0 min-h-screen bg-gray-50">
