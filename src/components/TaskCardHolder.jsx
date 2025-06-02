@@ -209,16 +209,19 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
       </header>
 
       {allTasksCompleted && (
-        <div className="col-span-3 text-center p-4 bg-green-200 text-green-800 rounded-md">
-          <p>🎉 All tasks are completed! 🎉</p>
+        <div className="col-span-3 p-6 bg-green-50 border border-green-300 rounded-lg shadow-sm text-center transition-all duration-300 mt-4">
+          <p className="text-green-800 text-lg font-semibold mb-4">
+            🎉 All tasks are completed! 🎉
+          </p>
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded-md"
+            className="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
             onClick={handleCompleteProject}
           >
-            Mark Project as Completed
+            ✅ Mark Project as Completed
           </button>
         </div>
       )}
+
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 py-8 px-3 md:px-0 min-h-screen bg-gray-50">
         <TaskColumn
           userRole={userRole}
