@@ -42,13 +42,6 @@ export default function ForgotPassword() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-blue-900 text-white py-6 shadow-md">
-        <div className="max-w-4xl mx-auto px-6">
-          <h1 className="text-3xl font-bold tracking-wide">Done it Services</h1>
-        </div>
-      </header>
-
       {/* Form */}
       <main className="flex-grow flex items-center justify-center px-4">
         <form
