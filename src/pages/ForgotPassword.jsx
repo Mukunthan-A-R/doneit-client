@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { confirmPasswordReset } from "../services/passwordReset";
 
 export default function ForgotPassword() {
-  const { token } = useParams(); // <-- get token from URL path param
+  const { token } = useParams();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,25 +20,23 @@ export default function ForgotPassword() {
       setError("Missing token.");
       return;
     }
-
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
 
     try {
-      const res = await axios.post("/api/password-reset/confirm", {
-        token,
-        newPassword: password, // match your backend key (newPassword)
-      });
-
-      if (res.data.message === "Password has been reset successfully") {
-        setMessage("Password reset successfully. You can now log in.");
-      } else {
-        setError("Failed to reset password. Try again.");
-      }
+      setLoading(true);
+      const res = await confirmPasswordReset(token, password);
+      setMessage(res.message || "Password reset successfully.");
     } catch (err) {
-      setError(err.response?.data?.message || "Server error.");
+      setError(err.message || "Server error.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,7 +49,7 @@ export default function ForgotPassword() {
         </div>
       </header>
 
-      {/* Form container */}
+      {/* Form */}
       <main className="flex-grow flex items-center justify-center px-4">
         <form
           onSubmit={handleSubmit}
@@ -84,6 +83,7 @@ export default function ForgotPassword() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
             />
           </div>
 
@@ -102,14 +102,16 @@ export default function ForgotPassword() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              minLength={6}
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-700 text-white font-semibold py-3 rounded-md hover:bg-blue-800 transition"
+            disabled={loading}
+            className="w-full bg-blue-700 text-white font-semibold py-3 rounded-md hover:bg-blue-800 transition disabled:opacity-50"
           >
-            Reset Password
+            {loading ? "Resetting..." : "Reset Password"}
           </button>
         </form>
       </main>
