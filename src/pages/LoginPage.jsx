@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/User";
 import { useSetRecoilState } from "recoil";
@@ -13,6 +13,13 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const setUser = useSetRecoilState(userData);
+
+  useEffect(() => {
+    const token = localStorage.getItem("x-auth-token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
