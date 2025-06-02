@@ -21,6 +21,10 @@ const HeatMap = ({ projectId }) => {
   const [error, setError] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
 
+  // 🔽 New state for dropdowns
+  const [showIdleDates, setShowIdleDates] = useState(false);
+  const [showLightDates, setShowLightDates] = useState(false);
+
   useEffect(() => {
     if (!projectId) return;
     setLoading(true);
@@ -276,29 +280,87 @@ const HeatMap = ({ projectId }) => {
             <tr className="even:bg-blue-50">
               <td className="px-4 py-3 font-medium">Idle Days</td>
               <td className="px-4 py-3 text-red-700 font-semibold">
-                {idleDays.length}{" "}
-                {idleDays.length > 0 && (
-                  <span className=" text-indigo-700 max-w-xs break-words">
-                    {"("}
+                <div className="flex items-center justify-between space-x-2">
+                  <span>{idleDays.length}</span>
+                  {idleDays.length > 0 && (
+                    <button
+                      onClick={() => setShowIdleDates((prev) => !prev)}
+                      className="inline-flex items-center px-2 py-1 text-sm text-blue-600 border border-blue-500 rounded hover:bg-blue-100 transition-all duration-300"
+                    >
+                      {showIdleDates ? "Hide" : "Show"}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={`h-4 w-4 ml-1 transition-transform duration-300 ${
+                          showIdleDates ? "rotate-180" : "rotate-0"
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+
+                <div
+                  className={`transition-all overflow-hidden duration-500 ease-in-out ${
+                    showIdleDates ? "max-h-[500px] mt-2" : "max-h-0"
+                  }`}
+                >
+                  <div className="text-indigo-700 break-words max-w-xs">
                     {idleDays.join(", ")}
-                    {")"}
-                  </span>
-                )}
+                  </div>
+                </div>
               </td>
             </tr>
             <tr className="even:bg-blue-50">
               <td className="px-4 py-3 font-medium">
-                Light Work Days (1-2 tasks)
+                Light Work Days (1–2 tasks)
               </td>
               <td className="px-4 py-3 text-green-700 font-semibold">
-                {lightWorkDays.length}
-                {lightWorkDays.length > 0 && (
-                  <span className=" text-indigo-700 max-w-xs break-words">
-                    {" ("}
+                <div className="flex items-center justify-between space-x-2">
+                  <span>{lightWorkDays.length}</span>
+                  {lightWorkDays.length > 0 && (
+                    <button
+                      onClick={() => setShowLightDates((prev) => !prev)}
+                      className="inline-flex items-center px-2 py-1 text-sm text-blue-600 border border-blue-500 rounded hover:bg-blue-100 transition-all duration-300"
+                    >
+                      {showLightDates ? "Hide" : "Show"}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={`h-4 w-4 ml-1 transition-transform duration-300 ${
+                          showLightDates ? "rotate-180" : "rotate-0"
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+
+                <div
+                  className={`transition-all overflow-hidden duration-500 ease-in-out ${
+                    showLightDates ? "max-h-[500px] mt-2" : "max-h-0"
+                  }`}
+                >
+                  <div className="text-indigo-700 break-words max-w-xs">
                     {lightWorkDays.join(", ")}
-                    {")"}
-                  </span>
-                )}
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>
