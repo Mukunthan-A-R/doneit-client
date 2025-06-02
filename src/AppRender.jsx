@@ -64,7 +64,7 @@ const AppRender = () => {
         <Route path="/password-reset" element={<ResetPassword />} />
         <Route path="/forgot-password/:token" element={<ForgotPassword />} />
         <Route path="/settings" element={<Settings />} />
-        <Route element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
