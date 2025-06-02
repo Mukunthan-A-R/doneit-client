@@ -71,7 +71,6 @@ const ProjectCalendar = () => {
           </button>
         </div>
         <TaskToolbar project_id={project_id} />
-        <div className="min-h-screen bg-blue-900"></div>
       </div>
 
       {/* Main Content */}
