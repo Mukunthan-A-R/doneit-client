@@ -117,7 +117,6 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
     try {
       await deleteTask(taskId);
       setTrigger((prev) => !prev);
-
       alert("The Task is Deleted Successfully");
 
       // Log delete activity
@@ -134,6 +133,16 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
       console.error("Error deleting task:", error);
     }
   };
+
+  // const handleDelete = async (taskId) => {
+  //   try {
+  //     await deleteTask(taskId);
+  //     setTrigger((prev) => !prev);
+  //     alert("The Task is Deleted Successfully");
+  //   } catch (error) {
+  //     console.error("Error deleting task:", error);
+  //   }
+  // };
 
   const notStartedTasks = tasks.filter((task) => task.status === "not started");
   const inProgressTasks = tasks.filter((task) => task.status === "in progress");
