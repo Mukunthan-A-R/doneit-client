@@ -12,6 +12,8 @@ import {
   FaTrash,
   FaExchangeAlt,
   FaListAlt,
+  FaUserPlus,
+  FaUserMinus,
 } from "react-icons/fa";
 
 const TransactionHistory = () => {
@@ -79,6 +81,10 @@ const TransactionHistory = () => {
         return <FaTrash className="text-red-600 inline mr-2" />;
       case "status-change":
         return <FaExchangeAlt className="text-blue-600 inline mr-2" />;
+      case "add-user":
+        return <FaUserPlus className="text-green-700 inline mr-2" />;
+      case "remove-user":
+        return <FaUserMinus className="text-red-700 inline mr-2" />;
       default:
         return <FaListAlt className="text-gray-500 inline mr-2" />;
     }
