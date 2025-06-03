@@ -195,6 +195,7 @@ const AddUserRoles = () => {
       )}
       {/* Pass the reloadAssignments state to UserAssignmentsDisplay to trigger re-fetch */}
       <UserAssignmentsDisplay
+        currentUserData={currentUserData}
         projectId={projectId}
         userRole={userRole}
         reloadAssignments={reloadAssignments}
