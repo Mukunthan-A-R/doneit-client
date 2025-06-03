@@ -124,9 +124,6 @@ const AddUserRoles = () => {
           },
         });
 
-        console.log(userDetails.data.email);
-        console.log(userDetails.data.name);
-
         setReloadAssignments((prev) => !prev);
 
         setEmail("");
