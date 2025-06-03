@@ -201,7 +201,8 @@ const TransactionHistory = () => {
                       const match = txn.description?.match(/by (.*?) <(.*?)>/);
                       const username = match?.[1];
                       const email = match?.[2];
-                      const beforeUser = txn.description?.split(match?.[0])[0];
+                      const beforeUser =
+                        txn.description?.split(match?.[0])[0] + "by ";
 
                       return (
                         <tr
