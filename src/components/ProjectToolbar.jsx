@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import MenuItem from "./modals/MenuItem";
+import { useRecoilState } from "recoil";
+import { userData } from "../data/atom";
 import CreateProject from "./modals/CreateProject";
 import FormatProjects from "./modals/FormatProjects";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { userData } from "../data/atom";
+import MenuItem from "./modals/MenuItem";
 
-import { RxDashboard } from "react-icons/rx";
+import { IoSettingsOutline } from "react-icons/io5";
 import { LuCircleUser } from "react-icons/lu";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
-import { IoSettingsOutline } from "react-icons/io5";
+import { RxDashboard } from "react-icons/rx";
 import { TbLogout2 } from "react-icons/tb";
 
 const ProjectToolbar = ({ user_id, handleTrigger }) => {

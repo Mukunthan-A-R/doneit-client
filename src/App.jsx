@@ -31,9 +31,9 @@ function App() {
       <NavBar />
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/dashboard" element={<Dashboard />} />
         <Route exact path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route exact path="/dashboard" element={<Dashboard />} />
         <Route exact path="/tasks/:projectId" element={<TaskDashboard />} />
         <Route exact path="/analytics/:projectId" element={<Analytics />} />
         <Route exact path="/list/:projectId" element={<TaskListView />} />

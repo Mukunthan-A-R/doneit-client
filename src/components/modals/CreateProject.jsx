@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { createProject } from "../../services/ProjectServices";
 
 const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
-  if (!showModal) return null;
 
   // State to store form data and validation errors
   const [loadingData, setLoadingData] = useState(false);
@@ -107,7 +106,7 @@ const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
     }
   };
 
-  return (
+  return showModal ?(
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md">
       {/* Modal Content */}
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full z-60">
@@ -267,7 +266,7 @@ const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
         </form>
       </div>
     </div>
-  );
+  ): null;
 };
 
 export default CreateProject;
