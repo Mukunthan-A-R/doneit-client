@@ -74,16 +74,17 @@ function Navbar() {
                   className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition"
                 >
                   <FaUserCircle className="text-2xl" />
+                  {user.name.split(" ")[0]}
                 </button>
 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-[#112240] text-white border border-gray-700 rounded shadow-lg z-50">
                     <Link
-                      to="/user-dashboard"
+                      to="/settings"
                       className="block px-4 py-2 hover:bg-blue-800 transition"
                       onClick={() => setIsDropdownOpen(false)}
                     >
-                      User Dashboard
+                      Settings
                     </Link>
                     <button
                       onClick={handleLogout}

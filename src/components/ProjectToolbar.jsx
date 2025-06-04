@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { userData } from "../data/atom";
 import CreateProject from "./modals/CreateProject";
 import FormatProjects from "./modals/FormatProjects";
@@ -11,11 +11,12 @@ import { LuCircleUser } from "react-icons/lu";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { TbLogout2 } from "react-icons/tb";
+import { createPortal } from "react-dom";
 
-const ProjectToolbar = ({ user_id, handleTrigger }) => {
+const ProjectToolbar = ({ user_id }) => {
   const [showModal, setShowModal] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [user, setUser] = useRecoilState(userData);
+  const setUser = useSetRecoilState(userData);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -33,7 +34,7 @@ const ProjectToolbar = ({ user_id, handleTrigger }) => {
 
   return (
     <>
-      <ul className="py-6 text-white h-screen">
+      <ul className="py-6 text-white h-full">
         <Link
           to="/dashboard"
           className="flex  hover:bg-blue-800 items-center pl-4"
@@ -79,12 +80,11 @@ const ProjectToolbar = ({ user_id, handleTrigger }) => {
       </ul>
 
       {/* Modals */}
-      <CreateProject
-        handleTrigger={handleTrigger}
-        user_id={user_id}
-        showModal={showModal}
-        setShowModal={setShowModal}
-      />
+      {showModal &&
+        createPortal(
+          <CreateProject user_id={user_id} setShowModal={setShowModal} />,
+          document.body,
+        )}
       {isPopupOpen && <FormatProjects onCancel={setIsPopupOpen} />}
     </>
   );

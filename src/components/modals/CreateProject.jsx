@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useSetRecoilState } from "recoil";
+import { refetchTriggerAtom } from "../../data/atom";
 import { createProject } from "../../services/ProjectServices";
 
-const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
-
+const CreateProject = ({ setShowModal, user_id }) => {
   // State to store form data and validation errors
   const [loadingData, setLoadingData] = useState(false);
   const [projectData, setProjectData] = useState({
@@ -15,6 +16,9 @@ const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
     // have to change create data
     created: parseInt(user_id),
   });
+
+  // refetch recoil
+  const setRefetchTrigger = useSetRecoilState(refetchTriggerAtom);
 
   const [errors, setErrors] = useState({});
 
@@ -96,8 +100,7 @@ const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
       if (response) {
         console.log("Project created:", response);
         setShowModal(false);
-        // window.location.reload();
-        handleTrigger();
+        setRefetchTrigger((prev) => prev + 1);
       }
     } catch (error) {
       console.error("Failed to create project:", error);
@@ -106,7 +109,7 @@ const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
     }
   };
 
-  return showModal ?(
+  return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md">
       {/* Modal Content */}
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full z-60">
@@ -266,7 +269,7 @@ const CreateProject = ({ showModal, setShowModal, user_id, handleTrigger }) => {
         </form>
       </div>
     </div>
-  ): null;
+  );
 };
 
 export default CreateProject;

@@ -45,3 +45,8 @@ export const CurrentProject = atom({
     status: "",
   },
 });
+
+export const refetchTriggerAtom = atom({
+  default: 0,
+  key: "refetchTrigger",
+});

@@ -23,6 +23,7 @@ import TransactionAnalytics from "./pages/TransactionAnalytics";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ForgotPassword from "./pages/ForgotPassword";
+import DashboardLayout from "./components/layouts/DashboardLayout";
 
 function App() {
   return (
@@ -33,7 +34,14 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route exact path="/dashboard" element={<Dashboard />} />
+
+        {/* Protected Routes */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route exact path="/user-dashboard" element={<UserDashboard />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+
         <Route exact path="/tasks/:projectId" element={<TaskDashboard />} />
         <Route exact path="/analytics/:projectId" element={<Analytics />} />
         <Route exact path="/list/:projectId" element={<TaskListView />} />
@@ -55,14 +63,12 @@ function App() {
         <Route path="/graph/:projectId" element={<Graph />} />
         <Route path="/heat-map/:projectId" element={<HeatMapPage />} />
         <Route path="/adduser/:projectId" element={<AddProjectUser />} />
-        <Route exact path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-serivce" element={<TermsOfService />} />
         <Route path="/password-reset" element={<ResetPassword />} />
         <Route path="/forgot-password/:token" element={<ForgotPassword />} />
-        <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

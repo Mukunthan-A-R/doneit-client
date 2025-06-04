@@ -95,7 +95,7 @@ const GeneralSettingsPanel = () => {
               onClick={() => handleZoom("out")}
               className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded text-sm"
             >
-              − Decrease
+              −
             </button>
             <span className="text-gray-600 font-medium">
               {(zoom * 100).toFixed(0)}%
@@ -104,7 +104,7 @@ const GeneralSettingsPanel = () => {
               onClick={() => handleZoom("in")}
               className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded text-sm"
             >
-              ＋ Increase
+              ＋
             </button>
           </div>
         </div>

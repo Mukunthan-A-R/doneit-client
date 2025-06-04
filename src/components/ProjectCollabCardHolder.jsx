@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
-import ProjectCard from "./ProjectCard";
-import { fetchProjects } from "../services/ProjectServices";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { getCollaboratedProjects } from "../services/getCollaboratedProjects";
 import ProjectCollabCard from "./ProjectCollabCard";
+import { refetchTriggerAtom } from "../data/atom";
 
-const ProjectCollabCardHolder = ({ user_id, trigger }) => {
+const ProjectCollabCardHolder = ({ user_id }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editTrigger, setEditTrigger] = useState(1);
+
+  const refetchTrigger = useRecoilValue(refetchTriggerAtom);
 
   const currentUserId = parseInt(user_id);
   // console.log("projects");
@@ -32,11 +34,11 @@ const ProjectCollabCardHolder = ({ user_id, trigger }) => {
     };
 
     if (currentUserId) fetchProjects();
-  }, [currentUserId, trigger, editTrigger]);
+  }, [currentUserId, refetchTrigger, editTrigger]);
 
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
-      prevProjects.filter((project) => project.project_id !== projectId)
+      prevProjects.filter((project) => project.project_id !== projectId),
     );
   };
 

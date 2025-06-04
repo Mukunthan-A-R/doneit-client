@@ -10,7 +10,7 @@ import { fetchTasksByUserId } from "../services/miscService";
 import StatsCards from "../components/modals/StatsCards.js";
 
 const UserDashboard = () => {
-  const userDatas = useRecoilValue(userData);
+  const user = useRecoilValue(userData);
   const [projects, setProjects] = useState([]);
   const [totalProjects, setTotalProjects] = useState([]);
   const [completedProjects, setCompletedProjects] = useState(0);
@@ -24,18 +24,12 @@ const UserDashboard = () => {
     role: "",
   });
 
-  const [user, setUser] = useState({
-    email: userDatas.email,
-    name: userDatas.name,
-    user_id: userDatas.user_id,
-  });
-
   // State to handle the side menu visibility on small screens
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const loadProjects = async () => {
-      const projectData = await fetchProjects(userDatas.user_id);
+      const projectData = await fetchProjects(user.user_id);
       setTotalProjects(projectData.data.length);
 
       if (projectData.status === 404) {
@@ -103,17 +97,7 @@ const UserDashboard = () => {
   }, [user.user_id]);
 
   return (
-    <div className="relative flex h-screen overflow-hidden bg-gray-100 text-gray-800 font-sans">
-      {/* Sidebar: Slide-in menu for small screens with backdrop blur */}
-      <div
-        className={`fixed lg:block w-64 bg-white shadow-md z-40 transition-transform duration-300 transform ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 backdrop-blur-md`} // Added backdrop blur effect here
-        style={{ height: "100vh" }} // Set height to 100vh for full screen height
-      >
-        <UserSideMenu />
-      </div>
-
+    <div className="relative flex overflow-hidden text-gray-800 font-sans">
       {/* Button to toggle sidebar on small screens, placed inside the page */}
       <div className="lg:hidden fixed top-22 left-3 z-50">
         <button
@@ -135,7 +119,7 @@ const UserDashboard = () => {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col mt-10 ml-0 lg:ml-64">
+      <div className="flex-1 flex flex-col">
         {/* User Info Section */}
         <section className="bg-white mx-6 mt-6 p-6 rounded-lg shadow flex items-center justify-between border-l-4 border-blue-700">
           <div className="flex items-center space-x-4">
@@ -231,8 +215,8 @@ const UserDashboard = () => {
                           project.priority === "high"
                             ? "bg-red-500"
                             : project.priority === "medium"
-                            ? "bg-yellow-500"
-                            : "bg-green-500"
+                              ? "bg-yellow-500"
+                              : "bg-green-500"
                         }`}
                       >
                         {project.priority}

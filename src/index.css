@@ -9,6 +9,11 @@ body {
   @apply font-sans;
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 /* Scrollbar styling for WebKit browsers */
 .scrollbar-thin::-webkit-scrollbar {
   width: 8px;

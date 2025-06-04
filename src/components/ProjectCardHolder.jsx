@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
-import ProjectCard from "./ProjectCard";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { refetchTriggerAtom } from "../data/atom";
 import { fetchProjects } from "../services/ProjectServices";
+import ProjectCard from "./ProjectCard";
 
-const ProjectCardHolder = ({ user_id, trigger }) => {
+const ProjectCardHolder = ({ user_id }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editTrigger, setEditTrigger] = useState(1);
 
   const currentUserId = parseInt(user_id);
+
+  const refetchTrigger = useRecoilValue(refetchTriggerAtom);
 
   useEffect(() => {
     const getProjects = async () => {
@@ -26,11 +30,11 @@ const ProjectCardHolder = ({ user_id, trigger }) => {
       }
     };
     getProjects();
-  }, [currentUserId, trigger, editTrigger]);
+  }, [currentUserId, refetchTrigger, editTrigger]);
 
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
-      prevProjects.filter((project) => project.project_id !== projectId)
+      prevProjects.filter((project) => project.project_id !== projectId),
     );
   };
 
