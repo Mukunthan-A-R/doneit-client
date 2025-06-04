@@ -11,6 +11,7 @@ import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
 import { fetchProjectById } from "../services/ProjectServices";
 import { fetchUserById } from "../services/UserData";
+import { createActivityLog } from "../services/projectActivity";
 
 const AddUserRoles = () => {
   const [userId, setUserId] = useState(null);
@@ -111,8 +112,19 @@ const AddUserRoles = () => {
         const response = await createAssignment(newUser);
         console.log("Assignment created successfully:", response);
 
-        // After adding a user, trigger a re-fetch of assignments
-        setReloadAssignments((prev) => !prev); // This will toggle the state and trigger a re-render of the UserAssignmentsDisplay
+        await createActivityLog({
+          user_id: currentUserData.user_id, // who performed the action
+          project_id: projectId,
+          action: "add-user",
+          context: {
+            addedUserId: userId, // user id added
+            addedUserEmail: userDetails.data.email, // real email
+            addedUserName: userDetails.data.name, // real name
+            addedUserRole: role,
+          },
+        });
+
+        setReloadAssignments((prev) => !prev);
 
         setEmail("");
         setRole("member");
@@ -183,6 +195,7 @@ const AddUserRoles = () => {
       )}
       {/* Pass the reloadAssignments state to UserAssignmentsDisplay to trigger re-fetch */}
       <UserAssignmentsDisplay
+        currentUserData={currentUserData}
         projectId={projectId}
         userRole={userRole}
         reloadAssignments={reloadAssignments}

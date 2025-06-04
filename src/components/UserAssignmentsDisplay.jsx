@@ -6,12 +6,14 @@ import {
 import { fetchUserById } from "../services/UserData";
 import { useParams } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
+import { createActivityLog } from "../services/projectActivity";
 
 const UserAssignmentsDisplay = ({
   projectId,
   reloadAssignments,
   setReloadAssignments,
   userRole,
+  currentUserData,
 }) => {
   const [assignments, setAssignments] = useState([]);
   const [users, setUsers] = useState({});
@@ -65,9 +67,9 @@ const UserAssignmentsDisplay = ({
     };
 
     fetchAssignments();
-  }, [projectId, reloadAssignments]); // Re-run the effect when projectId or reloadAssignments changes
+  }, [projectId, reloadAssignments]); // Re-run when projectId or reloadAssignments changes
 
-  const handleDelete = async (assignmentId) => {
+  const handleDelete = async (assignmentId, userToDelete) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this assignment?"
     );
@@ -75,10 +77,21 @@ const UserAssignmentsDisplay = ({
 
     try {
       const response = await deleteAssignmentById(assignmentId);
+
       if (response.success) {
-        // Re-fetch the assignments after deletion
-        // reloadAssignments(); // This should be passed in as a prop
-        // fetchUserDetails(assignmentId);
+        // Create activity log with the user info of the deleted assignment
+        await createActivityLog({
+          user_id: currentUserData.user_id,
+          project_id: projectId,
+          action: "remove-user",
+          context: {
+            targetUserId: userToDelete.id || userToDelete.user_id,
+            targetUserName: userToDelete.name,
+            targetUserEmail: userToDelete.email,
+          },
+        });
+
+        // Refresh the assignments list after deletion
         setReloadAssignments(!reloadAssignments);
       } else {
         alert(response.message || "Failed to delete assignment.");
@@ -141,7 +154,10 @@ const UserAssignmentsDisplay = ({
                         <div className="flex items-center justify-center h-full py-4">
                           <MdDelete
                             onClick={() =>
-                              handleDelete(parseInt(assignment.assignment_id))
+                              handleDelete(
+                                parseInt(assignment.assignment_id),
+                                users[assignment.user_id]
+                              )
                             }
                             color="red"
                             size={20}

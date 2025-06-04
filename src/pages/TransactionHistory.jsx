@@ -6,6 +6,15 @@ import { ProjectState } from "../data/atom";
 import { useParams } from "react-router-dom";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import ExportLogs from "../components/ExportLogs";
+import {
+  FaPlusCircle,
+  FaEdit,
+  FaTrash,
+  FaExchangeAlt,
+  FaListAlt,
+  FaUserPlus,
+  FaUserMinus,
+} from "react-icons/fa";
 
 const TransactionHistory = () => {
   const currentProject = useRecoilValue(ProjectState);
@@ -61,6 +70,25 @@ const TransactionHistory = () => {
     const timeMatch = isWithinDuration(txn.timestamp);
     return typeMatch && timeMatch;
   });
+
+  const getActionIcon = (action) => {
+    switch (action) {
+      case "create":
+        return <FaPlusCircle className="text-green-600 inline mr-2" />;
+      case "update":
+        return <FaEdit className="text-yellow-600 inline mr-2" />;
+      case "delete":
+        return <FaTrash className="text-red-600 inline mr-2" />;
+      case "status-change":
+        return <FaExchangeAlt className="text-blue-600 inline mr-2" />;
+      case "add-user":
+        return <FaUserPlus className="text-green-700 inline mr-2" />;
+      case "remove-user":
+        return <FaUserMinus className="text-red-700 inline mr-2" />;
+      default:
+        return <FaListAlt className="text-gray-500 inline mr-2" />;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800 flex flex-col font-sans">
@@ -169,24 +197,57 @@ const TransactionHistory = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {filteredTransactions.map((txn, index) => (
-                      <tr
-                        key={txn.id || `${txn.timestamp}-${index}`}
-                        className={`${
-                          index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                        } hover:bg-blue-50 transition`}
-                      >
-                        <td className="px-6 py-4 capitalize text-gray-900">
-                          {txn.action}
-                        </td>
-                        <td className="px-6 py-4 text-gray-700">
-                          {txn.description || txn.context || "—"}
-                        </td>
-                        <td className="px-6 py-4 text-gray-700">
-                          {formatDate(txn.timestamp)}
+                    {transactions.map((txn, index) => {
+                      const match = txn.description?.match(/by (.*?) <(.*?)>/);
+                      const username = match?.[1];
+                      const email = match?.[2];
+                      const beforeUser =
+                        txn.description?.split(match?.[0])[0] + "by ";
+
+                      return (
+                        <tr
+                          key={txn.id || `${txn.timestamp}-${index}`}
+                          className={`${
+                            index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                          } hover:bg-blue-50 transition group`}
+                        >
+                          <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-900 flex items-center space-x-3">
+                            <span className="text-xl">
+                              {getActionIcon(txn.action)}
+                            </span>
+                            <span className="capitalize text-blue-700 font-semibold">
+                              {txn.action}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            {beforeUser}
+                            {username && (
+                              <>
+                                <span className="text-blue-800 font-semibold">
+                                  {username}
+                                </span>{" "}
+                                <span className="text-blue-700">
+                                  &lt;{email}&gt;
+                                </span>
+                              </>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                            {formatDate(txn.timestamp)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    {transactions.length === 0 && (
+                      <tr>
+                        <td
+                          colSpan={3}
+                          className="text-center py-8 text-gray-500 italic"
+                        >
+                          No transactions found.
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>
