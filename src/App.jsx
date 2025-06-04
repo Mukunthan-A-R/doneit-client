@@ -80,6 +80,7 @@ function App() {
         position="top-right"
         transition={Slide}
         pauseOnFocusLoss
+        hideProgressBar
       />
     </Router>
   );

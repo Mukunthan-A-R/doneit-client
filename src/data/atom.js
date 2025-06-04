@@ -32,6 +32,7 @@ export const ProjectState = atom({
   default: null,
 });
 
+/** Discard this soon. first replace all "CurrentProject" usage with useProject hook and then delete this. */
 export const CurrentProject = atom({
   key: "CurrentProject",
   default: {
@@ -43,6 +44,17 @@ export const CurrentProject = atom({
     end_date: null,
     priority: "",
     status: "",
+  },
+});
+
+/** use this only from now on */
+export const CurrentProjectState = atom({
+  key: "CurrentProjectState",
+  default: {
+    project: null,
+    isLoading: false,
+    error: null,
+    id: null,
   },
 });
 

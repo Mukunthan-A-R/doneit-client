@@ -1,34 +1,8 @@
-import { useEffect, useState } from "react";
-import { fetchProjectById } from "../../services/ProjectServices";
+import useProject from "../../hooks/useProject";
 import { formatDate } from "../../services/utils";
 
-const ProjectInfo = ({ project_id, show, onClose }) => {
-  const [project, setProject] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const getProject = async (project_id) => {
-      if (project_id) {
-        try {
-          setLoading(true);
-          const data = await fetchProjectById(project_id);
-          setProject(data);
-          // console.log(data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    getProject(project_id);
-  }, []);
-
-  // console.log(project);
-
-  if (!show) return null;
+const ProjectInfo = ({ onClose }) => {
+  const { isLoading: loading, error, project } = useProject();
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -43,22 +17,19 @@ const ProjectInfo = ({ project_id, show, onClose }) => {
         >
           &times;
         </button>
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: {error}</p>}
-        {project && (
-          <div className="text-3xl font-semibold">{project.data.name}</div>
-        )}{" "}
-        {project && (
-          <div className="font-medium">{project.data.description}</div>
-        )}{" "}
-        {project && <div>Project ID : {project.data.project_id}</div>}
-        {project && <div>Priority : {project.data.priority}</div>}
-        {project && <div>Status : {project.data.status}</div>}
-        {project && (
-          <div>Project Start Date : {formatDate(project.data.start_date)}</div>
-        )}
-        {project && (
-          <div>Project End Date : {formatDate(project.data.end_date)}</div>
+        {error && <p>Error: {error.response?.message}</p>}
+        {loading && !project ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <div className="text-3xl font-semibold">{project.name}</div>
+            <div className="font-medium">{project.description}</div>
+            <div>Project ID : {project.project_id}</div>
+            <div>Priority : {project.priority}</div>
+            <div>Status : {project.status}</div>
+            <div>Project Start Date : {formatDate(project.start_date)}</div>
+            <div>Project End Date : {formatDate(project.end_date)}</div>
+          </>
         )}
       </div>
     </div>

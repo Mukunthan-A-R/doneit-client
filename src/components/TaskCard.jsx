@@ -4,6 +4,7 @@ import { userData } from "../data/atom";
 import { updateTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
+import { useParams } from "react-router-dom";
 
 const TaskCard = ({
   task_id,
@@ -16,7 +17,6 @@ const TaskCard = ({
   onEditClick,
   onhandleDelete,
   onStatusChange,
-  project_id,
   userRole,
   projectStartDate,
   projectEndDate,
@@ -27,6 +27,8 @@ const TaskCard = ({
   const remainingTime = calculateRemainingTime(endDate);
   const endTime = formatDate(endDate);
   const startTime = formatDate(startDate);
+
+  const { projectId } = useParams();
 
   const [menuVisible, setMenuVisible] = useState(false);
   const [notification, setNotification] = useState("");
@@ -61,7 +63,7 @@ const TaskCard = ({
 
   const handleStatusChange = async (newStatus) => {
     const updatedTaskData = {
-      project_id,
+      project_id: projectId,
       status: newStatus,
       title,
       description: desc,
@@ -167,12 +169,12 @@ const TaskCard = ({
     }
 
     try {
-      const updatedTaskData = { ...formData, project_id };
+      const updatedTaskData = { ...formData, project_id: projectId };
       await updateTask(task_id, updatedTaskData);
 
       await createActivityLog({
         user_id: currentUserId,
-        project_id: updatedTaskData.project_id,
+        projectId: updatedTaskData.project_id,
         task_id: task_id,
         action: "update",
         context: {

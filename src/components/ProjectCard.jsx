@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { CurrentProject, ProjectState } from "../data/atom";
+import { CurrentProject, ProjectState, refetchTriggerAtom } from "../data/atom";
 import {
   deleteProjectById,
   editProjectById,
 } from "../services/ProjectServices";
 import { formatDate } from "../services/utils";
 
-const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
+const ProjectCard = ({ project, onDelete }) => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -16,6 +16,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
 
   const setCurrentProject = useSetRecoilState(ProjectState);
   const setCurrentProjectData = useSetRecoilState(CurrentProject);
+  const setRefetchTrigger = useSetRecoilState(refetchTriggerAtom);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -47,8 +48,7 @@ const ProjectCard = ({ project, onDelete, handleEditTrigger }) => {
       setCurrentProject(project.project_id);
       console.log("Project updated successfully:", updatedProject);
       setIsEditing(false); // Close the edit mode after successful update
-      // location.reload();
-      handleEditTrigger();
+      setRefetchTrigger((prev) => prev + 1);
     } catch (error) {
       console.error("Error updating project:", error);
       alert("Error updating project!");

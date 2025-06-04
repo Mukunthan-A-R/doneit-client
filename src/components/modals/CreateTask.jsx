@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { refetchTriggerAtom, userData } from "../../data/atom"; // Adjust path if needed
+import useProject from "../../hooks/useProject";
 import { createTask } from "../../services/TaskServices";
-import { fetchProjectById } from "../../services/ProjectServices";
 import { createActivityLog } from "../../services/projectActivity"; // You said you'll create this service
 
-const CreateTask = ({ project_id, onClose }) => {
+const CreateTask = ({ onClose }) => {
   const currentUserData = useRecoilValue(userData);
   const setRefetchTrigger = useSetRecoilState(refetchTriggerAtom);
   const user_id = currentUserData?.user_id;
+  const { projectId } = useParams();
 
   const [taskLine, setTaskLine] = useState(null);
   const [loadingData, setLoadingData] = useState(false);
+
+  const { project } = useProject(projectId);
 
   const [taskData, setTaskData] = useState({
     title: "",
@@ -20,7 +24,7 @@ const CreateTask = ({ project_id, onClose }) => {
     time_duration: 0,
     start_date: "",
     end_date: "",
-    project_id: project_id,
+    project_id: projectId,
   });
 
   const [errors, setErrors] = useState({
@@ -33,20 +37,11 @@ const CreateTask = ({ project_id, onClose }) => {
   });
 
   useEffect(() => {
-    const getProject = async () => {
-      try {
-        const { data } = await fetchProjectById(project_id);
-        setTaskLine({
-          start_date: data.start_date,
-          end_date: data.end_date,
-        });
-      } catch (err) {
-        console.log("Error", err);
-      }
-    };
-
-    getProject();
-  }, [project_id]);
+    setTaskLine({
+      start_date: project.start_date,
+      end_date: project.end_date,
+    });
+  }, [project]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

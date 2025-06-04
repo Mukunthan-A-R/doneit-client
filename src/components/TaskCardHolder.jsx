@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { deleteTask, fetchTasks } from "../services/TaskServices";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProjectState, refetchTriggerAtom, userData } from "../data/atom";
-import TaskCard from "./TaskCard";
+import useProject from "../hooks/useProject";
 import { editProjectById, fetchProjectById } from "../services/ProjectServices";
+import { deleteTask, fetchTasks } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
+import ProjectTitleCard from "./ProjectTitleCard";
+import TaskCard from "./TaskCard";
 import ProjectCompletedToast from "./modals/ProjectCompletedToast";
-import { formatDate } from "../services/utils";
+import CreateTask from "./modals/CreateTask";
+import { IoMdAddCircleOutline } from "react-icons/io";
 
-const TaskCardHolder = ({ project_id, userRole }) => {
+const TaskCardHolder = ({ userRole }) => {
   const { projectId } = useParams();
   const fallbackProjectId = useRecoilValue(ProjectState);
   const activeProjectId = projectId || fallbackProjectId;
+  const [showCreateTask, setShowCreateTask] = useState(false);
 
   const currentUserData = useRecoilValue(userData);
   const [refetchTrigger, setRefetchTrigger] =
     useRecoilState(refetchTriggerAtom);
   const currentUserId = currentUserData?.user_id;
 
-  const [project, setProject] = useState({
-    created: 0,
-    description: "",
-    end_date: "2025-01-01T00:00:00.000Z",
-    name: "",
-    priority: "",
-    project_id: 58,
-    start_date: "2025-01-01T00:00:00.000Z",
-    status: "",
-  });
+  const { project } = useProject(projectId);
+
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -46,7 +42,7 @@ const TaskCardHolder = ({ project_id, userRole }) => {
           return;
         }
 
-        const fetchedTasks = await fetchTasks(project_id);
+        const fetchedTasks = await fetchTasks(projectId);
         if (isMounted) {
           setTasks(fetchedTasks.data);
         }
@@ -70,21 +66,6 @@ const TaskCardHolder = ({ project_id, userRole }) => {
       setLoading(false);
     };
   }, [activeProjectId, refetchTrigger]);
-
-  useEffect(() => {
-    const getProject = async (project_id) => {
-      if (project_id) {
-        try {
-          const { data } = await fetchProjectById(project_id);
-          setProject(data);
-        } catch (err) {
-          setError(err);
-        }
-      }
-    };
-
-    getProject(project_id);
-  }, []);
 
   const handleStatusChange = (taskId, newStatus) => {
     setTasks((prevTasks) =>
@@ -124,7 +105,7 @@ const TaskCardHolder = ({ project_id, userRole }) => {
       // Log delete activity
       await createActivityLog({
         user_id: currentUserId,
-        project_id: activeProjectId,
+        projectId: activeProjectId,
         task_id: taskId,
         action: "delete",
         context: {
@@ -178,36 +159,11 @@ const TaskCardHolder = ({ project_id, userRole }) => {
   }
 
   return (
-    <>
-      <div className="flex flex-col sm:flex-row  gap-2 mt-8 lg:mt-0">
-        <h2 className="text-2xl font-medium ">{project.name}</h2>
-        <span className="flex gap-2">
-          <p className="mt-2">
-            ( {formatDate(project.start_date)} to {formatDate(project.end_date)}{" "}
-            )
-          </p>
-          <p className="font-medium flex items-center mt-2">
-            <span
-              className={` px-2 py-1 rounded-full text-white text-xs font-semibold ${
-                project.priority === "low"
-                  ? "bg-green-500"
-                  : project.priority === "medium"
-                    ? "bg-orange-500"
-                    : "bg-red-500"
-              }`}
-            >
-              {project.priority}
-            </span>
-          </p>
-        </span>
-      </div>
-      <p className="font-medium">Description : {project.description}</p>
-      <p className="font-medium"> Status : {project.status}</p>
-
+    <div className="flex flex-col gap-3">
+      <ProjectTitleCard />
       <header className="bg-blue-950 text-white py-4 px-6  shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between my-4 mb-0 gap-4 md:gap-0">
         <h1 className="text-2xl font-bold"> Task Tracker</h1>
       </header>
-
       {allTasksCompleted && (
         <div className="col-span-3 p-6 bg-green-50 border border-green-300 rounded-lg shadow-sm text-center transition-all duration-300 mt-4">
           <p className="text-green-800 text-lg font-semibold mb-4">
@@ -221,7 +177,6 @@ const TaskCardHolder = ({ project_id, userRole }) => {
           </button>
         </div>
       )}
-
       {/* Toast */}
       {showToast && (
         <ProjectCompletedToast
@@ -229,8 +184,19 @@ const TaskCardHolder = ({ project_id, userRole }) => {
           onClose={() => setShowToast(false)}
         />
       )}
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 py-8 px-3 md:px-0 min-h-screen bg-gray-50">
+      <button
+        onClick={() => setShowCreateTask(true)}
+        className="flex text-lg items-center justify-center p-2 hover:bg-blue-700 text-white rounded-md w-fit px-4 cursor-pointer bg-blue-400 transition duration-300"
+      >
+        <IoMdAddCircleOutline size={30} />
+        Create Task
+      </button>
+      {showCreateTask && (
+        <CreateTask
+          onClose={() => setShowCreateTask(false)} // Close the modal
+        />
+      )}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 px-3 md:px-0 min-h-screen ">
         <TaskColumn
           userRole={userRole}
           title="Not Started"
@@ -239,8 +205,8 @@ const TaskCardHolder = ({ project_id, userRole }) => {
           onEditClick={handleEditClick}
           onDelete={handleDelete}
           onStatusChange={handleStatusChange}
-          projectStartDate={project.start_date}
-          projectEndDate={project.end_date}
+          projectStartDate={project?.start_date}
+          projectEndDate={project?.end_date}
         />
 
         <TaskColumn
@@ -251,8 +217,8 @@ const TaskCardHolder = ({ project_id, userRole }) => {
           onEditClick={handleEditClick}
           onDelete={handleDelete}
           onStatusChange={handleStatusChange}
-          projectStartDate={project.start_date}
-          projectEndDate={project.end_date}
+          projectStartDate={project?.start_date}
+          projectEndDate={project?.end_date}
         />
 
         <TaskColumn
@@ -263,11 +229,11 @@ const TaskCardHolder = ({ project_id, userRole }) => {
           onEditClick={handleEditClick}
           onDelete={handleDelete}
           onStatusChange={handleStatusChange}
-          projectStartDate={project.start_date}
-          projectEndDate={project.end_date}
+          projectStartDate={project?.start_date}
+          projectEndDate={project?.end_date}
         />
       </div>
-    </>
+    </div>
   );
 };
 
@@ -285,9 +251,7 @@ const TaskColumn = ({
   projectStartDate,
   projectEndDate,
 }) => (
-  <div
-    className={`${bg} text-white p-4 rounded-md shadow-lg flex flex-col h-[80vh]`}
-  >
+  <div className={`${bg} text-white p-4 rounded-md shadow-lg flex flex-col`}>
     <h2 className="text-xl font-medium mb-4">{title}</h2>
     <div className="overflow-y-auto space-y-4 pr-2" style={{ flexGrow: 1 }}>
       {tasks.length === 0 ? (
@@ -303,7 +267,6 @@ const TaskColumn = ({
             startDate={task.start_date}
             endDate={task.end_date}
             timeDuration={task.time_duration}
-            project_id={task.project_id}
             onEditClick={onEditClick}
             onhandleDelete={onDelete}
             onStatusChange={onStatusChange}

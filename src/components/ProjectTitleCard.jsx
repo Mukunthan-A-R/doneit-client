@@ -1,72 +1,51 @@
-import React, { useEffect, useState } from "react";
-import { fetchProjectById } from "../services/ProjectServices";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import useProject from "../hooks/useProject";
+import { formatDate } from "../services/utils";
+import ProjectInfo from "./modals/ProjectInfo";
+import { useState } from "react";
+import { MdInfoOutline } from "react-icons/md";
 
 const ProjectTitleCard = () => {
-  const { project_id } = useParams();
-
-  const [project, setProject] = useState({
-    created: 0,
-    description: "",
-    end_date: "2025-01-01T00:00:00.000Z",
-    name: "",
-    priority: "",
-    project_id: 58,
-    start_date: "2025-01-01T00:00:00.000Z",
-    status: "",
-  });
-
-  useEffect(() => {
-    const getProject = async (project_id) => {
-      if (project_id) {
-        try {
-          const { data } = await fetchProjectById(project_id);
-          console.log("🚀 ~ getProject ~ data:", data);
-          setProject(data);
-        } catch (err) {
-          console.log("🚀 ~ getProject ~ err:", err);
-          toast.error("Error fetching project details!");
-        }
-      }
-    };
-
-    getProject(project_id);
-  }, [project_id]);
+  const { projectId } = useParams();
+  const [showInfo, setShowInfo] = useState(false);
+  const { project } = useProject(projectId);
 
   return (
     <div className="mb-6 sm:mb-4">
       <div className="flex flex-col sm:flex-row  gap-2 mt-2 lg:mt-0">
-        <h2 className="text-2xl font-medium ">{project.name}</h2>
+        <h2 className="text-2xl font-medium ">{project?.name}</h2>
         <span className="flex gap-2">
           <p className="mt-2">
-            ( {formatDate(project.start_date)} to {formatDate(project.end_date)}{" "}
-            )
+            ( {formatDate(project?.start_date)} to{" "}
+            {formatDate(project?.end_date)} )
           </p>
           <p className="font-medium flex items-center mt-2">
             <span
               className={` px-2 py-1 rounded-full text-white text-xs font-semibold ${
-                project.priority === "low"
+                project?.priority === "low"
                   ? "bg-green-500"
-                  : project.priority === "medium"
+                  : project?.priority === "medium"
                     ? "bg-orange-500"
                     : "bg-red-500"
               }`}
             >
-              {project.priority}
+              {project?.priority}
             </span>
+            <button
+              onClick={() => setShowInfo(true)}
+              className="flex items-center justify-center hover:bg-blue-700 transition duration-300 rounded-full"
+            >
+              <MdInfoOutline size={30} />
+            </button>
+
+            {showInfo && <ProjectInfo onClose={() => setShowInfo(false)} />}
           </p>
         </span>
       </div>
-      <p className="font-medium">Description : {project.description}</p>
-      <p className="font-medium"> Status : {project.status}</p>
+      <p className="font-medium">Description : {project?.description}</p>
+      <p className="font-medium"> Status : {project?.status}</p>
     </div>
   );
 };
 
 export default ProjectTitleCard;
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB");
-};

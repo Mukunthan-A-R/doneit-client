@@ -8,7 +8,6 @@ const ProjectCardHolder = ({ user_id }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editTrigger, setEditTrigger] = useState(1);
 
   const currentUserId = parseInt(user_id);
 
@@ -30,7 +29,7 @@ const ProjectCardHolder = ({ user_id }) => {
       }
     };
     getProjects();
-  }, [currentUserId, refetchTrigger, editTrigger]);
+  }, [currentUserId, refetchTrigger]);
 
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
@@ -51,9 +50,6 @@ const ProjectCardHolder = ({ user_id }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {projects.map((project) => (
             <ProjectCard
-              handleEditTrigger={() => {
-                setEditTrigger(editTrigger + 1);
-              }}
               key={project.project_id}
               project={project}
               onDelete={handleDeleteProject}

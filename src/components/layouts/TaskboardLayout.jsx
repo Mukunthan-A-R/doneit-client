@@ -1,40 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import TaskToolbar from "../TaskToolbar";
 
-import { useRecoilValue } from "recoil";
-import { CurrentProject, userData } from "../../data/atom";
-import { getCollaboratedProjects } from "../../services/getCollaboratedProjects";
-
 const TaskboardLayout = () => {
-  const [userRole, setUserRole] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const currentUserData = useRecoilValue(userData);
 
   const params = useParams();
   const project_id = params.projectId;
-
-  const currentUserId = currentUserData.user_id;
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const { data } = await getCollaboratedProjects(currentUserId);
-        const project = data.find((p) => p.project_id === parseInt(project_id));
-        if (project) {
-          setUserRole(project.role);
-        }
-      } catch (err) {
-        if (err.response && err.response.status === 404) {
-          console.log("No data");
-        } else {
-          console.log(err.message);
-        }
-      }
-    };
-
-    if (currentUserId) fetchProjects();
-  }, [currentUserId]);
 
   return (
     <div className="flex flex-col lg:flex-row h-full relative overflow-x-hidden flex-1">
