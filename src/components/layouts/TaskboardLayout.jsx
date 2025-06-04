@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import TaskToolbar from "../TaskToolbar";
-import TaskToolKit from "../TaskToolKit";
 
 import { useRecoilValue } from "recoil";
-import { userData } from "../../data/atom";
+import { CurrentProject, userData } from "../../data/atom";
 import { getCollaboratedProjects } from "../../services/getCollaboratedProjects";
 
 const TaskboardLayout = () => {
@@ -44,13 +43,13 @@ const TaskboardLayout = () => {
         className={`
             bg-blue-900 p-2 pr-0 w-full max-w-[16rem]
             transition-all duration-300 flex flex-col
-            fixed top-0 h-full pt-20
+            fixed top-0 h-full pt-20 gap-3
           `}
       >
         {/* Sidebar Header with Close icon */}
         <div className="flex items-center justify-between lg:justify-center ">
           {/* Close icon (only visible on mobile) */}
-          <h2 className="text-white text-xl font-medium w-full">
+          <h2 className="text-white text-xl text-center font-medium w-full">
             Task Toolbar
           </h2>
 
@@ -75,14 +74,7 @@ const TaskboardLayout = () => {
           </button>
         </div>
 
-        <div className="flex justify-between items-start">
-          <div className="w-full">
-            <TaskToolbar project_id={project_id} />
-          </div>
-          <div className="flex justify-end items-start">
-            <TaskToolKit userRole={userRole} project_id={project_id} />
-          </div>
-        </div>
+        <TaskToolbar project_id={project_id} />
       </div>
 
       {/* Hamburger button for mobile */}

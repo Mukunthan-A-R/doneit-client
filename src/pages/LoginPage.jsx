@@ -3,12 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/User";
 import { useSetRecoilState } from "recoil";
 import { userData } from "../data/atom";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
 
@@ -24,7 +24,6 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
     setLoading(true); // Set loading to true when form is submitted
 
     try {
@@ -55,11 +54,12 @@ const LoginPage = () => {
       // ✅ Update Recoil and let atom persist to localStorage
       setUser(userPayload);
 
-      setSuccess("Login successful!");
+      toast.success("Sign in successful!");
       setTimeout(() => {
         navigate("/dashboard");
       }, 500);
     } catch (err) {
+      console.log("🚀 ~ handleSubmit ~ err:", err);
       setError("Invalid email or password");
     } finally {
       setLoading(false); // Set loading to false once the process is done
@@ -68,12 +68,6 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12 relative">
-      {success && (
-        <div className="absolute top-6 z-50 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg animate-fadeIn">
-          {success}
-        </div>
-      )}
-
       <div className="max-w-4xl w-full bg-gray-50 rounded-2xl shadow-xl overflow-hidden grid lg:grid-cols-2">
         <div className="hidden lg:flex flex-col justify-center items-center bg-blue-900 text-white p-10">
           <h1 className="text-4xl font-extrabold mb-2">Done it</h1>

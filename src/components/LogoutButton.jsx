@@ -1,24 +1,7 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { userData } from "../data/atom";
+import useAuth from "../hooks/useAuth";
 
 const LogoutButton = () => {
-  const navigate = useNavigate();
-  const [, setUser] = useRecoilState(userData);
-
-  const handleLogout = () => {
-    localStorage.removeItem("x-auth-token");
-    localStorage.removeItem("userData");
-    setUser({
-      token: null,
-      user_id: null,
-      name: "",
-      email: "",
-      loggedIn: false,
-    });
-    navigate("/login");
-  };
+  const { handleLogout } = useAuth();
 
   return (
     <section className="w-full mx-auto my-8 bg-white rounded-lg shadow-md border-l-4 border-blue-700 p-6">

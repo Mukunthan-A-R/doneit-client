@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { fetchProjectById } from "../services/ProjectServices";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
-const ProjectTitleCard = ({ project_id }) => {
+const ProjectTitleCard = () => {
+  const { project_id } = useParams();
+
   const [project, setProject] = useState({
     created: 0,
     description: "",
@@ -18,15 +22,17 @@ const ProjectTitleCard = ({ project_id }) => {
       if (project_id) {
         try {
           const { data } = await fetchProjectById(project_id);
+          console.log("🚀 ~ getProject ~ data:", data);
           setProject(data);
         } catch (err) {
-          setError(err.message);
+          console.log("🚀 ~ getProject ~ err:", err);
+          toast.error("Error fetching project details!");
         }
       }
     };
 
     getProject(project_id);
-  }, []);
+  }, [project_id]);
 
   return (
     <div className="mb-6 sm:mb-4">
@@ -43,8 +49,8 @@ const ProjectTitleCard = ({ project_id }) => {
                 project.priority === "low"
                   ? "bg-green-500"
                   : project.priority === "medium"
-                  ? "bg-orange-500"
-                  : "bg-red-500"
+                    ? "bg-orange-500"
+                    : "bg-red-500"
               }`}
             >
               {project.priority}

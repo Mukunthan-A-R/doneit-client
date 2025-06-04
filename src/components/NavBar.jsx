@@ -1,31 +1,17 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { useRecoilState } from "recoil";
-import { userData } from "../data/atom";
+import { Link } from "react-router-dom";
 import SandySoft from "../assets/SandySoft.png";
+import useAuth from "../hooks/useAuth";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [user, setUser] = useRecoilState(userData);
-  const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-  const handleLogout = () => {
-    localStorage.removeItem("x-auth-token");
-    localStorage.removeItem("userData");
-    setUser({
-      token: null,
-      user_id: null,
-      name: "",
-      email: "",
-      loggedIn: false,
-    });
-    navigate("/login");
-  };
+  const { handleLogout, user } = useAuth();
 
   const isLoggedIn = !!user?.token;
 

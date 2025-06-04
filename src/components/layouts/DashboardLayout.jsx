@@ -29,7 +29,7 @@ export default function DashboardLayout() {
             fixed top-0 h-full pt-20
           `}
       >
-        <h2 className="text-white font-sans text-center text-2xl font-medium ">
+        <h2 className="text-white font-sans text-center text-xl font-medium ">
           Project Toolbar
         </h2>
         <ProjectToolbar user_id={currentUserData.user_id} />

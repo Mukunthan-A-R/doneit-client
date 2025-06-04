@@ -1,27 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { userData } from "../data/atom";
+import { Link } from "react-router-dom";
 
 import { IoSettingsOutline } from "react-icons/io5";
 import { RxDashboard } from "react-icons/rx";
 import { TbLogout2 } from "react-icons/tb";
+import useAuth from "../hooks/useAuth";
 
 const UserSideMenu = () => {
-  const navigate = useNavigate();
-  const setUser = useSetRecoilState(userData);
-
-  const handleLogout = () => {
-    localStorage.removeItem("x-auth-token");
-    localStorage.removeItem("userData");
-    setUser({
-      token: null,
-      user_id: null,
-      name: "",
-      email: "",
-      loggedIn: false,
-    });
-    navigate("/login");
-  };
+  const { handleLogout } = useAuth();
 
   return (
     <aside className="w-64 bg-blue-900 h-full text-white flex-shrink-0">

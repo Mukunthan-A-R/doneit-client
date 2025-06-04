@@ -56,7 +56,7 @@ const Analytics = () => {
 
   return (
     <>
-      <ProjectTitleCard project_id={project_id}></ProjectTitleCard>
+      <ProjectTitleCard />
 
       <header className="bg-blue-950 text-white py-4 px-6 shadow-md flex items-center justify-between">
         <h1 className="text-2xl font-semibold"> Project Analytics</h1>
