@@ -3,40 +3,26 @@ import { useParams } from "react-router-dom";
 
 import CalendarCard from "../components/CalendarCard";
 import ProjectTitleCard from "../components/ProjectTitleCard";
-import { fetchProjectById } from "../services/ProjectServices";
+import useProject from "../hooks/useProject";
 import { fetchTasks } from "../services/TaskServices";
 
 const ProjectCalendar = () => {
-  const { project_id } = useParams();
+  const { projectId } = useParams();
 
   const [graphData, setGraphData] = useState({});
-  const [ProjectData, setProjectData] = useState({
-    id: null,
-    name: "",
-    description: "",
-    project_id: null,
-    start_date: null,
-    end_date: null,
-    priority: "",
-    status: "",
-  });
+  const { project } = useProject(projectId);
 
   useEffect(() => {
-    if (project_id) {
-      const loadProject = async () => {
-        const project = await fetchProjectById(project_id);
-        setProjectData(project.data);
-      };
+    if (projectId) {
       const loadTasks = async () => {
-        const tasks = await fetchTasks(project_id);
+        const tasks = await fetchTasks(projectId);
         const result = formatTasksByDateRange(tasks.data);
         setGraphData(result);
       };
 
-      loadProject();
       loadTasks();
     }
-  }, [project_id]);
+  }, [projectId]);
 
   return (
     <>
@@ -47,8 +33,8 @@ const ProjectCalendar = () => {
       </header>
 
       <CalendarCard
-        startDate={ProjectData.start_date}
-        endDate={ProjectData.end_date}
+        startDate={project?.start_date}
+        endDate={project?.end_date}
         tasksByDate={graphData}
       />
     </>

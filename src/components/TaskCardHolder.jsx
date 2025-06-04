@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
+import { IoMdAddCircleOutline } from "react-icons/io";
 import { useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProjectState, refetchTriggerAtom, userData } from "../data/atom";
 import useProject from "../hooks/useProject";
-import { editProjectById, fetchProjectById } from "../services/ProjectServices";
+import { editProjectById } from "../services/ProjectServices";
 import { deleteTask, fetchTasks } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import ProjectTitleCard from "./ProjectTitleCard";
 import TaskCard from "./TaskCard";
-import ProjectCompletedToast from "./modals/ProjectCompletedToast";
 import CreateTask from "./modals/CreateTask";
-import { IoMdAddCircleOutline } from "react-icons/io";
+import ProjectCompletedToast from "./modals/ProjectCompletedToast";
 
 const TaskCardHolder = ({ userRole }) => {
   const { projectId } = useParams();
@@ -76,15 +76,14 @@ const TaskCardHolder = ({ userRole }) => {
   };
 
   const handleCompleteProject = async () => {
-    const result = await fetchProjectById(fallbackProjectId);
     const editData = {
-      name: result.data.name,
-      description: result.data.description,
-      start_date: result.data.start_date,
-      end_date: result.data.end_date,
+      name: project?.name,
+      description: project?.description,
+      start_date: project?.start_date,
+      end_date: project?.end_date,
       status: "completed",
-      priority: result.data.priority,
-      created: result.data.created,
+      priority: project?.priority,
+      created: project?.created,
     };
     const response = await editProjectById(fallbackProjectId, editData);
     if (response) {

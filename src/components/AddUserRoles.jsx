@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { getUserByEmail } from "../services/UserEmail";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getUserByEmail } from "../services/UserEmail";
 import {
   createAssignment,
   getAssignmentsByProjectId,
 } from "../services/collaboratorUserData";
 import UserAssignmentsDisplay from "./UserAssignmentsDisplay";
 
+import { isAxiosError } from "axios";
+import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
-import { fetchProjectById } from "../services/ProjectServices";
+import { useDebouncedCallback } from "../hooks/useDebounceCallback";
+import useProject from "../hooks/useProject";
 import { fetchUserById } from "../services/UserData";
 import { createActivityLog } from "../services/projectActivity";
-import { useDebouncedCallback } from "../hooks/useDebounceCallback";
-import { isAxiosError } from "axios";
 
 const AddUserRoles = () => {
   const [userId, setUserId] = useState(null);
@@ -26,6 +27,7 @@ const AddUserRoles = () => {
   const [ownerEmail, setOwnerEmail] = useState("");
 
   const { projectId } = useParams();
+  const { project } = useProject(projectId);
 
   const currentUserData = useRecoilValue(userData);
 
@@ -45,7 +47,8 @@ const AddUserRoles = () => {
           // console.log(filterData[0].role);
         }
       } catch (err) {
-        // setError("Error fetching assignments");
+        console.log("🚀 ~ fetchAssignments ~ err:", err);
+        toast.error("Error fetching assignments");
       }
     };
 
@@ -55,8 +58,7 @@ const AddUserRoles = () => {
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
-        const response = await fetchProjectById(projectId);
-        const ProjectOwner = await fetchUserById(response.data.created);
+        const ProjectOwner = await fetchUserById(project?.created);
         setOwnerEmail(ProjectOwner.data.email);
         if (ProjectOwner.data.user_id === currentUserData.user_id) {
           setUserRole("admin");
@@ -66,8 +68,8 @@ const AddUserRoles = () => {
       }
     };
 
-    fetchProjectDetails();
-  }, [projectId]);
+    if (project?.created) fetchProjectDetails();
+  }, [projectId, project?.created]);
 
   const handleSearchUser = useDebouncedCallback((email) => {
     if (email) {

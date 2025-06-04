@@ -9,7 +9,6 @@ import { MdDelete } from "react-icons/md";
 import { createActivityLog } from "../services/projectActivity";
 
 const UserAssignmentsDisplay = ({
-  projectId,
   reloadAssignments,
   setReloadAssignments,
   userRole,
@@ -21,7 +20,7 @@ const UserAssignmentsDisplay = ({
   const [error, setError] = useState(null);
 
   const params = useParams();
-  const project_id = parseInt(params.projectId);
+  const projectId = parseInt(params.projectId);
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -42,7 +41,8 @@ const UserAssignmentsDisplay = ({
           setError(response.message || "Failed to load assignments");
         }
       } catch (err) {
-        setError("Error fetching assignments");
+        console.log("🚀 ~ fetchAssignments ~ err:", err);
+        setError("Error fetching assignments for users");
       } finally {
         setLoading(false);
       }
@@ -71,7 +71,7 @@ const UserAssignmentsDisplay = ({
 
   const handleDelete = async (assignmentId, userToDelete) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this assignment?"
+      "Are you sure you want to delete this assignment?",
     );
     if (!confirmDelete) return;
 
@@ -156,7 +156,7 @@ const UserAssignmentsDisplay = ({
                             onClick={() =>
                               handleDelete(
                                 parseInt(assignment.assignment_id),
-                                users[assignment.user_id]
+                                users[assignment.user_id],
                               )
                             }
                             color="red"

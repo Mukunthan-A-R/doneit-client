@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import useProject from "../hooks/useProject";
 import { fetchTasks } from "../services/TaskServices";
-import { fetchProjectById } from "../services/ProjectServices";
 
-const GanttChartTimeLine = ({ projectId }) => {
+const GanttChartTimeLine = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const [projectStart, setProjectStart] = useState(null);
   const [projectEnd, setProjectEnd] = useState(null);
   const [intervalType, setIntervalType] = useState("weekly");
+  const { projectId } = useParams();
+  const { project } = useProject();
 
   useEffect(() => {
     const getTasks = async () => {
@@ -26,9 +29,8 @@ const GanttChartTimeLine = ({ projectId }) => {
 
     const getProject = async () => {
       try {
-        const { data } = await fetchProjectById(projectId);
-        setProjectStart(new Date(data.start_date));
-        setProjectEnd(new Date(data.end_date));
+        setProjectStart(new Date(project.start_date));
+        setProjectEnd(new Date(project.end_date));
       } catch (err) {
         console.log("Error", err);
       }
@@ -135,13 +137,13 @@ const GanttChartTimeLine = ({ projectId }) => {
 
           if (intervalType === "daily") {
             offset = Math.floor(
-              (taskStart - projectStart) / (24 * 60 * 60 * 1000)
+              (taskStart - projectStart) / (24 * 60 * 60 * 1000),
             );
             duration =
               Math.floor((taskEnd - taskStart) / (24 * 60 * 60 * 1000)) + 1;
           } else if (intervalType === "weekly") {
             offset = Math.floor(
-              (taskStart - projectStart) / (7 * 24 * 60 * 60 * 1000)
+              (taskStart - projectStart) / (7 * 24 * 60 * 60 * 1000),
             );
             duration =
               Math.floor((taskEnd - taskStart) / (7 * 24 * 60 * 60 * 1000)) + 1;
@@ -158,7 +160,7 @@ const GanttChartTimeLine = ({ projectId }) => {
           const colStart = Math.max(0, Math.min(NUM_INTERVALS - 1, offset));
           const colSpan = Math.max(
             1,
-            Math.min(NUM_INTERVALS - colStart, duration)
+            Math.min(NUM_INTERVALS - colStart, duration),
           );
 
           return (
@@ -177,7 +179,7 @@ const GanttChartTimeLine = ({ projectId }) => {
                     width: `${(colSpan / NUM_INTERVALS) * 100}%`,
                   }}
                   title={`${task.title} (${getDateForInterval(
-                    offset
+                    offset,
                   )} → ${getDateForInterval(offset + duration - 1)})`}
                 />
               </div>
