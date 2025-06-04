@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { deleteTask, fetchTasks } from "../services/TaskServices";
-import { useRecoilValue } from "recoil";
-import { ProjectState, userData } from "../data/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { ProjectState, refetchTriggerAtom, userData } from "../data/atom";
 import TaskCard from "./TaskCard";
 import { editProjectById, fetchProjectById } from "../services/ProjectServices";
 import { createActivityLog } from "../services/projectActivity";
 import ProjectCompletedToast from "./modals/ProjectCompletedToast";
+import { formatDate } from "../services/utils";
 
-const TaskCardHolder = ({ project_id, value, userRole }) => {
+const TaskCardHolder = ({ project_id, userRole }) => {
   const { projectId } = useParams();
   const fallbackProjectId = useRecoilValue(ProjectState);
   const activeProjectId = projectId || fallbackProjectId;
 
   const currentUserData = useRecoilValue(userData);
+  const [refetchTrigger, setRefetchTrigger] =
+    useRecoilState(refetchTriggerAtom);
   const currentUserId = currentUserData?.user_id;
 
   const [project, setProject] = useState({
@@ -29,7 +32,6 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [trigger, setTrigger] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
@@ -67,7 +69,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
       setError(null);
       setLoading(false);
     };
-  }, [activeProjectId, trigger, value]);
+  }, [activeProjectId, refetchTrigger]);
 
   useEffect(() => {
     const getProject = async (project_id) => {
@@ -87,8 +89,8 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
   const handleStatusChange = (taskId, newStatus) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.task_id === taskId ? { ...task, status: newStatus } : task
-      )
+        task.task_id === taskId ? { ...task, status: newStatus } : task,
+      ),
     );
   };
 
@@ -116,7 +118,7 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
   const handleDelete = async (taskId, taskTitle) => {
     try {
       await deleteTask(taskId);
-      setTrigger((prev) => !prev);
+      setRefetchTrigger((prev) => prev + 1);
       alert("The Task is Deleted Successfully");
 
       // Log delete activity
@@ -190,8 +192,8 @@ const TaskCardHolder = ({ project_id, value, userRole }) => {
                 project.priority === "low"
                   ? "bg-green-500"
                   : project.priority === "medium"
-                  ? "bg-orange-500"
-                  : "bg-red-500"
+                    ? "bg-orange-500"
+                    : "bg-red-500"
               }`}
             >
               {project.priority}
@@ -314,8 +316,3 @@ const TaskColumn = ({
     </div>
   </div>
 );
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB");
-};

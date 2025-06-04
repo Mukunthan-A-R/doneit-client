@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { CurrentProject, ProjectState } from "../data/atom";
 import {
   deleteProjectById,
   editProjectById,
   fetchProjectById,
 } from "../services/ProjectServices";
-import { useRecoilState } from "recoil";
-import { ProjectState, CurrentProject } from "../data/atom";
-import { useNavigate } from "react-router-dom";
+import { formatDate } from "../services/utils";
 
 const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
   const navigate = useNavigate();
@@ -14,9 +15,8 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedProjectData, setEditedProjectData] = useState({ ...project });
 
-  const [currentProject, setCurrentProject] = useRecoilState(ProjectState);
-  const [CurrentProjectData, setCurrentProjectData] =
-    useRecoilState(CurrentProject);
+  const setCurrentProject = useSetRecoilState(ProjectState);
+  const setCurrentProjectData = useSetRecoilState(CurrentProject);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -85,7 +85,7 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
 
   return (
     <>
-      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl transition-shadow duration-300 hover:scale-105 transition-transform">
+      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl duration-300 hover:scale-105 transition-transform">
         {/* Menu Icon */}
         <div className="absolute top-3 right-3">
           {project.role === "admin" && (
@@ -160,10 +160,10 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
                     project.priority === "high"
                       ? "bg-red-100 text-red-800"
                       : project.priority === "medium"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : project.priority === "low"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-200 text-gray-700"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : project.priority === "low"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-200 text-gray-700"
                   }`}
                 >
                   {project.priority?.toUpperCase()}
@@ -351,9 +351,4 @@ const calculateRemainingTime = (endDate) => {
     message: "Time remaining",
     overDue: 0,
   };
-};
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB"); // Formats to "DD/MM/YYYY"
 };

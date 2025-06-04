@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const STORAGE_KEY = "done_it_session_key";
 
@@ -7,15 +8,12 @@ const SessionTimeout = ({ timeout = 15 * 60 * 1000 }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const timerRef = useRef(null);
-  const [showPopup, setShowPopup] = useState(false);
 
   const hasAuthToken = () => {
     return !!localStorage.getItem("x-auth-token");
   };
 
   const logout = () => {
-    setShowPopup(true);
-
     setTimeout(() => {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem("x-auth-token");
@@ -45,6 +43,7 @@ const SessionTimeout = ({ timeout = 15 * 60 * 1000 }) => {
       const remainingTime = expiryTime - now;
 
       if (remainingTime <= 0) {
+        toast.error("Session ended. Please log in again.");
         logout();
       } else {
         timerRef.current = setTimeout(logout, remainingTime);
@@ -70,17 +69,7 @@ const SessionTimeout = ({ timeout = 15 * 60 * 1000 }) => {
     };
   }, []);
 
-  return showPopup ? (
-    <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg z-51 animate-fade flex items-center justify-between gap-4 min-w-[300px]">
-      <span>Session ended. Please log in again.</span>
-      <button
-        onClick={() => setShowPopup(false)}
-        className="text-white hover:text-gray-200 text-xl font-bold leading-none focus:outline-none"
-      >
-        &times;
-      </button>
-    </div>
-  ) : null;
+  return null;
 };
 
 export default SessionTimeout;

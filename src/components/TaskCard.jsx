@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { updateTask } from "../services/TaskServices";
-import { createActivityLog } from "../services/projectActivity";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userData } from "../data/atom";
+import { updateTask } from "../services/TaskServices";
+import { createActivityLog } from "../services/projectActivity";
+import { formatDate } from "../services/utils";
 
 const TaskCard = ({
   task_id,
@@ -429,9 +430,4 @@ const calculateRemainingTime = (endDate) => {
     timeOver: false,
     message: "Time Remaining",
   };
-};
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB");
 };

@@ -24,6 +24,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ForgotPassword from "./pages/ForgotPassword";
 import DashboardLayout from "./components/layouts/DashboardLayout";
+import TaskboardLayout from "./components/layouts/TaskboardLayout";
+import { ToastContainer, Slide } from "react-toastify";
 
 function App() {
   return (
@@ -42,27 +44,30 @@ function App() {
           <Route path="/settings" element={<Settings />} />
         </Route>
 
-        <Route exact path="/tasks/:projectId" element={<TaskDashboard />} />
-        <Route exact path="/analytics/:projectId" element={<Analytics />} />
-        <Route exact path="/list/:projectId" element={<TaskListView />} />
-        <Route
-          exact
-          path="/project-calendar/:projectId"
-          element={<ProjectCalendar />}
-        />
-        <Route
-          exact
-          path="/transaction/:projectId"
-          element={<TransactionHistory />}
-        />
-        <Route
-          exact
-          path="/transaction-analytics/:projectId"
-          element={<TransactionAnalytics />}
-        />
-        <Route path="/graph/:projectId" element={<Graph />} />
-        <Route path="/heat-map/:projectId" element={<HeatMapPage />} />
-        <Route path="/adduser/:projectId" element={<AddProjectUser />} />
+        <Route element={<TaskboardLayout />}>
+          <Route exact path="/tasks/:projectId" element={<TaskDashboard />} />
+          <Route exact path="/analytics/:projectId" element={<Analytics />} />
+          <Route exact path="/list/:projectId" element={<TaskListView />} />
+          <Route
+            exact
+            path="/project-calendar/:projectId"
+            element={<ProjectCalendar />}
+          />
+          <Route
+            exact
+            path="/transaction/:projectId"
+            element={<TransactionHistory />}
+          />
+          <Route
+            exact
+            path="/transaction-analytics/:projectId"
+            element={<TransactionAnalytics />}
+          />
+          <Route path="/graph/:projectId" element={<Graph />} />
+          <Route path="/heat-map/:projectId" element={<HeatMapPage />} />
+          <Route path="/adduser/:projectId" element={<AddProjectUser />} />
+        </Route>
+
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -71,6 +76,11 @@ function App() {
         <Route path="/forgot-password/:token" element={<ForgotPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <ToastContainer
+        position="top-right"
+        transition={Slide}
+        pauseOnFocusLoss
+      />
     </Router>
   );
 }

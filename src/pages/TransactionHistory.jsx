@@ -1,24 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { fetchActivityLogs } from "../services/projectActivity";
-import TaskToolbar from "../components/TaskToolbar";
-import { useRecoilValue } from "recoil";
-import { ProjectState } from "../data/atom";
-import { useParams } from "react-router-dom";
-import ProjectTitleCard from "../components/ProjectTitleCard";
-import ExportLogs from "../components/ExportLogs";
+import { useEffect, useState } from "react";
 import {
-  FaPlusCircle,
   FaEdit,
-  FaTrash,
   FaExchangeAlt,
   FaListAlt,
-  FaUserPlus,
+  FaPlusCircle,
+  FaTrash,
   FaUserMinus,
+  FaUserPlus,
 } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import ExportLogs from "../components/ExportLogs";
+import ProjectTitleCard from "../components/ProjectTitleCard";
+import { fetchActivityLogs } from "../services/projectActivity";
 
 const TransactionHistory = () => {
-  const currentProject = useRecoilValue(ProjectState);
-  const [isNavOpen, setIsNavOpen] = useState(false);
   const { projectId } = useParams();
 
   const [transactions, setTransactions] = useState([]);
@@ -36,6 +31,7 @@ const TransactionHistory = () => {
         setTransactions(response.data || []);
         setError(null);
       } catch (err) {
+        console.log("🚀 ~ getTransactions ~ err:", err);
         setError("Failed to fetch transactions.");
         setTransactions([]);
       } finally {
@@ -91,175 +87,132 @@ const TransactionHistory = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-800 flex flex-col font-sans">
-      {/* Mobile Navbar */}
-      <div>
-        <button
-          onClick={() => setIsNavOpen(true)}
-          className="lg:hidden bg-blue-900 text-white px-4 py-2 m-4 rounded z-20"
-        >
-          ☰ Menu
-        </button>
-      </div>
+    <>
+      <ProjectTitleCard project_id={projectId} />
 
-      {/* Sidebar Panel for Mobile */}
-      <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-blue-900 text-white p-6 z-50 transform transition-transform duration-300 ease-in-out shadow-lg
-          ${isNavOpen ? "translate-x-0" : "-translate-x-full"} lg:hidden`}
-      >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold tracking-wide m-0">
-            Task Toolbar
-          </h2>
-          <button
-            onClick={() => setIsNavOpen(false)}
-            aria-label="Close menu"
-            className="text-white text-3xl focus:outline-none focus:ring-2 focus:ring-white rounded"
+      <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
+        <h1 className="text-2xl font-bold"> Project Logs</h1>
+      </header>
+
+      {/* Filters */}
+      <div className="bg-white rounded-xl shadow p-4 mt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <label className="text-sm font-medium text-gray-700">
+            Action Type:
+          </label>
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
           >
-            &times;
-          </button>
+            <option value="all">All</option>
+            <option value="create">Create</option>
+            <option value="update">Update</option>
+            <option value="delete">Delete</option>
+            <option value="status-change">Status Change</option>
+          </select>
         </div>
-        <TaskToolbar project_id={projectId} />
-      </aside>
 
-      <div className="flex flex-1 flex-col lg:flex-row">
-        {/* Sidebar for desktop */}
-        <aside className="hidden lg:block w-1/6 bg-blue-900 text-white p-4 shadow-lg min-h-screen">
-          <h2 className="text-xl font-semibold">Task Toolbar</h2>
-          <TaskToolbar project_id={projectId} />
-        </aside>
-
-        {/* Main Content */}
-        <main className="w-full lg:w-10/12 px-4 py-6 max-w-7xl mx-auto">
-          <ProjectTitleCard project_id={projectId} />
-
-          <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
-            <h1 className="text-2xl font-bold"> Project Logs</h1>
-          </header>
-
-          {/* Filters */}
-          <div className="bg-white rounded-xl shadow p-4 mt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-              <label className="text-sm font-medium text-gray-700">
-                Action Type:
-              </label>
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-              >
-                <option value="all">All</option>
-                <option value="create">Create</option>
-                <option value="update">Update</option>
-                <option value="delete">Delete</option>
-                <option value="status-change">Status Change</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-              <label className="text-sm font-medium text-gray-700">
-                Time Range:
-              </label>
-              <select
-                value={selectedDuration}
-                onChange={(e) => setSelectedDuration(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-              >
-                <option value="all">All Time</option>
-                <option value="24h">Last 24 Hours</option>
-                <option value="7d">Last 7 Days</option>
-                <option value="30d">Last 30 Days</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Transactions Table */}
-          <section className="mt-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              Transaction History
-            </h2>
-            {loading ? (
-              <p className="text-gray-500">Loading...</p>
-            ) : error ? (
-              <p className="text-red-500">{error}</p>
-            ) : filteredTransactions.length === 0 ? (
-              <p className="text-gray-600">No transactions match the filter.</p>
-            ) : (
-              <div className="overflow-x-auto rounded-lg shadow bg-white">
-                <table className="min-w-full text-sm text-left">
-                  <thead className="bg-blue-900 text-white">
-                    <tr>
-                      <th className="px-6 py-3 font-semibold">Action</th>
-                      <th className="px-6 py-3 font-semibold">Description</th>
-                      <th className="px-6 py-3 font-semibold">
-                        Date &amp; Time
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {transactions.map((txn, index) => {
-                      const match = txn.description?.match(/by (.*?) <(.*?)>/);
-                      const username = match?.[1];
-                      const email = match?.[2];
-                      const beforeUser =
-                        txn.description?.split(match?.[0])[0] + "by ";
-
-                      return (
-                        <tr
-                          key={txn.id || `${txn.timestamp}-${index}`}
-                          className={`${
-                            index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                          } hover:bg-blue-50 transition group`}
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-900 flex items-center space-x-3">
-                            <span className="text-xl">
-                              {getActionIcon(txn.action)}
-                            </span>
-                            <span className="capitalize text-blue-700 font-semibold">
-                              {txn.action}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-700">
-                            {beforeUser}
-                            {username && (
-                              <>
-                                <span className="text-blue-800 font-semibold">
-                                  {username}
-                                </span>{" "}
-                                <span className="text-blue-700">
-                                  &lt;{email}&gt;
-                                </span>
-                              </>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
-                            {formatDate(txn.timestamp)}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                    {transactions.length === 0 && (
-                      <tr>
-                        <td
-                          colSpan={3}
-                          className="text-center py-8 text-gray-500 italic"
-                        >
-                          No transactions found.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </section>
-
-          <div className="flex justify-center mt-6">
-            <ExportLogs transactions={transactions} />
-          </div>
-        </main>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <label className="text-sm font-medium text-gray-700">
+            Time Range:
+          </label>
+          <select
+            value={selectedDuration}
+            onChange={(e) => setSelectedDuration(e.target.value)}
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+          >
+            <option value="all">All Time</option>
+            <option value="24h">Last 24 Hours</option>
+            <option value="7d">Last 7 Days</option>
+            <option value="30d">Last 30 Days</option>
+          </select>
+        </div>
       </div>
-    </div>
+
+      {/* Transactions Table */}
+      <section className="mt-8">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
+          Transaction History
+        </h2>
+        {loading ? (
+          <p className="text-gray-500">Loading...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : filteredTransactions.length === 0 ? (
+          <p className="text-gray-600">No transactions match the filter.</p>
+        ) : (
+          <div className="overflow-x-auto rounded-lg shadow bg-white">
+            <table className="min-w-full text-sm text-left">
+              <thead className="bg-blue-900 text-white">
+                <tr>
+                  <th className="px-6 py-3 font-semibold">Action</th>
+                  <th className="px-6 py-3 font-semibold">Description</th>
+                  <th className="px-6 py-3 font-semibold">Date &amp; Time</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {transactions.map((txn, index) => {
+                  const match = txn.description?.match(/by (.*?) <(.*?)>/);
+                  const username = match?.[1];
+                  const email = match?.[2];
+                  const beforeUser =
+                    txn.description?.split(match?.[0])[0] + "by ";
+
+                  return (
+                    <tr
+                      key={txn.id || `${txn.timestamp}-${index}`}
+                      className={`${
+                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      } hover:bg-blue-50 transition group`}
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-900 flex items-center space-x-3">
+                        <span className="text-xl">
+                          {getActionIcon(txn.action)}
+                        </span>
+                        <span className="capitalize text-blue-700 font-semibold">
+                          {txn.action}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-700">
+                        {beforeUser}
+                        {username && (
+                          <>
+                            <span className="text-blue-800 font-semibold">
+                              {username}
+                            </span>{" "}
+                            <span className="text-blue-700">
+                              &lt;{email}&gt;
+                            </span>
+                          </>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                        {formatDate(txn.timestamp)}
+                      </td>
+                    </tr>
+                  );
+                })}
+                {transactions.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="text-center py-8 text-gray-500 italic"
+                    >
+                      No transactions found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      <div className="flex justify-center mt-6">
+        <ExportLogs transactions={transactions} />
+      </div>
+    </>
   );
 };
 

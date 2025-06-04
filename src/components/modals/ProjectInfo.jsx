@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchProjectById } from "../../services/ProjectServices";
+import { formatDate } from "../../services/utils";
 
 const ProjectInfo = ({ project_id, show, onClose }) => {
   const [project, setProject] = useState(null);
@@ -65,8 +66,3 @@ const ProjectInfo = ({ project_id, show, onClose }) => {
 };
 
 export default ProjectInfo;
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB"); // Formats to "DD/MM/YYYY"
-};

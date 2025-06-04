@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { userData } from "../../data/atom"; // Adjust path if needed
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { refetchTriggerAtom, userData } from "../../data/atom"; // Adjust path if needed
 import { createTask } from "../../services/TaskServices";
 import { fetchProjectById } from "../../services/ProjectServices";
 import { createActivityLog } from "../../services/projectActivity"; // You said you'll create this service
 
-const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
+const CreateTask = ({ project_id, onClose }) => {
   const currentUserData = useRecoilValue(userData);
+  const setRefetchTrigger = useSetRecoilState(refetchTriggerAtom);
   const user_id = currentUserData?.user_id;
 
   const [taskLine, setTaskLine] = useState(null);
@@ -153,7 +154,7 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
       });
 
       onClose();
-      onCreateTask();
+      setRefetchTrigger((prev) => prev + 1);
     } catch (error) {
       console.error("Error creating task:", error);
       alert("Failed to create task.");
@@ -162,10 +163,8 @@ const CreateTask = ({ project_id, show, onClose, onCreateTask }) => {
     }
   };
 
-  if (!show) return null;
-
   return (
-    <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-semibold mb-4">Create Task</h2>
 

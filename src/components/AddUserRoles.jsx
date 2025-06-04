@@ -12,6 +12,8 @@ import { userData } from "../data/atom";
 import { fetchProjectById } from "../services/ProjectServices";
 import { fetchUserById } from "../services/UserData";
 import { createActivityLog } from "../services/projectActivity";
+import { useDebouncedCallback } from "../hooks/useDebounceCallback";
+import { isAxiosError } from "axios";
 
 const AddUserRoles = () => {
   const [userId, setUserId] = useState(null);
@@ -34,7 +36,7 @@ const AddUserRoles = () => {
         const ResData = response.data;
 
         let filterData = ResData.filter(
-          (item) => item.user_id === parseInt(currentUserData.user_id)
+          (item) => item.user_id === parseInt(currentUserData.user_id),
         );
 
         if (response.success) {
@@ -51,7 +53,7 @@ const AddUserRoles = () => {
   }, [projectId]);
 
   useEffect(() => {
-    const fetchProjectBuId = async () => {
+    const fetchProjectDetails = async () => {
       try {
         const response = await fetchProjectById(projectId);
         const ProjectOwner = await fetchUserById(response.data.created);
@@ -64,16 +66,16 @@ const AddUserRoles = () => {
       }
     };
 
-    fetchProjectBuId();
+    fetchProjectDetails();
   }, [projectId]);
 
-  useEffect(() => {
+  const handleSearchUser = useDebouncedCallback((email) => {
     if (email) {
       const fetchUser = async () => {
         if (ownerEmail.trim() === email.trim()) {
           alert(
             `The email ${email.trim()} you are trying to add is the owner of the project ! \n
-            You can't assign roles to owner of the Project !`
+            You can't assign roles to owner of the Project !`,
           );
           return;
         }
@@ -83,8 +85,12 @@ const AddUserRoles = () => {
           setUserDetails(data);
           setUserNotFound(false);
         } catch (error) {
-          setUserDetails(null);
-          setUserNotFound(true);
+          if (isAxiosError(error)) {
+            if (error.status === 404) {
+              setUserDetails(null);
+              setUserNotFound(true);
+            }
+          }
         }
       };
       fetchUser();
@@ -92,9 +98,12 @@ const AddUserRoles = () => {
       setUserDetails(null);
       setUserNotFound(false);
     }
-  }, [email]);
+  }, 500);
 
-  const handleEmailChange = (event) => setEmail(event.target.value);
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+    handleSearchUser(event.target.value);
+  };
   const handleRoleChange = (event) => setRole(event.target.value);
 
   const handleAddUser = async (event) => {
