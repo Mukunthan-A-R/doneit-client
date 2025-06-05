@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { refetchTriggerAtom } from "../../data/atom";
 import { createProject } from "../../services/ProjectServices";
+import { toast } from "react-toastify";
 
 const CreateProject = ({ setShowModal, user_id }) => {
   // State to store form data and validation errors
@@ -99,11 +100,13 @@ const CreateProject = ({ setShowModal, user_id }) => {
 
       if (response) {
         console.log("Project created:", response);
+        toast.success("Project created successfully!");
         setShowModal(false);
         setRefetchTrigger((prev) => prev + 1);
       }
     } catch (error) {
       console.error("Failed to create project:", error);
+      toast.error("Failed to create project");
     } finally {
       setLoadingData(false);
     }
