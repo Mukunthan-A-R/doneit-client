@@ -219,6 +219,7 @@ const TaskCardHolder = ({ userRole }) => {
           title="Not Started"
           bg="bg-blue-900"
           tasks={notStartedTasks}
+          count={notStartedTasks.length}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
           onStatusChange={handleStatusChange}
@@ -231,6 +232,7 @@ const TaskCardHolder = ({ userRole }) => {
           title="In Progress"
           bg="bg-[#deaf14]"
           tasks={inProgressTasks}
+          count={inProgressTasks.length}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
           onStatusChange={handleStatusChange}
@@ -243,6 +245,7 @@ const TaskCardHolder = ({ userRole }) => {
           title="Completed"
           bg="bg-green-600"
           tasks={completedTasks}
+          count={completedTasks.length}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
           onStatusChange={handleStatusChange}
@@ -261,6 +264,7 @@ const TaskColumn = ({
   title,
   bg,
   tasks,
+  count,
   onEditClick,
   onDelete,
   onStatusChange,
@@ -269,8 +273,11 @@ const TaskColumn = ({
   projectEndDate,
 }) => (
   <div className={`bg-gray-100 text-white p-4 rounded-lg  flex flex-col`}>
-    <div className={`${bg} py-2 px-4 rounded-xl`}>
+    <div
+      className={`${bg} py-2 px-4 rounded-xl flex justify-between items-center`}
+    >
       <h2 className="text-xl font-semibold text-white">{title}</h2>
+      <p>{count}</p>
     </div>
     <div className="overflow-y-auto space-y-4 pr-2" style={{ flexGrow: 1 }}>
       {tasks.length === 0 ? (
