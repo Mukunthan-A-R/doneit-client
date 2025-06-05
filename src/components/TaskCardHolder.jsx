@@ -3,6 +3,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProjectState, refetchTriggerAtom, userData } from "../data/atom";
+import { toast } from "react-toastify";
 import useProject from "../hooks/useProject";
 import { editProjectById } from "../services/ProjectServices";
 import { deleteTask, fetchTasks } from "../services/TaskServices";
@@ -10,7 +11,6 @@ import { createActivityLog } from "../services/projectActivity";
 import ProjectTitleCard from "./ProjectTitleCard";
 import TaskCard from "./TaskCard";
 import CreateTask from "./modals/CreateTask";
-import ProjectCompletedToast from "./modals/ProjectCompletedToast";
 
 const TaskCardHolder = ({ userRole }) => {
   const { projectId } = useParams();
@@ -28,7 +28,6 @@ const TaskCardHolder = ({ userRole }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -87,7 +86,7 @@ const TaskCardHolder = ({ userRole }) => {
     };
     const response = await editProjectById(fallbackProjectId, editData);
     if (response) {
-      setShowToast(true);
+      toast.success("Project marked as completed!");
     }
   };
 
@@ -182,13 +181,6 @@ const TaskCardHolder = ({ userRole }) => {
             Mark Project as Completed
           </button>
         </div>
-      )}
-      {/* Toast */}
-      {showToast && (
-        <ProjectCompletedToast
-          show={showToast}
-          onClose={() => setShowToast(false)}
-        />
       )}
 
       {showCreateTask && (
