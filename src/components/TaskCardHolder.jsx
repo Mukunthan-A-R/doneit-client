@@ -70,8 +70,8 @@ const TaskCardHolder = ({ userRole }) => {
   const handleStatusChange = (taskId, newStatus) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.task_id === taskId ? { ...task, status: newStatus } : task,
-      ),
+        task.task_id === taskId ? { ...task, status: newStatus } : task
+      )
     );
   };
 
@@ -161,18 +161,25 @@ const TaskCardHolder = ({ userRole }) => {
     <div className="flex flex-col gap-3">
       <ProjectTitleCard />
       <header className="bg-blue-950 text-white py-4 px-6  shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between my-4 mb-0 gap-4 md:gap-0">
-        <h1 className="text-2xl font-bold"> Task Tracker</h1>
+        <h1 className="text-2xl font-bold">Task Tracker </h1>
+        <button
+          onClick={() => setShowCreateTask(true)}
+          className="flex text-lg items-center justify-center p-2 text-white rounded-md w-fit px-4 cursor-pointer border border-white transition duration-300 gap-2 transform hover:scale-105"
+        >
+          <IoMdAddCircleOutline size={30} />
+          Create Task
+        </button>
       </header>
       {allTasksCompleted && (
-        <div className="col-span-3 p-6 bg-green-50 border border-green-300 rounded-lg shadow-sm text-center transition-all duration-300 mt-4">
-          <p className="text-green-800 text-lg font-semibold mb-4">
-            🎉 All tasks are completed! 🎉
+        <div className="col-span-3 p-6 bg-blue-900 border border-blue-700 rounded-xl shadow-lg text-center transition-all duration-300 mt-4">
+          <p className="text-white text-xl font-semibold mb-4 flex items-center justify-center gap-2">
+            🎉 All tasks are completed!
           </p>
           <button
-            className="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
             onClick={handleCompleteProject}
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-md shadow-md transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400"
           >
-            ✅ Mark Project as Completed
+            Mark Project as Completed
           </button>
         </div>
       )}
@@ -183,13 +190,7 @@ const TaskCardHolder = ({ userRole }) => {
           onClose={() => setShowToast(false)}
         />
       )}
-      <button
-        onClick={() => setShowCreateTask(true)}
-        className="flex text-lg items-center justify-center p-2 hover:bg-blue-700 text-white rounded-md w-fit px-4 cursor-pointer bg-blue-400 transition duration-300"
-      >
-        <IoMdAddCircleOutline size={30} />
-        Create Task
-      </button>
+
       {showCreateTask && (
         <CreateTask
           onClose={() => setShowCreateTask(false)} // Close the modal
@@ -199,7 +200,7 @@ const TaskCardHolder = ({ userRole }) => {
         <TaskColumn
           userRole={userRole}
           title="Not Started"
-          bg="bg-gradient-to-b from-red-500 to-red-400"
+          bg="bg-blue-900"
           tasks={notStartedTasks}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
@@ -211,7 +212,7 @@ const TaskCardHolder = ({ userRole }) => {
         <TaskColumn
           userRole={userRole}
           title="In Progress"
-          bg="bg-gradient-to-b from-blue-500 to-blue-400"
+          bg="bg-[#deaf14]"
           tasks={inProgressTasks}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
@@ -223,7 +224,7 @@ const TaskCardHolder = ({ userRole }) => {
         <TaskColumn
           userRole={userRole}
           title="Completed"
-          bg="bg-gradient-to-b from-green-500 to-green-400"
+          bg="bg-green-600"
           tasks={completedTasks}
           onEditClick={handleEditClick}
           onDelete={handleDelete}
@@ -250,11 +251,13 @@ const TaskColumn = ({
   projectStartDate,
   projectEndDate,
 }) => (
-  <div className={`${bg} text-white p-4 rounded-md shadow-lg flex flex-col`}>
-    <h2 className="text-xl font-medium mb-4">{title}</h2>
+  <div className={`bg-gray-100 text-white p-4 rounded-lg  flex flex-col`}>
+    <div className={`${bg} py-2 px-4 rounded-xl`}>
+      <h2 className="text-xl font-semibold text-white">{title}</h2>
+    </div>
     <div className="overflow-y-auto space-y-4 pr-2" style={{ flexGrow: 1 }}>
       {tasks.length === 0 ? (
-        <p className="text-gray-200">No tasks to show</p>
+        <p className="text-gray-800 pt-4 pl-4 font-medium">No tasks to show</p>
       ) : (
         tasks.map((task) => (
           <TaskCard

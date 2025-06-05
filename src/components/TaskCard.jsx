@@ -203,7 +203,7 @@ const TaskCard = ({
   };
 
   return (
-    <div className="p-4 my-4 bg-white rounded-lg shadow-lg relative">
+    <div className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative">
       {/* 3-Dot Menu */}
       <div className="absolute top-2 right-2">
         {userRole !== "client" && (
@@ -268,7 +268,6 @@ const TaskCard = ({
       <p className="text-sm text-gray-600">Start Date: {startTime}</p>
       <p className="text-sm text-gray-600">End Date: {endTime}</p>
       <p className="text-sm text-gray-600">Work Hours: {timeDuration} hrs</p>
-
       {remainingTime.timeOver === false ? (
         <span className="flex gap-1 text-sm text-gray-600">
           <p>{remainingTime.message}:</p>
