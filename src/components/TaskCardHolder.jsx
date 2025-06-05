@@ -98,7 +98,8 @@ const TaskCardHolder = ({ userRole }) => {
     try {
       await deleteTask(taskId);
       setRefetchTrigger((prev) => prev + 1);
-      alert("The Task is Deleted Successfully");
+
+      toast.success("Task Deleted Successfully!");
 
       // Log delete activity
       await createActivityLog({
