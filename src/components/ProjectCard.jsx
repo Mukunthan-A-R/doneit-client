@@ -7,6 +7,7 @@ import {
   editProjectById,
 } from "../services/ProjectServices";
 import { formatDate } from "../services/utils";
+import { toast } from "react-toastify";
 
 const ProjectCard = ({ project, onDelete }) => {
   const navigate = useNavigate();
@@ -26,10 +27,10 @@ const ProjectCard = ({ project, onDelete }) => {
     try {
       await deleteProjectById(project.project_id);
       onDelete(project.project_id);
-      alert("Project deleted successfully!");
+      toast.success("Project deleted successfully!");
     } catch (error) {
       console.error("Error deleting project:", error);
-      alert("Error deleting project!");
+      toast.error("Error deleting project!");
     }
   };
 
