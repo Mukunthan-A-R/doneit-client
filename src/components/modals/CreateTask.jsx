@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { refetchTriggerAtom, userData } from "../../data/atom"; // Adjust path if needed
+import { refetchTriggerAtom, userData } from "../../data/atom";
+import { toast } from "react-toastify";
 import useProject from "../../hooks/useProject";
 import { createTask } from "../../services/TaskServices";
-import { createActivityLog } from "../../services/projectActivity"; // You said you'll create this service
+import { createActivityLog } from "../../services/projectActivity";
 
 const CreateTask = ({ onClose }) => {
   const currentUserData = useRecoilValue(userData);
@@ -147,6 +148,8 @@ const CreateTask = ({ onClose }) => {
           title: newTask.data.title,
         },
       });
+
+      toast.success("New Task Created!");
 
       onClose();
       setRefetchTrigger((prev) => prev + 1);
