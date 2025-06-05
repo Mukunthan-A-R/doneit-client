@@ -149,7 +149,31 @@ const TaskCardHolder = ({ userRole }) => {
 
   if (!loading && tasks.length === 0) {
     return (
-      <p className="text-gray-600">Please create a task to get started!</p>
+      <div>
+        <ProjectTitleCard />
+        <header className="bg-blue-950 text-white py-4 px-6  shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between my-4 mb-0 gap-4 md:gap-0">
+          <h1 className="text-2xl font-bold">Task Tracker </h1>
+          <button
+            onClick={() => {
+              setShowCreateTask(true);
+            }}
+            className="flex text-lg items-center justify-center p-2 text-white rounded-md w-fit px-4 cursor-pointer border border-white transition duration-300 gap-2 transform hover:scale-105"
+          >
+            <IoMdAddCircleOutline size={30} />
+            Create Task
+          </button>
+        </header>
+        <div className="flex items-center justify-center mt-20">
+          <p className="text-gray-600 text-base sm:text-xl">
+            Please create a task to get started!
+          </p>
+        </div>
+        {showCreateTask && (
+          <CreateTask
+            onClose={() => setShowCreateTask(false)} // Close the modal
+          />
+        )}
+      </div>
     );
   }
 
