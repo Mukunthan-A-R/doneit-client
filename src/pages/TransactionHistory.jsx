@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import ExportLogs from "../components/ExportLogs";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import { fetchActivityLogs } from "../services/projectActivity";
+import { toast } from "react-toastify";
 
 const TransactionHistory = () => {
   const { projectId } = useParams();
@@ -22,6 +23,7 @@ const TransactionHistory = () => {
 
   const [selectedType, setSelectedType] = useState("all");
   const [selectedDuration, setSelectedDuration] = useState("all");
+  const [sortOrder, setSortOrder] = useState("desc");
 
   useEffect(() => {
     const getTransactions = async () => {
@@ -31,7 +33,8 @@ const TransactionHistory = () => {
         setTransactions(response.data || []);
         setError(null);
       } catch (err) {
-        console.log("🚀 ~ getTransactions ~ err:", err);
+        console.error("🚀 ~ getTransactions ~ err:", err);
+        toast.error("Failed to fetch transactions.");
         setError("Failed to fetch transactions.");
         setTransactions([]);
       } finally {
@@ -61,11 +64,17 @@ const TransactionHistory = () => {
     return diffDays <= durationMap[selectedDuration];
   };
 
-  const filteredTransactions = transactions.filter((txn) => {
-    const typeMatch = selectedType === "all" || txn.action === selectedType;
-    const timeMatch = isWithinDuration(txn.timestamp);
-    return typeMatch && timeMatch;
-  });
+  const filteredTransactions = transactions
+    .filter((txn) => {
+      const typeMatch = selectedType === "all" || txn.action === selectedType;
+      const timeMatch = isWithinDuration(txn.timestamp);
+      return typeMatch && timeMatch;
+    })
+    .sort((a, b) =>
+      sortOrder === "asc"
+        ? new Date(a.timestamp) - new Date(b.timestamp)
+        : new Date(b.timestamp) - new Date(a.timestamp)
+    );
 
   const getActionIcon = (action) => {
     switch (action) {
@@ -91,7 +100,7 @@ const TransactionHistory = () => {
       <ProjectTitleCard project_id={projectId} />
 
       <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
-        <h1 className="text-2xl font-bold"> Project Logs</h1>
+        <h1 className="text-2xl font-bold">Project Logs</h1>
       </header>
 
       {/* Filters */}
@@ -110,6 +119,8 @@ const TransactionHistory = () => {
             <option value="update">Update</option>
             <option value="delete">Delete</option>
             <option value="status-change">Status Change</option>
+            <option value="add-user">Add User</option>
+            <option value="remove-user">Remove User</option>
           </select>
         </div>
 
@@ -126,6 +137,20 @@ const TransactionHistory = () => {
             <option value="24h">Last 24 Hours</option>
             <option value="7d">Last 7 Days</option>
             <option value="30d">Last 30 Days</option>
+          </select>
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <label className="text-sm font-medium text-gray-700">
+            Sort Order:
+          </label>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+          >
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
           </select>
         </div>
       </div>
@@ -152,7 +177,7 @@ const TransactionHistory = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {transactions.map((txn, index) => {
+                {filteredTransactions.map((txn, index) => {
                   const match = txn.description?.match(/by (.*?) <(.*?)>/);
                   const username = match?.[1];
                   const email = match?.[2];
