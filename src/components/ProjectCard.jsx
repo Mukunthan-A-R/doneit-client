@@ -80,23 +80,10 @@ const ProjectCard = ({ project, onDelete }) => {
         {/* Menu Icon */}
         <div className="absolute top-3 right-3">
           <button
-            className="text-gray-600 hover:text-gray-800 focus:outline-none cursor-pointer"
+            className="text-gray-900 font-bold text-xl focus:outline-none cursor-pointer"
             onClick={toggleDropdown}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 12h12M6 6h12m-6 12h6"
-              ></path>
-            </svg>
+            ...
           </button>
 
           {/* Dropdown Menu */}
@@ -149,10 +136,10 @@ const ProjectCard = ({ project, onDelete }) => {
                     project.priority === "high"
                       ? "bg-red-100 text-red-800"
                       : project.priority === "medium"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : project.priority === "low"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-200 text-gray-700"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : project.priority === "low"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-200 text-gray-700"
                   }`}
                 >
                   {project.priority?.toUpperCase()}
