@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { fetchTasks } from "../services/TaskServices";
-import { fetchProjectById } from "../services/ProjectServices";
+import { useEffect, useMemo, useState } from "react";
+import useProject from "../hooks/useProject";
+import useProjectTasks from "../hooks/useProjectTasks";
 
 const GITHUB_COLORS = ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
 
@@ -14,38 +14,29 @@ const getColorLevel = (count) => {
 };
 
 const HeatMap = ({ projectId }) => {
-  const [tasks, setTasks] = useState([]);
   const [projectStart, setProjectStart] = useState(null);
   const [projectEnd, setProjectEnd] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
 
-  // 🔽 New state for dropdowns
+  //  New state for dropdowns
   const [showIdleDates, setShowIdleDates] = useState(false);
   const [showLightDates, setShowLightDates] = useState(false);
 
+  const { project, isLoading } = useProject(projectId);
+  const { tasks, isLoading: loading, error } = useProjectTasks(projectId);
+
   useEffect(() => {
-    if (!projectId) return;
-    setLoading(true);
-    Promise.all([fetchProjectById(projectId), fetchTasks(projectId)])
-      .then(([projRes, taskRes]) => {
-        const projData = projRes.data;
-        setProjectStart(new Date(projData.start_date));
-        setProjectEnd(new Date(projData.end_date));
-        setTasks(taskRes.data || []);
-        setError(null);
-      })
-      .catch(() => {
-        setError("Failed to load project or tasks.");
-      })
-      .finally(() => setLoading(false));
-  }, [projectId]);
+    if (!project) return;
+    if (!isLoading) {
+      setProjectStart(new Date(project?.start_date));
+      setProjectEnd(new Date(project?.end_date));
+    }
+  }, [project]);
 
   const tasksByDate = useMemo(() => {
     if (!projectStart || !projectEnd) return {};
     const map = {};
-    tasks.forEach((task) => {
+    tasks?.forEach((task) => {
       let current = new Date(task.start_date);
       const taskEnd = new Date(task.end_date);
       while (current <= taskEnd) {
@@ -76,7 +67,7 @@ const HeatMap = ({ projectId }) => {
     return d;
   }, [projectEnd]);
 
-  const totalTasks = tasks.length;
+  const totalTasks = tasks?.length;
   const activeDays = Object.keys(tasksByDate).length;
   const avgTasksPerDay =
     activeDays > 0 ? (totalTasks / activeDays).toFixed(2) : 0;
@@ -97,14 +88,14 @@ const HeatMap = ({ projectId }) => {
     (date) => tasksByDate[date]?.length > 0 && tasksByDate[date]?.length <= 2
   );
 
-  const completed = tasks.filter((t) => t.status === "Completed").length;
-  const notStarted = tasks.filter((t) => t.status === "Not Started").length;
+  const completed = tasks?.filter((t) => t.status === "Completed").length;
+  const notStarted = tasks?.filter((t) => t.status === "Not Started").length;
   const remaining = totalTasks - completed;
 
   if (loading)
     return (
       <div className="text-center py-10 text-gray-500 animate-pulse">
-        Loading heatmap...
+        Loading Heatmap...
       </div>
     );
 
