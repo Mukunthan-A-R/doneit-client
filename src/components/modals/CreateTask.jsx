@@ -163,7 +163,7 @@ const CreateTask = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+      <div className="bg-white p-4 pt-6 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-semibold mb-4">Create Task</h2>
 
         <form onSubmit={handleSubmit}>

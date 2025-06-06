@@ -5,7 +5,7 @@ const PrivacyPolicy = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-blue-50 text-gray-900 font-sans p-8 flex flex-col justify-between">
+    <div className="min-h-screen bg-blue-50 text-gray-900 font-sans p-4 pt-6 flex flex-col justify-between">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-10">
         <h1 className="text-4xl font-bold text-blue-800 mb-6">
           Privacy Policy

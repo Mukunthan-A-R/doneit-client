@@ -18,7 +18,7 @@ export default function PasswordResetEmail() {
       const res = await requestPasswordReset(email);
       setMessage(
         res.message ||
-          `If an account exists for ${email}, a reset link has been sent.`
+          `If an account exists for ${email}, a reset link has been sent.`,
       );
     } catch (err) {
       setError(err.message || "Failed to send reset email");
@@ -29,7 +29,7 @@ export default function PasswordResetEmail() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4">
-      <main className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+      <main className="w-full max-w-md bg-white rounded-lg shadow-md p-4 pt-6">
         <h1 className="text-2xl font-semibold mb-6 text-center">
           Reset your password
         </h1>

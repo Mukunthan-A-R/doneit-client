@@ -64,7 +64,7 @@ const GeneralSettingsPanel = () => {
   const aspectHeight = resolution.height / divisor;
 
   return (
-    <div className="w-full h-full overflow-auto bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow border-l-4 border-blue-700 flex flex-col">
+    <div className="w-full h-full overflow-auto bg-white p-4 sm:p-6 lg:p-4 pt-6 rounded-lg shadow border-l-4 border-blue-700 flex flex-col">
       <h2 className="text-2xl font-semibold text-blue-900 mb-6 text-center sm:text-left">
         System Preferences
       </h2>

@@ -138,10 +138,10 @@ const ProjectCard = ({ project, onDelete }) => {
                     project.priority === "high"
                       ? "bg-red-100 text-red-800"
                       : project.priority === "medium"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : project.priority === "low"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-200 text-gray-700"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : project.priority === "low"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-200 text-gray-700"
                   }`}
                 >
                   {project.priority?.toUpperCase()}
@@ -193,7 +193,7 @@ const ProjectCard = ({ project, onDelete }) => {
       {/* Edit Modal Popup */}
       {isEditing && (
         <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+          <div className="bg-white p-4 pt-6 rounded-lg shadow-lg w-96">
             <h2 className="text-2xl font-semibold mb-4">Edit Project</h2>
 
             <div className="mb-4">

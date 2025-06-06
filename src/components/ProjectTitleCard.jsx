@@ -12,7 +12,7 @@ const ProjectTitleCard = () => {
 
   return (
     <div className="mb-6 sm:mb-4">
-      <div className="flex flex-col sm:flex-row  gap-2 mt-2 lg:mt-0">
+      <div className="flex flex-col md:flex-row items-center gap-2 ">
         <h2 className="text-2xl font-medium ">{project?.name}</h2>
         <span className="flex gap-2">
           <p className="mt-2">
@@ -31,16 +31,16 @@ const ProjectTitleCard = () => {
             >
               {project?.priority}
             </span>
-            <button
-              onClick={() => setShowInfo(true)}
-              className="flex items-center justify-center hover:bg-blue-700 transition duration-300 rounded-full"
-            >
-              <MdInfoOutline size={30} />
-            </button>
 
             {showInfo && <ProjectInfo onClose={() => setShowInfo(false)} />}
           </p>
         </span>
+        <button
+          onClick={() => setShowInfo(true)}
+          className="flex items-center justify-center cursor-pointer transition duration-300 rounded-full"
+        >
+          <MdInfoOutline size={30} />
+        </button>
       </div>
       <p className="font-medium">Description : {project?.description}</p>
       <p className="font-medium"> Status : {project?.status}</p>
