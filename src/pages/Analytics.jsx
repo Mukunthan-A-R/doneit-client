@@ -5,27 +5,16 @@ import PieChart from "../components/PieChart";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import { ProjectState } from "../data/atom";
 import { fetchTasks } from "../services/TaskServices";
+import useProjectTasks from "../hooks/useProjectTasks";
 
 const Analytics = () => {
-  const [tasks, setTasks] = useState([]);
-  const [Error, setError] = useState(null);
+  const [tasksP, setTasksP] = useState([]);
   const currentProject = useRecoilValue(ProjectState);
 
   const params = useParams();
   const project_id = params.projectId;
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const fetchedTasks = await fetchTasks(project_id);
-        setTasks(fetchedTasks.data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
-    getData();
-  }, [currentProject]);
+  const { tasks, isLoading } = useProjectTasks(project_id);
 
   const countTasksByStatus = () => {
     const counts = {
@@ -34,7 +23,7 @@ const Analytics = () => {
       notStarted: 0,
     };
 
-    tasks.forEach((task) => {
+    tasks?.forEach((task) => {
       if (task.status === "not started") {
         counts.notStarted += 1;
       } else if (task.status === "in progress" || task.status === "pending") {
@@ -48,11 +37,17 @@ const Analytics = () => {
   };
 
   const { remaining, completed, notStarted } = countTasksByStatus();
-  const totalTasks = tasks.length;
+  const totalTasks = tasks?.length;
   const completionPercentage =
     totalTasks > 0 ? (completed / totalTasks) * 100 : 0;
 
-  // error use pannu bro
+  if (isLoading) {
+    return (
+      <div className="text-center py-6 text-gray-500 animate-pulse">
+        Loading Analysis chart...
+      </div>
+    );
+  }
 
   return (
     <>

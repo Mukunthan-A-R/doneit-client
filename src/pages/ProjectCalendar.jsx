@@ -10,7 +10,7 @@ const ProjectCalendar = () => {
   const { projectId } = useParams();
 
   const [graphData, setGraphData] = useState({});
-  const { project } = useProject(projectId);
+  const { project, isLoading, error } = useProject(projectId);
 
   useEffect(() => {
     if (projectId) {
@@ -24,6 +24,14 @@ const ProjectCalendar = () => {
     }
   }, [projectId]);
 
+  if (isLoading || !project) {
+    return <p> Loaing Graph ...</p>;
+  }
+
+  if (error) {
+    return <p> {error.message}</p>;
+  }
+
   return (
     <>
       <ProjectTitleCard />
@@ -32,6 +40,7 @@ const ProjectCalendar = () => {
         <h1 className="text-2xl font-bold"> Project Calendar</h1>
       </header>
 
+      <p>hi</p>
       <CalendarCard
         startDate={project?.start_date}
         endDate={project?.end_date}

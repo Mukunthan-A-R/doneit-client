@@ -1,43 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 import ProjectTitleCard from "../components/ProjectTitleCard";
-import { ProjectState } from "../data/atom";
-import { fetchTasks } from "../services/TaskServices";
+import useProjectTasks from "../hooks/useProjectTasks";
 import { formatDate } from "../services/utils";
 
 const TaskListView = () => {
-  const [tasks, setTasks] = useState([]);
-  const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
-  const currentProject = useRecoilValue(ProjectState);
   const { projectId } = useParams();
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const fetchedTasks = await fetchTasks(projectId);
-        setTasks(fetchedTasks.data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
-    getData();
-  }, [projectId, currentProject]);
+  const { tasks, error, isLoading } = useProjectTasks(projectId);
 
   const filteredTasks =
     statusFilter === "all"
       ? tasks
-      : tasks.filter((task) => task.status === statusFilter);
+      : tasks?.filter((task) => task.status === statusFilter);
 
   if (error) {
     return <div className="text-red-500 font-medium p-6">Error: {error}</div>;
   }
 
-  if (tasks.length === 0) {
+  if (isLoading) {
     return (
-      <div className="text-gray-500 font-medium p-6">Loading tasks...</div>
+      <div className="text-gray-500 font-medium p-6">
+        Loading Tasks list View...
+      </div>
     );
   }
 
@@ -70,7 +55,7 @@ const TaskListView = () => {
       <section className="bg-white p-6 rounded-xl shadow-md">
         <h2 className="text-xl font-semibold text-center mb-6">Tasks</h2>
         <div className="space-y-5">
-          {filteredTasks.map((task, index) => (
+          {filteredTasks?.map((task, index) => (
             <TaskCard key={task.id ?? `task-${index}`} task={task} />
           ))}
         </div>
