@@ -69,8 +69,8 @@ const TaskCardHolder = ({ userRole }) => {
   const handleStatusChange = (taskId, newStatus) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.task_id === taskId ? { ...task, status: newStatus } : task
-      )
+        task.task_id === taskId ? { ...task, status: newStatus } : task,
+      ),
     );
   };
 
@@ -147,112 +147,84 @@ const TaskCardHolder = ({ userRole }) => {
     return <p className="text-red-500">Access Forbidden ! URL not found !</p>;
   }
 
-  if (!loading && tasks.length === 0) {
-    return (
-      <div>
-        <ProjectTitleCard />
-        <header className="bg-blue-950 text-white py-4 px-6  shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between my-4 mb-0 gap-4 md:gap-0">
-          <h1 className="text-2xl font-bold">Task Tracker </h1>
-          <button
-            onClick={() => {
-              setShowCreateTask(true);
-            }}
-            className="flex text-lg items-center justify-center p-2 text-white rounded-md w-fit px-4 cursor-pointer border border-white transition duration-300 gap-2 transform hover:scale-105"
-          >
-            <IoMdAddCircleOutline size={30} />
-            Create Task
-          </button>
-        </header>
-        <div className="flex items-center justify-center mt-20">
-          <p className="text-gray-600 text-base sm:text-xl">
-            Please create a task to get started!
-          </p>
-        </div>
-        {showCreateTask && (
-          <CreateTask
-            onClose={() => setShowCreateTask(false)} // Close the modal
-          />
-        )}
-      </div>
-    );
-  }
-
-  if (error) {
-    return <p className="text-red-600">An error occurred: {error}</p>;
-  }
-
   return (
     <div className="flex flex-col gap-3">
       <ProjectTitleCard />
-      <header className="bg-blue-950 text-white py-4 px-6  shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between my-4 mb-0 gap-4 md:gap-0">
+      <header className="bg-blue-950 text-white py-2 px-4  shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between my-4 mb-0 gap-4 md:gap-0">
         <h1 className="text-2xl font-bold">Task Tracker </h1>
         <button
           onClick={() => setShowCreateTask(true)}
-          className="flex text-lg items-center justify-center p-2 text-white rounded-md w-fit px-4 cursor-pointer border border-white transition duration-300 gap-2 transform hover:scale-105"
+          className="flex items-center justify-center p-2 text-white rounded-md w-fit px-4 cursor-pointer border border-white transition duration-300 gap-2 transform hover:scale-105"
         >
-          <IoMdAddCircleOutline size={30} />
+          <IoMdAddCircleOutline size={20} />
           Create Task
         </button>
       </header>
-      {allTasksCompleted && (
-        <div className="col-span-3 p-6 bg-blue-900 border border-blue-700 rounded-xl shadow-lg text-center transition-all duration-300 mt-4">
-          <p className="text-white text-xl font-semibold mb-4 flex items-center justify-center gap-2">
-            🎉 All tasks are completed!
-          </p>
-          <button
-            onClick={handleCompleteProject}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-md shadow-md transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400"
-          >
-            Mark Project as Completed
-          </button>
-        </div>
-      )}
-
       {showCreateTask && (
         <CreateTask
           onClose={() => setShowCreateTask(false)} // Close the modal
         />
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 px-3 md:px-0 min-h-screen ">
-        <TaskColumn
-          userRole={userRole}
-          title="Not Started"
-          bg="bg-blue-900"
-          tasks={notStartedTasks}
-          count={notStartedTasks.length}
-          onEditClick={handleEditClick}
-          onDelete={handleDelete}
-          onStatusChange={handleStatusChange}
-          projectStartDate={project?.start_date}
-          projectEndDate={project?.end_date}
-        />
+      {!loading && tasks.length === 0 ? (
+        <p>No tasks have been created.</p>
+      ) : (
+        <>
+          {allTasksCompleted && (
+            <div className="col-span-3 p-6 bg-blue-900 border border-blue-700 rounded-xl shadow-lg text-center transition-all duration-300 mt-4">
+              <p className="text-white text-xl font-semibold mb-4 flex items-center justify-center gap-2">
+                🎉 All tasks are completed!
+              </p>
+              <button
+                onClick={handleCompleteProject}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-md shadow-md transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400"
+              >
+                Mark Project as Completed
+              </button>
+            </div>
+          )}
 
-        <TaskColumn
-          userRole={userRole}
-          title="In Progress"
-          bg="bg-[#deaf14]"
-          tasks={inProgressTasks}
-          count={inProgressTasks.length}
-          onEditClick={handleEditClick}
-          onDelete={handleDelete}
-          onStatusChange={handleStatusChange}
-          projectStartDate={project?.start_date}
-          projectEndDate={project?.end_date}
-        />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 px-3 md:px-0 min-h-screen ">
+            <TaskColumn
+              userRole={userRole}
+              title="Not Started"
+              bg="bg-blue-900"
+              tasks={notStartedTasks}
+              count={notStartedTasks.length}
+              onEditClick={handleEditClick}
+              onDelete={handleDelete}
+              onStatusChange={handleStatusChange}
+              projectStartDate={project?.start_date}
+              projectEndDate={project?.end_date}
+            />
 
-        <TaskColumn
-          userRole={userRole}
-          title="Completed"
-          bg="bg-green-600"
-          tasks={completedTasks}
-          count={completedTasks.length}
-          onEditClick={handleEditClick}
-          onDelete={handleDelete}
-          onStatusChange={handleStatusChange}
-          projectStartDate={project?.start_date}
-          projectEndDate={project?.end_date}
-        />
-      </div>
+            <TaskColumn
+              userRole={userRole}
+              title="In Progress"
+              bg="bg-[#deaf14]"
+              tasks={inProgressTasks}
+              count={inProgressTasks.length}
+              onEditClick={handleEditClick}
+              onDelete={handleDelete}
+              onStatusChange={handleStatusChange}
+              projectStartDate={project?.start_date}
+              projectEndDate={project?.end_date}
+            />
+
+            <TaskColumn
+              userRole={userRole}
+              title="Completed"
+              bg="bg-green-600"
+              tasks={completedTasks}
+              count={completedTasks.length}
+              onEditClick={handleEditClick}
+              onDelete={handleDelete}
+              onStatusChange={handleStatusChange}
+              projectStartDate={project?.start_date}
+              projectEndDate={project?.end_date}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

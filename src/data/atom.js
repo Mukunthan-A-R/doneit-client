@@ -58,6 +58,16 @@ export const CurrentProjectState = atom({
   },
 });
 
+export const CurrentProjectTasks = atom({
+  key: "CurrentProjectTasks",
+  default: {
+    project_id: null,
+    isLoading: false,
+    error: null,
+    tasks: null,
+  },
+});
+
 export const refetchTriggerAtom = atom({
   default: 0,
   key: "refetchTrigger",

@@ -1,46 +1,26 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import useProject from "../hooks/useProject";
-import { fetchTasks } from "../services/TaskServices";
+import useProjectTasks from "../hooks/useProjectTasks";
 
-const GanttChartTimeLine = () => {
-  const [tasks, setTasks] = useState([]);
-  const [error, setError] = useState(null);
+const GanttChartTimeLine = ({ projectId }) => {
+  const { tasks, isLoading, error } = useProjectTasks(projectId);
+  console.log(
+    "🚀 ~ GanttChart ~ tasks, error, isLoading:",
+    tasks,
+    error,
+    isLoading,
+  );
   const [projectStart, setProjectStart] = useState(null);
   const [projectEnd, setProjectEnd] = useState(null);
-  const [intervalType, setIntervalType] = useState("weekly");
-  const { projectId } = useParams();
+  const [intervalType] = useState("weekly");
   const { project } = useProject();
 
   useEffect(() => {
-    const getTasks = async () => {
-      try {
-        const data = await fetchTasks(projectId);
-        setTasks(data.data);
-      } catch (err) {
-        if (err.response?.status === 404) {
-          setTasks([]);
-          setError("No tasks found for this project!");
-        } else {
-          setError("Currently no graphs available");
-        }
-      }
-    };
-
-    const getProject = async () => {
-      try {
-        setProjectStart(new Date(project.start_date));
-        setProjectEnd(new Date(project.end_date));
-      } catch (err) {
-        console.log("Error", err);
-      }
-    };
-
-    if (projectId) {
-      getTasks();
-      getProject();
+    if (project) {
+      setProjectStart(new Date(project.start_date));
+      setProjectEnd(new Date(project.end_date));
     }
-  }, [projectId]);
+  }, [project]);
 
   const getNumIntervals = () => {
     if (!projectStart || !projectEnd) return 0;
@@ -94,7 +74,7 @@ const GanttChartTimeLine = () => {
   if (error)
     return <div className="text-red-600 text-center py-4">{error}</div>;
 
-  if (!tasks.length || !projectStart || !projectEnd)
+  if (isLoading)
     return (
       <div className="text-center py-6 text-gray-500 animate-pulse">
         Loading Gantt chart...
@@ -104,7 +84,7 @@ const GanttChartTimeLine = () => {
   const NUM_INTERVALS = getNumIntervals();
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-7xl mx-auto mt-10 border border-gray-200">
+    <div className="bg-white rounded-2xl shadow-xl p-4 pt-6 w-full max-w-7xl mx-auto mt-10 border border-gray-200">
       <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
         Project Section Graph
       </h2>
@@ -128,7 +108,7 @@ const GanttChartTimeLine = () => {
 
       {/* Task Rows */}
       <div className="space-y-3">
-        {tasks.map((task) => {
+        {tasks?.map((task) => {
           const taskStart = new Date(task.start_date);
           const taskEnd = new Date(task.end_date);
 
@@ -191,8 +171,8 @@ const GanttChartTimeLine = () => {
       {/* Legend */}
       <div className="mt-6 text-sm text-gray-500 text-center">
         Showing {NUM_INTERVALS} {intervalType} intervals from{" "}
-        <strong>{projectStart.toLocaleDateString()}</strong> to{" "}
-        <strong>{projectEnd.toLocaleDateString()}</strong>
+        <strong>{projectStart?.toLocaleDateString()}</strong> to{" "}
+        <strong>{projectEnd?.toLocaleDateString()}</strong>
       </div>
     </div>
   );

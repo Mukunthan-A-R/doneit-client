@@ -1,57 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { fetchTasks } from "../services/TaskServices";
+import { useEffect, useState } from "react";
+import useProjectTasks from "../hooks/useProjectTasks";
+
+const NUM_DAYS = 12;
+const getDayOffset = (start, end) => {
+  const diff = (new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24);
+  return Math.round(diff);
+};
+
+const formatDate = (dateStr) => {
+  const options = { month: "short", day: "numeric" };
+  return new Date(dateStr).toLocaleDateString(undefined, options);
+};
+
+const getDateForOffset = (baseDate, offset) => {
+  const date = new Date(baseDate);
+  date.setDate(baseDate?.getDate() + offset);
+  return formatDate(date);
+};
 
 const GanttChart = ({ projectId }) => {
-  const [tasks, setTasks] = useState([]);
+  const { tasks, error, isLoading } = useProjectTasks(projectId);
   const [baseDate, setBaseDate] = useState(null);
-  const [error, setError] = useState(null);
-  const NUM_DAYS = 12;
 
   useEffect(() => {
-    const getTasks = async () => {
-      try {
-        const data = await fetchTasks(projectId);
-        setTasks(data.data);
-
-        if (data.data.length > 0) {
-          const earliest = data.data.reduce((min, task) =>
-            new Date(task.start_date) < new Date(min.start_date) ? task : min
-          );
-          setBaseDate(new Date(earliest.start_date));
-        }
-      } catch (err) {
-        if (err.response.status == 404) {
-          setTasks([]);
-          setError("No tasks found for this project !");
-        } else {
-          setError("Currently no graphs Avaliable");
-        }
-      }
-    };
-
-    if (projectId) getTasks();
-  }, [projectId]);
-
-  const getDayOffset = (start, end) => {
-    const diff = (new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24);
-    return Math.round(diff);
-  };
-
-  const formatDate = (dateStr) => {
-    const options = { month: "short", day: "numeric" };
-    return new Date(dateStr).toLocaleDateString(undefined, options);
-  };
-
-  const getDateForOffset = (offset) => {
-    const date = new Date(baseDate);
-    date.setDate(baseDate.getDate() + offset);
-    return formatDate(date);
-  };
+    if (tasks?.length > 0) {
+      const earliest = tasks.reduce((min, task) =>
+        new Date(task.start_date) < new Date(min.start_date) ? task : min,
+      );
+      setBaseDate(new Date(earliest.start_date));
+    }
+  }, [tasks]);
 
   if (error)
     return <div className="text-red-600 text-center py-4">{error}</div>;
 
-  if (!tasks.length || !baseDate)
+  if (isLoading)
     return (
       <div className="text-center py-6 text-gray-500 animate-pulse">
         Loading Gantt chart...
@@ -59,7 +42,7 @@ const GanttChart = ({ projectId }) => {
     );
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-7xl mx-auto mt-10 border border-gray-200">
+    <div className="bg-white rounded-2xl shadow-xl p-4 pt-6 w-full max-w-7xl mx-auto mt-10 border border-gray-200">
       <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
         12 Day Project Graph
       </h2>
@@ -73,7 +56,7 @@ const GanttChart = ({ projectId }) => {
               key={i}
               className="text-center py-1 bg-gray-100 text-gray-500 border border-gray-200"
             >
-              {getDateForOffset(i)}
+              {getDateForOffset(baseDate, i)}
             </div>
           ))}
         </div>
@@ -81,7 +64,7 @@ const GanttChart = ({ projectId }) => {
 
       {/* Task Rows */}
       <div className="space-y-3">
-        {tasks.map((task) => {
+        {tasks?.map((task) => {
           const offset = getDayOffset(baseDate, task.start_date);
           const duration = getDayOffset(task.start_date, task.end_date) + 1;
 
@@ -104,7 +87,7 @@ const GanttChart = ({ projectId }) => {
                     width: `${(colSpan / NUM_DAYS) * 100}%`,
                   }}
                   title={`${task.title} (${formatDate(
-                    task.start_date
+                    task.start_date,
                   )} → ${formatDate(task.end_date)})`}
                 />
               </div>

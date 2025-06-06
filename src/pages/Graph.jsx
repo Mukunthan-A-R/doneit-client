@@ -4,19 +4,18 @@ import GanttChartTimeLine from "../components/GanttChartTimeLine";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 
 const Graph = () => {
-  const params = useParams();
-  const project_id = params.projectId;
+  const { projectId } = useParams();
 
   return (
     <>
-      <ProjectTitleCard project_id={project_id}></ProjectTitleCard>
+      <ProjectTitleCard project_id={projectId}></ProjectTitleCard>
 
       <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
         <h1 className="text-2xl font-bold"> Project Graph</h1>
       </header>
 
-      <GanttChart projectId={project_id}></GanttChart>
-      <GanttChartTimeLine projectId={project_id}></GanttChartTimeLine>
+      <GanttChart projectId={projectId} />
+      <GanttChartTimeLine projectId={projectId} />
     </>
   );
 };
