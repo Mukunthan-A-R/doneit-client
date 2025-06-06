@@ -5,6 +5,7 @@ import CalendarCard from "../components/CalendarCard";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import useProject from "../hooks/useProject";
 import { fetchTasks } from "../services/TaskServices";
+import useProjectTasks from "../hooks/useProjectTasks";
 
 const ProjectCalendar = () => {
   const { projectId } = useParams();
@@ -12,11 +13,12 @@ const ProjectCalendar = () => {
   const [graphData, setGraphData] = useState({});
   const { project, isLoading, error } = useProject(projectId);
 
+  const { tasks } = useProjectTasks(projectId);
+
   useEffect(() => {
     if (projectId) {
       const loadTasks = async () => {
-        const tasks = await fetchTasks(projectId);
-        const result = formatTasksByDateRange(tasks.data);
+        const result = formatTasksByDateRange(tasks);
         setGraphData(result);
       };
 
@@ -40,7 +42,6 @@ const ProjectCalendar = () => {
         <h1 className="text-2xl font-bold"> Project Calendar</h1>
       </header>
 
-      <p>hi</p>
       <CalendarCard
         startDate={project?.start_date}
         endDate={project?.end_date}
@@ -55,7 +56,7 @@ export default ProjectCalendar;
 const formatTasksByDateRange = (taskArray) => {
   const result = {};
 
-  taskArray.forEach((task) => {
+  taskArray?.forEach((task) => {
     const start = new Date(task.start_date);
     const end = new Date(task.end_date);
 
