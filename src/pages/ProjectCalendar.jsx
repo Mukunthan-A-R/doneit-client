@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import CalendarCard from "../components/CalendarCard";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import useProject from "../hooks/useProject";
-import { fetchTasks } from "../services/TaskServices";
 import useProjectTasks from "../hooks/useProjectTasks";
 
 const ProjectCalendar = () => {
