@@ -32,30 +32,6 @@ const AddUserRoles = () => {
   const currentUserData = useRecoilValue(userData);
 
   useEffect(() => {
-    const fetchAssignments = async () => {
-      try {
-        const response = await getAssignmentsByProjectId(projectId);
-        const ResData = response.data;
-
-        let filterData = ResData.filter(
-          (item) => item.user_id === parseInt(currentUserData.user_id),
-        );
-
-        if (response.success) {
-          setUserRole(filterData[0].role);
-          // console.log("filterData in the outer level");
-          // console.log(filterData[0].role);
-        }
-      } catch (err) {
-        console.log("🚀 ~ fetchAssignments ~ err:", err);
-        toast.error("Error fetching assignments");
-      }
-    };
-
-    fetchAssignments();
-  }, [projectId]);
-
-  useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
         const ProjectOwner = await fetchUserById(project?.created);
@@ -71,13 +47,38 @@ const AddUserRoles = () => {
     if (project?.created) fetchProjectDetails();
   }, [projectId, project?.created]);
 
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const response = await getAssignmentsByProjectId(projectId);
+        const ResData = response.data;
+        if (setUserRole) {
+          return;
+        }
+
+        let filterData = ResData.filter(
+          (item) => item.user_id === parseInt(currentUserData.user_id)
+        );
+
+        if (response.success) {
+          setUserRole(filterData[0].role);
+        }
+      } catch (err) {
+        console.log("🚀 ~ fetchAssignments ~ err:", err);
+        toast.error("Error fetching assignments");
+      }
+    };
+
+    fetchAssignments();
+  }, [projectId]);
+
   const handleSearchUser = useDebouncedCallback((email) => {
     if (email) {
       const fetchUser = async () => {
         if (ownerEmail.trim() === email.trim()) {
           alert(
             `The email ${email.trim()} you are trying to add is the owner of the project ! \n
-            You can't assign roles to owner of the Project !`,
+            You can't assign roles to owner of the Project !`
           );
           return;
         }
