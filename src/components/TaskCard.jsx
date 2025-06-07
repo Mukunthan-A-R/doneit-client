@@ -5,6 +5,7 @@ import { updateTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const TaskCard = ({
   task_id,
@@ -89,16 +90,12 @@ const TaskCard = ({
         },
       });
 
-      setNotification({
-        type: "success",
-        message: "Status updated successfully!",
-      });
-      setTimeout(() => setNotification(""), 2000);
+      toast.success("Status updated successfully!");
       onStatusChange(task_id, newStatus);
     } catch (err) {
       console.error("Failed to update task status", err);
-      setNotification({ type: "failure", message: "Failed to update status." });
-      setTimeout(() => setNotification(""), 2000);
+
+      toast.error("Failed to update status!");
     }
     setMenuVisible(false);
   };
@@ -184,21 +181,13 @@ const TaskCard = ({
         },
       });
 
-      setNotification({
-        type: "success",
-        message: "Task updated successfully!",
-      });
-      setTimeout(() => {
-        setNotification("");
-        setIsEditPopupVisible(false);
-      }, 2000);
+      toast.success("Task updated successfully!");
       onEditClick(updatedTaskData);
     } catch (err) {
       console.error("Error updating task:", err);
-      setNotification({ type: "failure", message: "Failed to update task." });
-      setTimeout(() => setNotification(""), 2000);
+      toast.error("Failed to update task!");
     } finally {
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
