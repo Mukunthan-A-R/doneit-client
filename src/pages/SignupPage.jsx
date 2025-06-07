@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate for redirection
-import { registerUser } from "../services/User"; // Import the registerUser function
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../services/User";
+import { toast } from "react-toastify";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -13,11 +14,9 @@ const SignupPage = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false); // Loading state to show a loader
-  const [successMessage, setSuccessMessage] = useState(""); // Success message
-  const [errorMessage, setErrorMessage] = useState(""); // Error message
+  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate(); // Initialize useNavigate for redirection
+  const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
@@ -63,7 +62,7 @@ const SignupPage = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // clear error on change
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const handleSubmit = async (e) => {
@@ -73,27 +72,23 @@ const SignupPage = () => {
 
     const payload = {
       name: formData.first_name + " " + formData.last_name,
-      // last_name: formData.last_name,
       email: formData.email.toLowerCase(),
       password: formData.password,
       role: formData.role,
       company: formData.company,
     };
 
-    setLoading(true); // Set loading to true when submitting
-    setSuccessMessage(""); // Clear any previous success messages
-    setErrorMessage(""); // Clear any previous error messages
+    setLoading(true);
 
     try {
-      const response = await registerUser(payload); // Send data using the registerUser function
+      const response = await registerUser(payload);
       console.log("User registered:", response);
-      setSuccessMessage(
+      toast.success(
         "Registration successful! Activation Mail has been sent to your account !"
-      ); // Set success message
+      );
 
-      // Show success popup for 1 second and redirect
       setTimeout(() => {
-        navigate("/login"); // Redirect to login page
+        navigate("/login");
       }, 3000);
 
       setFormData({
@@ -103,16 +98,12 @@ const SignupPage = () => {
         password: "",
         role: "",
         company: "",
-      }); // Clear form after successful submission
+      });
     } catch (error) {
       console.error("Registration failed:", error);
-      setErrorMessage(
-        error.response.data.message ||
-          error.response.data ||
-          "An error occurred during registration. Please try again."
-      ); // Set error message
+      toast.error("An error occurred during registration. Please try again.");
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
@@ -274,19 +265,6 @@ const SignupPage = () => {
               {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
-
-          {/* Success/Error Messages */}
-          {successMessage && (
-            <p className="text-green-600 text-sm mt-4 text-center">
-              {successMessage}
-            </p>
-          )}
-          {errorMessage && (
-            <p className="text-red-600 text-sm mt-4 text-center">
-              {errorMessage}
-            </p>
-          )}
-
           {/* Already have an account */}
           <p className="text-sm text-gray-600 mt-6 text-center">
             Already have an account?{" "}
