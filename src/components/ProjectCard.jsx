@@ -8,6 +8,7 @@ import {
 } from "../services/ProjectServices";
 import { formatDate } from "../services/utils";
 import { toast } from "react-toastify";
+import { confirmComponent } from "./modals/ConfirmToast";
 
 const ProjectCard = ({ project, onDelete }) => {
   const navigate = useNavigate();
@@ -25,6 +26,13 @@ const ProjectCard = ({ project, onDelete }) => {
 
   const handleDelete = async () => {
     try {
+      const confirmed = await confirmComponent(
+        "Are you sure you want to delete this Project?\n This action cannot be undone."
+      );
+      if (!confirmed) {
+        return;
+      }
+
       await deleteProjectById(project.project_id);
       onDelete(project.project_id);
       toast.success("Project deleted successfully!");
@@ -138,10 +146,10 @@ const ProjectCard = ({ project, onDelete }) => {
                     project.priority === "high"
                       ? "bg-red-100 text-red-800"
                       : project.priority === "medium"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : project.priority === "low"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-200 text-gray-700"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : project.priority === "low"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-200 text-gray-700"
                   }`}
                 >
                   {project.priority?.toUpperCase()}
