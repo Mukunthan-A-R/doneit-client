@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import EditUserModal from "../components/EditUserModal";
+import ProjectProgressTime from "../components/ProjectProgressTime";
+import StatsCards from "../components/modals/StatsCards.js";
 import { userData } from "../data/atom";
 import { fetchProjects } from "../services/ProjectServices";
-import UserSideMenu from "../components/UserSideMenu";
-import ProjectProgressTime from "../components/ProjectProgressTime";
-import EditUserModal from "../components/EditUserModal";
 import { fetchUserById } from "../services/UserData";
 import { fetchTasksByUserId } from "../services/miscService";
-import StatsCards from "../components/modals/StatsCards.js";
 
 const UserDashboard = () => {
   const user = useRecoilValue(userData);
@@ -23,9 +22,6 @@ const UserDashboard = () => {
     company: "",
     role: "",
   });
-
-  // State to handle the side menu visibility on small screens
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -98,16 +94,6 @@ const UserDashboard = () => {
 
   return (
     <div className="relative flex overflow-hidden text-gray-800 font-sans">
-      {/* Button to toggle sidebar on small screens, placed inside the page */}
-      <div className="lg:hidden fixed top-22 left-3 z-50">
-        <button
-          className="bg-blue-600 text-white p-2 rounded-md"
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-        >
-          {isMenuOpen ? "Close" : "Menu"}
-        </button>
-      </div>
-
       {showEditModal && (
         <EditUserModal
           handleSetUserDetails={(data) => {
@@ -215,8 +201,8 @@ const UserDashboard = () => {
                           project.priority === "high"
                             ? "bg-red-500"
                             : project.priority === "medium"
-                              ? "bg-yellow-500"
-                              : "bg-green-500"
+                            ? "bg-yellow-500"
+                            : "bg-green-500"
                         }`}
                       >
                         {project.priority}

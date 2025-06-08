@@ -12,7 +12,7 @@ import { RxDashboard } from "react-icons/rx";
 import { TbLogout2 } from "react-icons/tb";
 import useAuth from "../hooks/useAuth";
 
-const ProjectToolbar = ({ user_id }) => {
+const ProjectToolbar = ({ user_id, setNavigate }) => {
   const [showModal, setShowModal] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const { handleLogout } = useAuth();
@@ -22,7 +22,12 @@ const ProjectToolbar = ({ user_id }) => {
       <ul className="py-6 text-white h-full">
         <NavLink
           to="/dashboard"
-          className="flex hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4"
+          className={({ isActive }) =>
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`
+          }
+          onClick={setNavigate}
         >
           <RxDashboard size={20} />
           <MenuItem text="Dashboard" />
@@ -30,8 +35,11 @@ const ProjectToolbar = ({ user_id }) => {
         <NavLink
           to="/user-dashboard"
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <LuCircleUser size={20} />
           <MenuItem text="User Data" />
@@ -46,8 +54,11 @@ const ProjectToolbar = ({ user_id }) => {
         <NavLink
           to="/settings"
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <IoSettingsOutline size={20} />
           <MenuItem text="Settings" />
@@ -66,7 +77,7 @@ const ProjectToolbar = ({ user_id }) => {
       {showModal &&
         createPortal(
           <CreateProject user_id={user_id} setShowModal={setShowModal} />,
-          document.body,
+          document.body
         )}
       {isPopupOpen && <FormatProjects onCancel={setIsPopupOpen} />}
     </>

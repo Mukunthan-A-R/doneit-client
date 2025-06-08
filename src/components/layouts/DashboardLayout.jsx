@@ -19,6 +19,10 @@ export default function DashboardLayout() {
     }
   }, [location.pathname]);
 
+  function handleNavigate() {
+    return setIsSidebarOpen(false);
+  }
+
   return (
     <div className="flex flex-col lg:flex-row h-full relative overflow-x-hidden flex-1">
       {/* Sidebar */}
@@ -58,7 +62,10 @@ export default function DashboardLayout() {
           </button>
         </div>
 
-        <ProjectToolbar user_id={currentUserData.user_id} />
+        <ProjectToolbar
+          setNavigate={handleNavigate}
+          user_id={currentUserData.user_id}
+        />
       </div>
 
       {/* Main Content */}
