@@ -1,70 +1,48 @@
 import { useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const STORAGE_KEY = "done_it_session_key";
+const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
 
-const SessionTimeout = ({ timeout = 15 * 60 * 1000 }) => {
+const SessionTimeout = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const timerRef = useRef(null);
 
-  const hasAuthToken = () => {
-    return !!localStorage.getItem("x-auth-token");
-  };
-
-  const logout = () => {
+  const logoutUser = () => {
+    toast.error("You have been logged out due to inactivity.");
     setTimeout(() => {
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem("x-auth-token");
       localStorage.clear();
       navigate("/login");
-    }, 2000);
+    }, 1000);
   };
 
-  const resetTimer = () => {
-    if (!hasAuthToken()) return;
-
-    if (timerRef.current) clearTimeout(timerRef.current);
-    const expiryTime = Date.now() + timeout;
-    localStorage.setItem(STORAGE_KEY, expiryTime.toString());
-
-    timerRef.current = setTimeout(logout, timeout);
+  const resetInactivityTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(logoutUser, INACTIVITY_TIMEOUT);
   };
 
   useEffect(() => {
-    if (!hasAuthToken()) return;
+    const activityEvents = [
+      "mousemove",
+      "mousedown",
+      "keydown",
+      "touchstart",
+      "scroll",
+    ];
 
-    const expiryTimeStr = localStorage.getItem(STORAGE_KEY);
-    const now = Date.now();
+    activityEvents.forEach((event) => {
+      window.addEventListener(event, resetInactivityTimer);
+    });
 
-    if (expiryTimeStr) {
-      const expiryTime = parseInt(expiryTimeStr, 10);
-      const remainingTime = expiryTime - now;
-
-      if (remainingTime <= 0) {
-        toast.error("Session ended. Please log in again.");
-        logout();
-      } else {
-        timerRef.current = setTimeout(logout, remainingTime);
-      }
-    } else {
-      resetTimer();
-    }
-  }, [location]);
-
-  useEffect(() => {
-    if (!hasAuthToken()) return;
-
-    const events = ["mousemove", "keydown", "scroll", "click"];
-    for (const event of events) {
-      window.addEventListener(event, resetTimer);
-    }
+    // Start the initial timer
+    resetInactivityTimer();
 
     return () => {
-      for (const event of events) {
-        window.removeEventListener(event, resetTimer);
-      }
+      activityEvents.forEach((event) => {
+        window.removeEventListener(event, resetInactivityTimer);
+      });
       clearTimeout(timerRef.current);
     };
   }, []);
