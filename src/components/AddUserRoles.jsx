@@ -76,10 +76,11 @@ const AddUserRoles = () => {
     if (email) {
       const fetchUser = async () => {
         if (ownerEmail.trim() === email.trim()) {
-          alert(
-            `The email ${email.trim()} you are trying to add is the owner of the project ! \n
-            You can't assign roles to owner of the Project !`
+          toast.error(
+            `The email ${email.trim()} you are trying to add is the owner of the Project ! `
           );
+          toast.error(`
+            You can't assign roles to owner of the Project !`);
           return;
         }
         try {
