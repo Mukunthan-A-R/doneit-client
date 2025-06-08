@@ -1,36 +1,35 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
-import NavBar from "./components/NavBar";
-import Dashboard from "./pages/Dashboard";
-import TaskDashboard from "./pages/TaskDashboard";
-import Analytics from "./pages/Analytics";
-import Graph from "./pages/Graph";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import UserDashboard from "./pages/UserDashboard";
-import ProjectCalendar from "./pages/ProjectCalendar";
-import Settings from "./pages/Settings";
-import AddProjectUser from "./pages/AddProjectUser";
-import ResetPassword from "./pages/ResetPassword";
-import SessionTimeout from "./components/SessionTimeout";
-import TaskListView from "./pages/TaskListView";
-import HeatMapPage from "./pages/HeatMapPage";
-import TransactionHistory from "./pages/TransactionHistory";
-import TransactionAnalytics from "./pages/TransactionAnalytics";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import ForgotPassword from "./pages/ForgotPassword";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Slide, ToastContainer } from "react-toastify";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import TaskboardLayout from "./components/layouts/TaskboardLayout";
-import { ToastContainer, Slide } from "react-toastify";
+import NavBar from "./components/NavBar";
+import About from "./pages/About";
+import AddProjectUser from "./pages/AddProjectUser";
+import Analytics from "./pages/Analytics";
+import Contact from "./pages/Contact";
+import Dashboard from "./pages/Dashboard";
+import ForgotPassword from "./pages/ForgotPassword";
+import Graph from "./pages/Graph";
+import HeatMapPage from "./pages/HeatMapPage";
+import Home from "./pages/Home";
+import LoginPage from "./pages/LoginPage";
+import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ProjectCalendar from "./pages/ProjectCalendar";
+import ResetPassword from "./pages/ResetPassword";
+import Settings from "./pages/Settings";
+import SignupPage from "./pages/SignupPage";
+import TaskDashboard from "./pages/TaskDashboard";
+import TaskListView from "./pages/TaskListView";
+import TermsOfService from "./pages/TermsOfService";
+import TransactionAnalytics from "./pages/TransactionAnalytics";
+import TransactionHistory from "./pages/TransactionHistory";
+import UserDashboard from "./pages/UserDashboard";
+import ProtectedRoute from "./components/modals/ProtectedRoute";
 
 function App() {
   return (
     <Router>
-      {/* <SessionTimeout /> */}
       <NavBar />
       <Routes>
         <Route exact path="/" element={<Home />} />
@@ -38,34 +37,33 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
 
         {/* Protected Routes */}
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route exact path="/user-dashboard" element={<UserDashboard />} />
-          <Route path="/settings" element={<Settings />} />
-        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/user-dashboard" element={<UserDashboard />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
 
-        <Route element={<TaskboardLayout />}>
-          <Route exact path="/tasks/:projectId" element={<TaskDashboard />} />
-          <Route exact path="/analytics/:projectId" element={<Analytics />} />
-          <Route exact path="/list/:projectId" element={<TaskListView />} />
-          <Route
-            exact
-            path="/project-calendar/:projectId"
-            element={<ProjectCalendar />}
-          />
-          <Route
-            exact
-            path="/transaction/:projectId"
-            element={<TransactionHistory />}
-          />
-          <Route
-            exact
-            path="/transaction-analytics/:projectId"
-            element={<TransactionAnalytics />}
-          />
-          <Route path="/graph/:projectId" element={<Graph />} />
-          <Route path="/heat-map/:projectId" element={<HeatMapPage />} />
-          <Route path="/adduser/:projectId" element={<AddProjectUser />} />
+          <Route element={<TaskboardLayout />}>
+            <Route path="/tasks/:projectId" element={<TaskDashboard />} />
+            <Route path="/analytics/:projectId" element={<Analytics />} />
+            <Route path="/list/:projectId" element={<TaskListView />} />
+            <Route
+              path="/project-calendar/:projectId"
+              element={<ProjectCalendar />}
+            />
+            <Route
+              path="/transaction/:projectId"
+              element={<TransactionHistory />}
+            />
+            <Route
+              path="/transaction-analytics/:projectId"
+              element={<TransactionAnalytics />}
+            />
+            <Route path="/graph/:projectId" element={<Graph />} />
+            <Route path="/heat-map/:projectId" element={<HeatMapPage />} />
+            <Route path="/adduser/:projectId" element={<AddProjectUser />} />
+          </Route>
         </Route>
 
         <Route path="/about" element={<About />} />
