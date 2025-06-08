@@ -13,13 +13,15 @@ import { SiSimpleanalytics } from "react-icons/si";
 import { VscPieChart } from "react-icons/vsc";
 import { BsArrowLeft } from "react-icons/bs";
 
-const TaskToolbar = ({ project_id }) => {
+const TaskToolbar = ({ project_id, setNavigate }) => {
   return (
     <>
       <NavLink
         to="/dashboard"
         className={({ isActive }) =>
-          `flex ${isActive ? "bg-blue-600" : ""} py-3 gap-2 text-left text-white hover:bg-blue-800 items-center pl-4`
+          `flex ${
+            isActive ? "bg-blue-700" : ""
+          } py-3 gap-2 text-left text-white hover:bg-blue-800 items-center pl-4`
         }
       >
         <BsArrowLeft size={20} />
@@ -29,8 +31,11 @@ const TaskToolbar = ({ project_id }) => {
         <NavLink
           to={`/tasks/${project_id}`}
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <FaTasks size={20} />
           <MenuItem text="Task Tracker" />
@@ -38,8 +43,11 @@ const TaskToolbar = ({ project_id }) => {
         <NavLink
           to={`/analytics/${project_id}`}
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <SiSimpleanalytics size={20} />
           <MenuItem text="Analysis" />
@@ -47,8 +55,11 @@ const TaskToolbar = ({ project_id }) => {
         <NavLink
           to={`/graph/${project_id}`}
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <MdTimeline size={20} />
           <MenuItem text="Graph" />
@@ -56,8 +67,11 @@ const TaskToolbar = ({ project_id }) => {
         <NavLink
           to={`/heat-map/${project_id}`}
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <PiFireSimpleBold size={20} />
           <MenuItem text="Heat Map" />
@@ -65,8 +79,11 @@ const TaskToolbar = ({ project_id }) => {
         <NavLink
           to={`/project-calendar/${project_id}`}
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <IoCalendarClearOutline size={20} />
           <MenuItem text="Calendar" />
@@ -74,8 +91,11 @@ const TaskToolbar = ({ project_id }) => {
         <NavLink
           to={`/list/${project_id}`}
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <BiTask size={20} />
           <MenuItem text="Task List" />
@@ -83,8 +103,11 @@ const TaskToolbar = ({ project_id }) => {
         <NavLink
           to={`/adduser/${project_id}`}
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <AiOutlineUserAdd size={20} />
           <MenuItem text="Add User" />
@@ -92,8 +115,11 @@ const TaskToolbar = ({ project_id }) => {
         <NavLink
           to={`/transaction/${project_id}`}
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <LuDatabase size={20} />
           <MenuItem text="Logs" />
@@ -101,8 +127,11 @@ const TaskToolbar = ({ project_id }) => {
         <NavLink
           to={`/transaction-analytics/${project_id}`}
           className={({ isActive }) =>
-            `flex ${isActive ? "bg-blue-600" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
+            `flex ${
+              isActive ? "bg-blue-700" : ""
+            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
           }
+          onClick={setNavigate}
         >
           <VscPieChart size={20} />
           <MenuItem text="Insights" />
