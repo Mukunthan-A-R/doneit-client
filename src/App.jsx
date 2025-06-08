@@ -30,7 +30,7 @@ import { ToastContainer, Slide } from "react-toastify";
 function App() {
   return (
     <Router>
-      <SessionTimeout />
+      {/* <SessionTimeout /> */}
       <NavBar />
       <Routes>
         <Route exact path="/" element={<Home />} />
