@@ -3,15 +3,14 @@ import MenuItem from "./modals/MenuItem";
 
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BiTask } from "react-icons/bi";
+import { BsArrowLeft } from "react-icons/bs";
 import { FaTasks } from "react-icons/fa";
 import { IoCalendarClearOutline } from "react-icons/io5";
 import { LuDatabase } from "react-icons/lu";
 import { MdTimeline } from "react-icons/md";
 import { PiFireSimpleBold } from "react-icons/pi";
-import { RxDashboard } from "react-icons/rx";
 import { SiSimpleanalytics } from "react-icons/si";
 import { VscPieChart } from "react-icons/vsc";
-import { BsArrowLeft } from "react-icons/bs";
 
 const TaskToolbar = ({ project_id, setNavigate }) => {
   return (

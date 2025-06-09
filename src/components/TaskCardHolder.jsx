@@ -150,7 +150,7 @@ const TaskCardHolder = ({ userRole }) => {
   return (
     <div className="flex flex-col gap-3">
       <ProjectTitleCard />
-      <header className="bg-blue-950 text-white py-2 px-4  shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between my-4 mb-0 gap-4 md:gap-0">
+      <header className="bg-blue-950 text-white py-2 px-4  shadow rounded-lg flex items-center justify-between my-4 mb-0 gap-4 md:gap-0">
         <h1 className="text-2xl font-bold">Task Tracker </h1>
         <button
           onClick={() => setShowCreateTask(true)}
@@ -183,7 +183,7 @@ const TaskCardHolder = ({ userRole }) => {
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 px-3 md:px-0 min-h-screen ">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 md:px-0 min-h-screen">
             <TaskColumn
               userRole={userRole}
               title="Not Started"

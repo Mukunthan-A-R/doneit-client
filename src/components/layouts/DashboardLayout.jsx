@@ -62,6 +62,30 @@ export default function DashboardLayout() {
           </button>
         </div>
 
+        <button
+          className="absolute left-[105%] top-20 block data-[isopen=true]:opacity-0 transition lg:hidden bg-blue-800 text-white px-4 py-2 rounded shadow-md focus:outline-none z-30"
+          onClick={() => setIsSidebarOpen(true)}
+          data-isopen={isSidebarOpen}
+        >
+          <span className="flex items-center">
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
+            Menu
+          </span>
+        </button>
+
         <ProjectToolbar
           setNavigate={handleNavigate}
           user_id={currentUserData.user_id}
@@ -76,32 +100,6 @@ export default function DashboardLayout() {
           lg:ml-[16rem] lg:w-5/6 transition-all duration-300
         `}
       >
-        {/* Hamburger button for mobile (open only) */}
-        {!isSidebarOpen && (
-          <button
-            className="absolute top-4 left-4 block lg:hidden bg-blue-800 text-white px-4 py-2 rounded shadow-md focus:outline-none z-30"
-            onClick={() => setIsSidebarOpen(true)}
-          >
-            <span className="flex items-center">
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                ></path>
-              </svg>
-              Menu
-            </span>
-          </button>
-        )}
-
         <h1 className="text-xl font-medium pb-4 pt-14 lg:pt-0">
           Welcome {currentUserData.name} !
         </h1>

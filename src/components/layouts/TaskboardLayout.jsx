@@ -49,14 +49,11 @@ const TaskboardLayout = () => {
           </button>
         </div>
 
-        <TaskToolbar setNavigate={handleNavigate} project_id={project_id} />
-      </div>
-
-      {/* Hamburger button for mobile (open sidebar) */}
-      {!isSidebarOpen && (
+        {/* bUTTON */}
         <button
-          className="absolute top-4 left-4 block lg:hidden bg-blue-800 text-white px-4 py-2 rounded shadow-md focus:outline-none z-30"
+          className="absolute left-[105%] top-20 block data-[isopen=true]:opacity-0 transition lg:hidden bg-blue-800 text-white px-4 py-2 rounded shadow-md focus:outline-none z-30"
           onClick={() => setIsSidebarOpen(true)}
+          data-isopen={isSidebarOpen}
         >
           <span className="flex items-center">
             <svg
@@ -76,12 +73,14 @@ const TaskboardLayout = () => {
             Menu
           </span>
         </button>
-      )}
+
+        <TaskToolbar setNavigate={handleNavigate} project_id={project_id} />
+      </div>
 
       {/* Main Content */}
       <div
         className={`
-          w-full bg-white p-6 relative
+          w-full bg-white md:p-6 p-3 relative
           ${isSidebarOpen ? "ml-[16rem]" : "ml-0"}
           lg:ml-[16rem] lg:w-5/6 transition-all duration-300 mt-10 sm:mt-0
         `}
