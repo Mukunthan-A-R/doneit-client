@@ -32,7 +32,6 @@ const TaskCard = ({
   const { projectId } = useParams();
 
   const [menuVisible, setMenuVisible] = useState(false);
-  const [notification, setNotification] = useState("");
   const [isEditPopupVisible, setIsEditPopupVisible] = useState(false);
   const [errors, setErrors] = useState({
     title: "",
@@ -266,17 +265,6 @@ const TaskCard = ({
         </span>
       ) : (
         <p className="text-sm text-red-500">{remainingTime.message}</p>
-      )}
-
-      {/* Notification */}
-      {notification && (
-        <div
-          className={`fixed top-4 right-4 p-4 rounded-md shadow-lg ${
-            notification.type === "success" ? "bg-green-500" : "bg-red-500"
-          } text-white`}
-        >
-          {notification.message}
-        </div>
       )}
 
       {/* Edit Popup */}

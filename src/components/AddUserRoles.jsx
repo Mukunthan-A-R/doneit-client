@@ -57,7 +57,7 @@ const AddUserRoles = () => {
         }
 
         let filterData = ResData.filter(
-          (item) => item.user_id === parseInt(currentUserData.user_id)
+          (item) => item.user_id === parseInt(currentUserData.user_id),
         );
 
         if (response.success) {
@@ -77,10 +77,8 @@ const AddUserRoles = () => {
       const fetchUser = async () => {
         if (ownerEmail.trim() === email.trim()) {
           toast.error(
-            `The email ${email.trim()} you are trying to add is the owner of the Project ! `
+            `The email ${email.trim()} you are trying to add is the owner of the Project ! `,
           );
-          toast.error(`
-            You can't assign roles to owner of the Project !`);
           return;
         }
         try {
@@ -153,7 +151,7 @@ const AddUserRoles = () => {
   // console.log(userRole);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto">
       {!["member", "client", ""].includes(userRole) && (
         <>
           <h1 className="text-3xl font-semibold text-center mb-6">

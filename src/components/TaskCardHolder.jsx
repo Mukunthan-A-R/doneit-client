@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useParams } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { ProjectState, refetchTriggerAtom, userData } from "../data/atom";
 import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
+import { ProjectState, userData } from "../data/atom";
 import useProject from "../hooks/useProject";
+import useProjectTasks from "../hooks/useProjectTasks";
 import { editProjectById } from "../services/ProjectServices";
-import { deleteTask, fetchTasks } from "../services/TaskServices";
+import { deleteTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import ProjectTitleCard from "./ProjectTitleCard";
 import TaskCard from "./TaskCard";
@@ -19,59 +20,19 @@ const TaskCardHolder = ({ userRole }) => {
   const [showCreateTask, setShowCreateTask] = useState(false);
 
   const currentUserData = useRecoilValue(userData);
-  const [refetchTrigger, setRefetchTrigger] =
-    useRecoilState(refetchTriggerAtom);
   const currentUserId = currentUserData?.user_id;
 
   const { project } = useProject(projectId);
+  const {
+    tasks,
+    refetch: refetchTasks,
+    isLoading,
+    error,
+  } = useProjectTasks(projectId);
+  console.log(tasks, isLoading, error);
 
-  const [tasks, setTasks] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const getData = async () => {
-      try {
-        setLoading(true);
-        if (!activeProjectId) {
-          setTasks([]);
-          setLoading(false);
-          return;
-        }
-
-        const fetchedTasks = await fetchTasks(projectId);
-        if (isMounted) {
-          setTasks(fetchedTasks.data);
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(err.message);
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    getData();
-
-    return () => {
-      isMounted = false;
-      setTasks([]);
-      setError(null);
-      setLoading(false);
-    };
-  }, [activeProjectId, refetchTrigger]);
-
-  const handleStatusChange = (taskId, newStatus) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.task_id === taskId ? { ...task, status: newStatus } : task,
-      ),
-    );
+  const handleStatusChange = () => {
+    refetchTasks();
   };
 
   const handleCompleteProject = async () => {
@@ -97,7 +58,7 @@ const TaskCardHolder = ({ userRole }) => {
   const handleDelete = async (taskId, taskTitle) => {
     try {
       await deleteTask(taskId);
-      setRefetchTrigger((prev) => prev + 1);
+      refetchTasks();
 
       toast.success("Task Deleted Successfully!");
 
@@ -116,36 +77,30 @@ const TaskCardHolder = ({ userRole }) => {
     }
   };
 
-  // const handleDelete = async (taskId) => {
-  //   try {
-  //     await deleteTask(taskId);
-  //     setTrigger((prev) => !prev);
-  //     alert("The Task is Deleted Successfully");
-  //   } catch (error) {
-  //     console.error("Error deleting task:", error);
-  //   }
-  // };
-
-  const notStartedTasks = tasks.filter((task) => task.status === "not started");
-  const inProgressTasks = tasks.filter((task) => task.status === "in progress");
-  const completedTasks = tasks.filter((task) => task.status === "completed");
-
-  const allTasksCompleted =
-    tasks.length > 0 && tasks.length === completedTasks.length;
-
   if (!activeProjectId) {
     return (
       <p className="text-xl text-red-600">Please select a project first.</p>
     );
   }
 
-  if (loading) {
+  if (isLoading) {
     return <p className="text-blue-500">Loading tasks...</p>;
   }
 
   if (error === "Access denied") {
     return <p className="text-red-500">Access Forbidden ! URL not found !</p>;
   }
+
+  const notStartedTasks = tasks?.filter(
+    (task) => task.status === "not started",
+  );
+  const inProgressTasks = tasks?.filter(
+    (task) => task.status === "in progress",
+  );
+  const completedTasks = tasks?.filter((task) => task.status === "completed");
+
+  const allTasksCompleted =
+    tasks?.length > 0 && tasks?.length === completedTasks?.length;
 
   return (
     <div className="flex flex-col gap-3">
@@ -160,12 +115,13 @@ const TaskCardHolder = ({ userRole }) => {
           Create Task
         </button>
       </header>
+      <button onClick={refetchTasks}>trigger refetch</button>
       {showCreateTask && (
         <CreateTask
           onClose={() => setShowCreateTask(false)} // Close the modal
         />
       )}
-      {!loading && tasks.length === 0 ? (
+      {!isLoading && tasks?.length === 0 ? (
         <p>No tasks have been created.</p>
       ) : (
         <>
@@ -189,7 +145,7 @@ const TaskCardHolder = ({ userRole }) => {
               title="Not Started"
               bg="bg-blue-900"
               tasks={notStartedTasks}
-              count={notStartedTasks.length}
+              count={notStartedTasks?.length}
               onEditClick={handleEditClick}
               onDelete={handleDelete}
               onStatusChange={handleStatusChange}

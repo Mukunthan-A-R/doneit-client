@@ -41,7 +41,7 @@ const SettingsPage = () => {
 
   if (!token) {
     return (
-      <div className="p-6 text-center text-gray-500">
+      <div className="text-center text-gray-500">
         You are not logged in. Please{" "}
         <Link to="/login" className="text-blue-700 underline">
           sign in
@@ -52,31 +52,27 @@ const SettingsPage = () => {
   }
 
   if (!userDatas?.user_id) {
-    return (
-      <div className="p-6 text-center text-gray-500">Loading session…</div>
-    );
+    return <div className="text-center text-gray-500">Loading session…</div>;
   }
 
   if (loading) {
     return (
-      <div className="p-6 text-center text-gray-500">Loading user details…</div>
+      <div className="text-center text-gray-500">Loading user details…</div>
     );
   }
 
   if (error) {
-    return <div className="p-6 text-center text-red-600">{error}</div>;
+    return <div className="text-center text-red-600">{error}</div>;
   }
 
   if (!userDetails) {
     return (
-      <div className="p-6 text-center text-gray-500">
-        No user details found.
-      </div>
+      <div className="text-center text-gray-500">No user details found.</div>
     );
   }
 
   return (
-    <div className="w-full px-6">
+    <div className="w-full">
       {showEditModal && (
         <EditUserModal
           handleSetUserDetails={setUserDetails}
@@ -86,7 +82,7 @@ const SettingsPage = () => {
       )}
 
       {/* User Info Section */}
-      <section className="bg-white mt-6 p-6 rounded-lg shadow flex flex-col sm:flex-row sm:items-center sm:justify-between border-l-4 border-blue-700">
+      <section className="bg-white mt-6 p-4 rounded-lg shadow flex flex-col sm:flex-row sm:items-center sm:justify-between border-l-4 border-blue-700">
         <div className="flex items-center space-x-4 mb-4 sm:mb-0">
           <img
             className="h-16 w-16 rounded-full border-2 border-blue-700"

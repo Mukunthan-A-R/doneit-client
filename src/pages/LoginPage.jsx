@@ -60,6 +60,7 @@ const LoginPage = () => {
       }, 500);
     } catch (err) {
       console.log("🚀 ~ handleSubmit ~ err:", err);
+      toast.error(err.response?.error || err.message);
       setError("Invalid email or password");
     } finally {
       setLoading(false); // Set loading to false once the process is done
@@ -67,7 +68,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12 relative">
+    <div className="h-[90dvh] bg-white flex items-center justify-center px-4 py-12 relative">
       <div className="max-w-4xl w-full bg-gray-50 rounded-2xl shadow-xl overflow-hidden grid lg:grid-cols-2">
         <div className="hidden lg:flex flex-col justify-center items-center bg-blue-900 text-white p-10">
           <h1 className="text-4xl font-extrabold mb-2">Done it</h1>

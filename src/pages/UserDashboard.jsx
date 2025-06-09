@@ -107,7 +107,7 @@ const UserDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* User Info Section */}
-        <section className="bg-white mx-6 mt-6 p-6 rounded-lg shadow flex items-center justify-between border-l-4 border-blue-700">
+        <section className="bg-white p-4 mt-6 rounded-lg shadow flex items-center justify-between border-l-4 border-blue-700">
           <div className="flex items-center space-x-4">
             <img
               className="h-16 w-16 rounded-full border-2 border-blue-700"
@@ -135,7 +135,7 @@ const UserDashboard = () => {
         </section>
 
         {/* Dashboard Content */}
-        <main className="flex-1 overflow-y-auto p-6 pt-4">
+        <main className="flex-1 overflow-y-auto pt-4">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
             {[
@@ -201,8 +201,8 @@ const UserDashboard = () => {
                           project.priority === "high"
                             ? "bg-red-500"
                             : project.priority === "medium"
-                            ? "bg-yellow-500"
-                            : "bg-green-500"
+                              ? "bg-yellow-500"
+                              : "bg-green-500"
                         }`}
                       >
                         {project.priority}

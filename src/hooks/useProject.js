@@ -16,8 +16,9 @@ export default function useProject(id) {
   useEffect(() => {
     if (!id) return;
 
-    // Only fetch if not already loaded or if id changed
-    if ((state.id === id && state.project) || state.isLoading) return;
+    if (state.isLoading) return;
+
+    if (state.id === id && state.project && refetchTrigger === 0) return;
 
     async function getProject() {
       setState({ ...state, isLoading: true, error: null, id });
@@ -41,7 +42,7 @@ export default function useProject(id) {
 
   return {
     project: state.project,
-    isLoading: state.isLoading,
+    isLoading: state.isLoading || (!state.project && !state.error),
     error: state.error,
     refetch,
   };

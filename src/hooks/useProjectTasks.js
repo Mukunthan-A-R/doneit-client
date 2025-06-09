@@ -14,11 +14,13 @@ export default function useProjectTasks(projectId) {
   }
 
   useEffect(() => {
-    console.log("effect running");
+    console.log("effect running", state, projectId);
     if (!projectId) return;
 
-    // Only fetch if not already loaded or if projectId changed
-    if ((state.project_id === projectId && state.tasks) || state.isLoading)
+    if (state.isLoading) return;
+
+    // Always fetch on refetchTrigger change
+    if (state.project_id === projectId && state.tasks && refetchTrigger === 0)
       return;
 
     async function getProjectTasks() {
@@ -64,7 +66,7 @@ export default function useProjectTasks(projectId) {
 
   return {
     tasks: state.tasks,
-    isLoading: state.isLoading,
+    isLoading: state.isLoading || (!state.tasks && !state.error),
     error: state.error,
     refetch,
   };

@@ -20,10 +20,10 @@ const Settings = () => {
   }, [navigate]);
 
   return (
-    <div className="flex-1 p-6 bg-white">
-      <h1 className="text-2xl font-semibold pb-4">Your Settings!</h1>
+    <div className="flex-1 space-y-2 bg-white">
+      <h1 className="text-2xl font-semibold">Your Settings!</h1>
       <SettingsPage />
-      <div className="flex flex-col w-full  p-6 ">
+      <div className="flex flex-col w-full  ">
         <div className="flex-1 w-full">
           <GeneralSettingsPanel />
         </div>
