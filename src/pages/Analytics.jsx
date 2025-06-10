@@ -46,6 +46,14 @@ const Analytics = () => {
     return <ErrorHandler error={error} />;
   }
 
+  // if (tasks.length === 0) {
+  //   return (
+  //     <p className="flex flex-col justtify-center items-center p-40 text-green-800 text-lg sm:text-xl">
+  //       New project created! Let’s add your first task to get things moving.
+  //     </p>
+  //   );
+  // }
+
   const { remaining, completed, notStarted } = countTasksByStatus();
   const totalTasks = tasks?.length;
   const completionPercentage =
@@ -62,75 +70,96 @@ const Analytics = () => {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        {/* Pie Chart */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold text-center mb-4">
-            Task Distribution
-          </h2>
-          <PieChart tasks={tasks} />
-        </div>
+      {tasks?.length === 0 ? (
+        <p className="flex flex-col justtify-center items-center p-40 text-green-800 text-lg sm:text-xl">
+          Nothing to analyze just yet! Add a task to your project and come back
+          to see your progress.
+        </p>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            {/* Pie Chart */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold text-center mb-4">
+                Task Distribution
+              </h2>
+              <PieChart tasks={tasks} />
+            </div>
 
-        {/* Statistics */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold text-center mb-6">
-            Task Insights
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <StatCard label="Remaining Tasks" value={remaining} color="green" />
-            <StatCard label="Completed Tasks" value={completed} color="blue" />
-            <StatCard label="Not Started" value={notStarted} color="yellow" />
-            <StatCard
-              label="Completion"
-              value={`${completionPercentage.toFixed(2)}%`}
-              color="purple"
-            />
+            {/* Statistics */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold text-center mb-6">
+                Task Insights
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <StatCard
+                  label="Remaining Tasks"
+                  value={remaining}
+                  color="green"
+                />
+                <StatCard
+                  label="Completed Tasks"
+                  value={completed}
+                  color="blue"
+                />
+                <StatCard
+                  label="Not Started"
+                  value={notStarted}
+                  color="yellow"
+                />
+                <StatCard
+                  label="Completion"
+                  value={`${completionPercentage.toFixed(2)}%`}
+                  color="purple"
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Summary Table */}
-      <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-xl font-semibold text-blue-900 border-b-2 border-blue-700 pb-2 mb-4">
-          Summary Overview
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-gray-800">
-            <thead className="bg-blue-900 text-white uppercase text-xs tracking-wider">
-              <tr>
-                <th className="text-left px-4 py-3">Metric</th>
-                <th className="text-left px-4 py-3">Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Total Tasks</td>
-                <td className="px-4 py-3 text-blue-900 font-semibold">
-                  {totalTasks}
-                </td>
-              </tr>
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Completed Tasks</td>
-                <td className="px-4 py-3 text-green-700 font-semibold">
-                  {completed}
-                </td>
-              </tr>
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Remaining Tasks</td>
-                <td className="px-4 py-3 text-yellow-700 font-semibold">
-                  {remaining}
-                </td>
-              </tr>
-              <tr className="even:bg-blue-50">
-                <td className="px-4 py-3 font-medium">Not Started Tasks</td>
-                <td className="px-4 py-3 text-red-600 font-semibold">
-                  {notStarted}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+          {/* Summary Table */}
+          <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold text-blue-900 border-b-2 border-blue-700 pb-2 mb-4">
+              Summary Overview
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm text-gray-800">
+                <thead className="bg-blue-900 text-white uppercase text-xs tracking-wider">
+                  <tr>
+                    <th className="text-left px-4 py-3">Metric</th>
+                    <th className="text-left px-4 py-3">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="even:bg-blue-50">
+                    <td className="px-4 py-3 font-medium">Total Tasks</td>
+                    <td className="px-4 py-3 text-blue-900 font-semibold">
+                      {totalTasks}
+                    </td>
+                  </tr>
+                  <tr className="even:bg-blue-50">
+                    <td className="px-4 py-3 font-medium">Completed Tasks</td>
+                    <td className="px-4 py-3 text-green-700 font-semibold">
+                      {completed}
+                    </td>
+                  </tr>
+                  <tr className="even:bg-blue-50">
+                    <td className="px-4 py-3 font-medium">Remaining Tasks</td>
+                    <td className="px-4 py-3 text-yellow-700 font-semibold">
+                      {remaining}
+                    </td>
+                  </tr>
+                  <tr className="even:bg-blue-50">
+                    <td className="px-4 py-3 font-medium">Not Started Tasks</td>
+                    <td className="px-4 py-3 text-red-600 font-semibold">
+                      {notStarted}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

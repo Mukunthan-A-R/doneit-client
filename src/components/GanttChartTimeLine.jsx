@@ -80,6 +80,10 @@ const GanttChartTimeLine = ({ projectId }) => {
 
   const NUM_INTERVALS = getNumIntervals();
 
+  if (tasks?.length === 0) {
+    return;
+  }
+
   return (
     <div className="bg-white rounded-2xl shadow-xl p-4 pt-6 w-full max-w-7xl mx-auto mt-10 border border-gray-200">
       <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
@@ -114,13 +118,13 @@ const GanttChartTimeLine = ({ projectId }) => {
 
           if (intervalType === "daily") {
             offset = Math.floor(
-              (taskStart - projectStart) / (24 * 60 * 60 * 1000),
+              (taskStart - projectStart) / (24 * 60 * 60 * 1000)
             );
             duration =
               Math.floor((taskEnd - taskStart) / (24 * 60 * 60 * 1000)) + 1;
           } else if (intervalType === "weekly") {
             offset = Math.floor(
-              (taskStart - projectStart) / (7 * 24 * 60 * 60 * 1000),
+              (taskStart - projectStart) / (7 * 24 * 60 * 60 * 1000)
             );
             duration =
               Math.floor((taskEnd - taskStart) / (7 * 24 * 60 * 60 * 1000)) + 1;
@@ -137,7 +141,7 @@ const GanttChartTimeLine = ({ projectId }) => {
           const colStart = Math.max(0, Math.min(NUM_INTERVALS - 1, offset));
           const colSpan = Math.max(
             1,
-            Math.min(NUM_INTERVALS - colStart, duration),
+            Math.min(NUM_INTERVALS - colStart, duration)
           );
 
           return (
@@ -156,7 +160,7 @@ const GanttChartTimeLine = ({ projectId }) => {
                     width: `${(colSpan / NUM_INTERVALS) * 100}%`,
                   }}
                   title={`${task.title} (${getDateForInterval(
-                    offset,
+                    offset
                   )} → ${getDateForInterval(offset + duration - 1)})`}
                 />
               </div>
