@@ -3,19 +3,15 @@ import { useParams } from "react-router-dom";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import useProjectTasks from "../hooks/useProjectTasks";
 import { formatDate } from "../services/utils";
+import ErrorHandler from "../components/ErrorHandler";
 
 const TaskListView = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const { projectId } = useParams();
   const { tasks, error, isLoading } = useProjectTasks(projectId);
 
-  const filteredTasks =
-    statusFilter === "all"
-      ? tasks
-      : tasks?.filter((task) => task.status === statusFilter);
-
   if (error) {
-    return <div className="text-red-500 font-medium p-6">Error: {error}</div>;
+    return <ErrorHandler error={error} />;
   }
 
   if (isLoading) {
@@ -25,6 +21,11 @@ const TaskListView = () => {
       </div>
     );
   }
+
+  const filteredTasks =
+    statusFilter === "all"
+      ? tasks
+      : tasks?.filter((task) => task.status === statusFilter);
 
   return (
     <>

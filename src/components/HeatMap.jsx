@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import useProject from "../hooks/useProject";
 import useProjectTasks from "../hooks/useProjectTasks";
+import ErrorHandler from "./ErrorHandler";
 
 const GITHUB_COLORS = ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
 
@@ -67,6 +68,17 @@ const HeatMap = ({ projectId }) => {
     return d;
   }, [projectEnd]);
 
+  if (loading)
+    return (
+      <div className="text-center py-10 text-gray-500 animate-pulse">
+        Loading Heatmap...
+      </div>
+    );
+
+  if (error) {
+    return <ErrorHandler error={error} />;
+  }
+
   const totalTasks = tasks?.length;
   const activeDays = Object.keys(tasksByDate).length;
   const avgTasksPerDay =
@@ -85,26 +97,12 @@ const HeatMap = ({ projectId }) => {
 
   const idleDays = allDates.filter((date) => !tasksByDate[date]);
   const lightWorkDays = allDates.filter(
-    (date) => tasksByDate[date]?.length > 0 && tasksByDate[date]?.length <= 2
+    (date) => tasksByDate[date]?.length > 0 && tasksByDate[date]?.length <= 2,
   );
 
-  const completed = tasks?.filter((t) => t.status === "Completed").length;
-  const notStarted = tasks?.filter((t) => t.status === "Not Started").length;
-  const remaining = totalTasks - completed;
-
-  if (loading)
-    return (
-      <div className="text-center py-10 text-gray-500 animate-pulse">
-        Loading Heatmap...
-      </div>
-    );
-
-  if (error)
-    return (
-      <div className="text-center py-10 text-red-600 font-semibold">
-        {error}
-      </div>
-    );
+  // const completed = tasks?.filter((t) => t.status === "Completed").length;
+  // const notStarted = tasks?.filter((t) => t.status === "Not Started").length;
+  // const remaining = totalTasks - completed;
 
   const dateList = [];
   current = new Date(firstMonday);
@@ -197,12 +195,12 @@ const HeatMap = ({ projectId }) => {
               idx === 0
                 ? "0"
                 : idx === 1
-                ? "1-2"
-                : idx === 2
-                ? "3-4"
-                : idx === 3
-                ? "5-6"
-                : "7+";
+                  ? "1-2"
+                  : idx === 2
+                    ? "3-4"
+                    : idx === 3
+                      ? "5-6"
+                      : "7+";
             return (
               <div key={idx} className="flex items-center space-x-2">
                 <div

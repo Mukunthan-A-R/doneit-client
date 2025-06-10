@@ -5,6 +5,7 @@ import CalendarCard from "../components/CalendarCard";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import useProject from "../hooks/useProject";
 import useProjectTasks from "../hooks/useProjectTasks";
+import ErrorHandler from "../components/ErrorHandler";
 
 const ProjectCalendar = () => {
   const { projectId } = useParams();
@@ -12,25 +13,23 @@ const ProjectCalendar = () => {
   const [graphData, setGraphData] = useState({});
   const { project, isLoading, error } = useProject(projectId);
 
-  const { tasks } = useProjectTasks(projectId);
+  const { tasks, error: taskError } = useProjectTasks(projectId);
 
   useEffect(() => {
-    if (projectId) {
-      const loadTasks = async () => {
-        const result = formatTasksByDateRange(tasks);
-        setGraphData(result);
-      };
-
-      loadTasks();
-    }
-  }, [projectId]);
+    const result = formatTasksByDateRange(tasks);
+    setGraphData(result);
+  }, [tasks]);
 
   if (isLoading || !project) {
     return <p> Loaing Graph ...</p>;
   }
 
   if (error) {
-    return <p> {error.message}</p>;
+    return <ErrorHandler error={error} />;
+  }
+
+  if (taskError) {
+    return <ErrorHandler error={taskError} />;
   }
 
   return (

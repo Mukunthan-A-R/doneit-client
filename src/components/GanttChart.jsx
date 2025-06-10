@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useProjectTasks from "../hooks/useProjectTasks";
+import ErrorHandler from "./ErrorHandler";
 
 const NUM_DAYS = 12;
 const getDayOffset = (start, end) => {
@@ -31,15 +32,16 @@ const GanttChart = ({ projectId }) => {
     }
   }, [tasks]);
 
-  if (error)
-    return <div className="text-red-600 text-center py-4">{error}</div>;
-
   if (isLoading)
     return (
       <div className="text-center py-6 text-gray-500 animate-pulse">
         Loading Gantt chart...
       </div>
     );
+
+  if (error) {
+    return <ErrorHandler error={error} />;
+  }
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-4 pt-6 w-full max-w-7xl mx-auto mt-10 border border-gray-200">

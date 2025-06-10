@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import useProject from "../hooks/useProject";
 import useProjectTasks from "../hooks/useProjectTasks";
+import ErrorHandler from "./ErrorHandler";
 
 const GanttChartTimeLine = ({ projectId }) => {
   const { tasks, isLoading, error } = useProjectTasks(projectId);
-  console.log(
-    "🚀 ~ GanttChart ~ tasks, error, isLoading:",
-    tasks,
-    error,
-    isLoading,
-  );
+
   const [projectStart, setProjectStart] = useState(null);
   const [projectEnd, setProjectEnd] = useState(null);
   const [intervalType] = useState("weekly");
@@ -71,15 +67,16 @@ const GanttChartTimeLine = ({ projectId }) => {
     });
   };
 
-  if (error)
-    return <div className="text-red-600 text-center py-4">{error}</div>;
-
   if (isLoading)
     return (
       <div className="text-center py-6 text-gray-500 animate-pulse">
         Loading Gantt chart...
       </div>
     );
+
+  if (error) {
+    return <ErrorHandler error={error} />;
+  }
 
   const NUM_INTERVALS = getNumIntervals();
 
