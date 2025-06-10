@@ -1,10 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 function ConfirmToast({ message, onConfirm, onCancel }) {
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 w-[320px] max-w-sm rounded-lg shadow-md bg-white border border-gray-200 animate-slide-in z-50">
-      <div className="p-4">
+    <div
+      className="fixed top-0 left-0 w-full h-full backdrop-blur-sm z-50 grid place-items-center"
+      id={"confirmation"}
+    >
+      <div className="p-4 w-[320px] max-w-sm rounded-lg shadow-md bg-white border border-gray-200 animate-slide-in">
         <p className="text-gray-800 font-medium">{message}</p>
         <div className="flex justify-end gap-2 mt-4">
           <button
@@ -30,8 +32,10 @@ export function confirmComponent(message) {
     const container = document.createElement("div");
     document.body.appendChild(container);
 
+    const domContainer = createRoot(container);
+
     const cleanup = () => {
-      ReactDOM.unmountComponentAtNode(container);
+      domContainer.unmount();
       container.remove();
     };
 
@@ -45,13 +49,12 @@ export function confirmComponent(message) {
       resolve(false);
     };
 
-    ReactDOM.render(
+    domContainer.render(
       <ConfirmToast
         message={message}
         onConfirm={handleConfirm}
         onCancel={handleCancel}
       />,
-      container
     );
   });
 }

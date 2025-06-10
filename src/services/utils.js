@@ -14,3 +14,6 @@ export const handleError = (error) => {
         error.message
     : "Something went wrong!";
 };
+
+export const truncate = (str, max = 20) =>
+  str.length > max ? str.slice(0, max) + "..." : str;

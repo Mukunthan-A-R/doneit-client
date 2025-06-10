@@ -25,7 +25,7 @@ import TermsOfService from "./pages/TermsOfService";
 import TransactionAnalytics from "./pages/TransactionAnalytics";
 import TransactionHistory from "./pages/TransactionHistory";
 import UserDashboard from "./pages/UserDashboard";
-import ProtectedRoute from "./components/modals/ProtectedRoute";
+import ProtectedRoute from "./components/layouts/ProtectedRoute";
 
 function App() {
   return (

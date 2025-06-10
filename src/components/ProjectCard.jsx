@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useSetRecoilState } from "recoil";
 import { CurrentProject, ProjectState, refetchTriggerAtom } from "../data/atom";
+import useClickOutside from "../hooks/useClickOutside";
 import {
   deleteProjectById,
   editProjectById,
 } from "../services/ProjectServices";
-import { formatDate } from "../services/utils";
-import { toast } from "react-toastify";
+import { formatDate, truncate } from "../services/utils";
 import { confirmComponent } from "./modals/ConfirmToast";
 
 const ProjectCard = ({ project, onDelete }) => {
@@ -20,16 +21,21 @@ const ProjectCard = ({ project, onDelete }) => {
   const setCurrentProjectData = useSetRecoilState(CurrentProject);
   const setRefetchTrigger = useSetRecoilState(refetchTriggerAtom);
 
+  const handleClickOutsideRef = useClickOutside(() => setIsDropdownOpen(false));
+  const editClickOutsideRef = useClickOutside(() => setIsEditing(false));
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
   const handleDelete = async () => {
     try {
+      console.log("varudhaa");
       const confirmed = await confirmComponent(
         "Are you sure you want to delete this Project?\n This action cannot be undone.",
       );
       if (!confirmed) {
+        console.log("🚀 ~ handleDelete ~ confirmed:", confirmed);
         return;
       }
 
@@ -81,17 +87,15 @@ const ProjectCard = ({ project, onDelete }) => {
     navigate(`/tasks/${project.project_id}`);
   };
 
-  const truncate = (str, max = 20) =>
-    str.length > max ? str.slice(0, max) + "..." : str;
-
   return (
     <>
-      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl hover:scale-101 transition">
+      <div className="max-w-sm p-3 pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl hover:scale-101 transition">
         {/* Menu Icon */}
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-1 right-3">
           <button
             className="text-gray-900 font-bold text-xl focus:outline-none cursor-pointer"
             onClick={toggleDropdown}
+            ref={handleClickOutsideRef}
           >
             ...
           </button>
@@ -126,43 +130,42 @@ const ProjectCard = ({ project, onDelete }) => {
         {/* Display Card Content */}
         {!isEditing && (
           <>
-            <div className="px-6 py-4 ">
-              <div className="flex items-center space-x-3">
-                {project.status === "active" ? (
-                  <div className="w-4 h-4 rounded-full bg-green-600"></div>
-                ) : project.status === "completed" ? (
-                  <div className="w-4 h-4 rounded-full bg-gray-800"></div>
-                ) : (
-                  <div className="w-4 h-4 rounded-full bg-red-600"></div>
-                )}
-                <h2
-                  className="text-xl font-semibold text-blue-800 truncate w-[160px]"
-                  title={project.name}
-                >
-                  {truncate(project.name, 20)}
-                </h2>
-                <span
-                  className={`text-xs font-semibold px-2 py-1 rounded-full mr-5 ${
-                    project.priority === "high"
-                      ? "bg-red-100 text-red-800"
-                      : project.priority === "medium"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : project.priority === "low"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  {project.priority?.toUpperCase()}
-                </span>
-              </div>
-              <p className="text-gray-600 mt-2">{project.description}</p>
+            <div className="flex items-center space-x-3">
+              {project.status === "active" ? (
+                <div className="w-4 h-4 rounded-full bg-green-600"></div>
+              ) : project.status === "completed" ? (
+                <div className="w-4 h-4 rounded-full bg-gray-800"></div>
+              ) : (
+                <div className="w-4 h-4 rounded-full bg-red-600"></div>
+              )}
+              <h2
+                className="text-xl font-semibold text-blue-800 truncate w-[160px]"
+                title={project.name}
+              >
+                {truncate(project.name, 20)}
+              </h2>
+              <span
+                className={`text-xs font-semibold px-2 py-1 rounded-full mr-5 ${
+                  project.priority === "high"
+                    ? "bg-red-100 text-red-800"
+                    : project.priority === "medium"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : project.priority === "low"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-200 text-gray-700"
+                }`}
+              >
+                {project.priority?.toUpperCase()}
+              </span>
             </div>
+            <p className="text-gray-600 mt-2">{project.description}</p>
 
-            <div className="pl-6">
+            <div>
               <p className="text-sm text-gray-600">DeadLine</p>
               <p>{formatDate(project.end_date)}</p>
             </div>
-            <div className="px-6 py-2 flex items-center justify-between">
+
+            <div className="flex items-center justify-between">
               {editedProjectData.status !== "completed" ? (
                 <div className="flex flex-col">
                   <span className="text-sm text-gray-600">Remaining Time</span>
@@ -200,7 +203,10 @@ const ProjectCard = ({ project, onDelete }) => {
 
       {/* Edit Modal Popup */}
       {isEditing && (
-        <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
+        <div
+          className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex justify-center items-center z-50"
+          ref={editClickOutsideRef}
+        >
           <div className="bg-white p-4 pt-6 rounded-lg shadow-lg w-96">
             <h2 className="text-2xl font-semibold mb-4">Edit Project</h2>
 

@@ -47,29 +47,25 @@ const ProjectCardHolder = ({ user_id }) => {
 
   return (
     <div>
-      {projects.length === 0 ? (
-        <div className="text-gray-500 text-center mt-10 text-lg">
-          Create new projects to get started !
+      <div
+        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ${projects.length === 0 ? "content" : ""}`}
+      >
+        <div
+          role="button"
+          aria-roledescription="Click to create a new project"
+          onClick={() => setToggleCreateProject(true)}
+          className="max-w-sm cursor-pointer text-blue-700 py-8 rounded-lg bg-white flex flex-col justify-center items-center gap-3 overflow-hidden relative shadow-md hover:shadow-xl hover:scale-101 transition border-2 border-gray-300 border-dashed"
+        >
+          <BiPlusCircle size={32} /> Create project
         </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <div
-            role="button"
-            aria-roledescription="Click to create a new project"
-            onClick={() => setToggleCreateProject(true)}
-            className="max-w-sm cursor-pointer rounded-lg bg-white flex flex-col justify-center items-center gap-3 overflow-hidden relative shadow-md hover:shadow-xl hover:scale-101 transition border-2 border-gray-300 border-dashed"
-          >
-            <BiPlusCircle size={32} /> Create project
-          </div>
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.project_id}
-              project={project}
-              onDelete={handleDeleteProject}
-            />
-          ))}
-        </div>
-      )}
+        {projects.map((project) => (
+          <ProjectCard
+            key={project.project_id}
+            project={project}
+            onDelete={handleDeleteProject}
+          />
+        ))}
+      </div>
     </div>
   );
 };
