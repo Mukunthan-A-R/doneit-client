@@ -51,67 +51,72 @@ const GanttChart = ({ projectId }) => {
           project to life.
         </p>
       ) : (
-        <div className="bg-white rounded-2xl shadow-xl p-4 pt-6 w-full max-w-7xl mx-auto mt-10 border border-gray-200">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-            12 Day Project Graph
-          </h2>
+        <div className="overflow-x-auto">
+          <div className="min-w-[800px] bg-white rounded-xl shadow-xl p-6 w-full max-w-7xl mx-auto mt-12 border border-gray-200">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-10 text-center tracking-tight">
+              Project Timeline – {NUM_DAYS} Days
+            </h2>
 
-          {/* Grid Header */}
-          <div className="grid grid-cols-13 font-semibold text-xs text-gray-600 border-b pb-2 mb-4">
-            <div className="col-span-1">Task</div>
-            <div className="col-span-12 grid grid-cols-12 gap-[1px]">
-              {Array.from({ length: NUM_DAYS }).map((_, i) => (
-                <div
-                  key={i}
-                  className="text-center py-1 bg-gray-100 text-gray-500 border border-gray-200"
-                >
-                  {getDateForOffset(baseDate, i)}
-                </div>
-              ))}
+            {/* Grid Header */}
+            <div className="grid grid-cols-13 font-medium text-[11px] text-gray-700 border-b pb-3 mb-5">
+              <div className="col-span-1 pl-2">Task</div>
+              <div className="col-span-12 grid grid-cols-12 gap-[1px]">
+                {Array.from({ length: NUM_DAYS }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="text-center py-1 bg-gray-100 text-gray-600 border border-gray-300 font-semibold rounded-sm"
+                  >
+                    {getDateForOffset(baseDate, i)}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Task Rows */}
-          <div className="space-y-3">
-            {tasks?.map((task) => {
-              const offset = getDayOffset(baseDate, task.start_date);
-              const duration = getDayOffset(task.start_date, task.end_date) + 1;
+            {/* Task Rows */}
+            <div className="space-y-3">
+              {tasks?.map((task) => {
+                const offset = getDayOffset(baseDate, task.start_date);
+                const duration =
+                  getDayOffset(task.start_date, task.end_date) + 1;
 
-              const colStart = Math.max(0, Math.min(NUM_DAYS - 1, offset));
-              const colSpan = Math.max(
-                1,
-                Math.min(NUM_DAYS - colStart, duration)
-              );
+                const colStart = Math.max(0, Math.min(NUM_DAYS - 1, offset));
+                const colSpan = Math.max(
+                  1,
+                  Math.min(NUM_DAYS - colStart, duration)
+                );
 
-              return (
-                <div
-                  key={task.task_id}
-                  className="grid grid-cols-13 items-center text-sm relative"
-                >
-                  <div className="col-span-1 font-medium text-gray-800 truncate">
-                    {task.title}
+                return (
+                  <div
+                    key={task.task_id}
+                    className="grid grid-cols-13 items-center text-sm group relative"
+                  >
+                    <div className="col-span-1 font-medium text-gray-800 truncate pl-2">
+                      {task.title}
+                    </div>
+                    <div className="col-span-12 grid grid-cols-12 gap-[1px] relative h-6">
+                      <div
+                        className="absolute h-full rounded-md bg-gradient-to-r from-blue-500 to-blue-700 shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-[1.01]"
+                        style={{
+                          left: `${(colStart / NUM_DAYS) * 100}%`,
+                          width: `${(colSpan / NUM_DAYS) * 100}%`,
+                        }}
+                        title={`${task.title} (${formatDate(
+                          task.start_date
+                        )} → ${formatDate(task.end_date)})`}
+                      />
+                    </div>
                   </div>
-                  <div className="col-span-12 grid grid-cols-12 gap-[1px] relative h-6">
-                    <div
-                      className="absolute h-full rounded-md bg-gradient-to-r from-blue-500 to-blue-700 shadow-md transition-all duration-300"
-                      style={{
-                        left: `${(colStart / NUM_DAYS) * 100}%`,
-                        width: `${(colSpan / NUM_DAYS) * 100}%`,
-                      }}
-                      title={`${task.title} (${formatDate(
-                        task.start_date
-                      )} → ${formatDate(task.end_date)})`}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
 
-          {/* Legend */}
-          <div className="mt-6 text-sm text-gray-500 text-center">
-            Showing {NUM_DAYS} day window from{" "}
-            <strong>{formatDate(baseDate)}</strong>
+            {/* Legend */}
+            <div className="mt-8 text-sm text-gray-500 text-center italic">
+              Displaying a {NUM_DAYS}-day window starting from{" "}
+              <span className="font-semibold text-gray-700">
+                {formatDate(baseDate)}
+              </span>
+            </div>
           </div>
         </div>
       )}
