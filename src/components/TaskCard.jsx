@@ -170,7 +170,7 @@ const TaskCard = ({
 
       await createActivityLog({
         user_id: currentUserId,
-        projectId: updatedTaskData.project_id,
+        project_id: updatedTaskData.project_id,
         task_id: task_id,
         action: "update",
         context: {
