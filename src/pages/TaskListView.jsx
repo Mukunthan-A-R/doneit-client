@@ -53,14 +53,21 @@ const TaskListView = () => {
       </header>
 
       {/* Task List */}
-      <section className="bg-white p-6 rounded-xl shadow-md">
-        <h2 className="text-xl font-semibold text-center mb-6">Tasks</h2>
-        <div className="space-y-5">
-          {filteredTasks?.map((task, index) => (
-            <TaskCard key={task.id ?? `task-${index}`} task={task} />
-          ))}
-        </div>
-      </section>
+      {tasks?.length === 0 ? (
+        <p className="flex flex-col justtify-center items-center p-40 text-green-800 text-lg sm:text-xl">
+          Your task list is clear… for now. Start building it with your first
+          to-do!
+        </p>
+      ) : (
+        <section className="bg-white p-6 rounded-xl shadow-md">
+          <h2 className="text-xl font-semibold text-center mb-6">Tasks</h2>
+          <div className="space-y-5">
+            {filteredTasks?.map((task, index) => (
+              <TaskCard key={task.id ?? `task-${index}`} task={task} />
+            ))}
+          </div>
+        </section>
+      )}
     </>
   );
 };

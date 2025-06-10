@@ -39,12 +39,18 @@ const ProjectCalendar = () => {
       <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
         <h1 className="text-2xl font-bold"> Project Calendar</h1>
       </header>
-
-      <CalendarCard
-        startDate={project?.start_date}
-        endDate={project?.end_date}
-        tasksByDate={graphData}
-      />
+      {tasks?.length === 0 ? (
+        <p className="flex flex-col justtify-center items-center p-40 text-green-800 text-lg sm:text-xl">
+          No tasks here yet! Tap to add your first one and start organizing your
+          time.
+        </p>
+      ) : (
+        <CalendarCard
+          startDate={project?.start_date}
+          endDate={project?.end_date}
+          tasksByDate={graphData}
+        />
+      )}
     </>
   );
 };
