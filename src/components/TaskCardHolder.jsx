@@ -12,6 +12,7 @@ import { createActivityLog } from "../services/projectActivity";
 import ProjectTitleCard from "./ProjectTitleCard";
 import TaskCard from "./TaskCard";
 import CreateTask from "./modals/CreateTask";
+import ErrorHandler from "./ErrorHandler";
 
 const TaskCardHolder = ({ userRole }) => {
   const { projectId } = useParams();
@@ -29,7 +30,7 @@ const TaskCardHolder = ({ userRole }) => {
     isLoading,
     error,
   } = useProjectTasks(projectId);
-  console.log(tasks, isLoading, error);
+  console.log(tasks, isLoading, error, typeof error);
 
   const handleStatusChange = () => {
     refetchTasks();
@@ -87,8 +88,8 @@ const TaskCardHolder = ({ userRole }) => {
     return <p className="text-blue-500">Loading tasks...</p>;
   }
 
-  if (error === "Access denied") {
-    return <p className="text-red-500">Access Forbidden ! URL not found !</p>;
+  if (error) {
+    return <ErrorHandler error={error} />;
   }
 
   const notStartedTasks = tasks?.filter(

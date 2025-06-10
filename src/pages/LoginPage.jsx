@@ -4,6 +4,7 @@ import { loginUser } from "../services/User";
 import { useSetRecoilState } from "recoil";
 import { userData } from "../data/atom";
 import { toast } from "react-toastify";
+import { handleError } from "../services/utils";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -60,7 +61,7 @@ const LoginPage = () => {
       }, 500);
     } catch (err) {
       console.log("🚀 ~ handleSubmit ~ err:", err);
-      toast.error(err.response?.error || err.message);
+      toast.error(handleError(error));
       setError("Invalid email or password");
     } finally {
       setLoading(false); // Set loading to false once the process is done
@@ -119,14 +120,7 @@ const LoginPage = () => {
               />
             </div>
 
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 text-gray-600">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
-                />
-                Remember me
-              </label>
+            <div className="flex items-center justify-end text-sm">
               <Link
                 to="/password-reset"
                 className="text-blue-600 hover:underline"

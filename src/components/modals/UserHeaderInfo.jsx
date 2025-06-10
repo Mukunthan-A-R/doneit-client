@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
 const UserHeaderInfo = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -8,6 +9,7 @@ const UserHeaderInfo = () => {
     country: "",
     timezone: "",
   });
+  const { user } = useAuth();
 
   useEffect(() => {
     // Timer to update current time
@@ -53,7 +55,9 @@ const UserHeaderInfo = () => {
   return (
     <div className="bg-white p-6 mb-6 rounded-lg shadow flex flex-col md:flex-row justify-between items-start md:items-center border-l-4 border-blue-700">
       <div className="mb-4 md:mb-0">
-        <h1 className="text-2xl font-bold text-blue-900">Welcome Back</h1>
+        <h1 className="text-2xl font-bold text-blue-900">
+          Welcome Back, {user ? user.name : ""}
+        </h1>
         <p className="text-base font-bold text-gray-600">
           Location: {location.city}, {location.region}
         </p>

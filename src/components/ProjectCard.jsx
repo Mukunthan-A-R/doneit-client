@@ -27,7 +27,7 @@ const ProjectCard = ({ project, onDelete }) => {
   const handleDelete = async () => {
     try {
       const confirmed = await confirmComponent(
-        "Are you sure you want to delete this Project?\n This action cannot be undone."
+        "Are you sure you want to delete this Project?\n This action cannot be undone.",
       );
       if (!confirmed) {
         return;
@@ -86,7 +86,7 @@ const ProjectCard = ({ project, onDelete }) => {
 
   return (
     <>
-      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl duration-300 hover:scale-105 transition-transform">
+      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl hover:scale-101 transition">
         {/* Menu Icon */}
         <div className="absolute top-3 right-3">
           <button
@@ -146,10 +146,10 @@ const ProjectCard = ({ project, onDelete }) => {
                     project.priority === "high"
                       ? "bg-red-100 text-red-800"
                       : project.priority === "medium"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : project.priority === "low"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-200 text-gray-700"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : project.priority === "low"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-200 text-gray-700"
                   }`}
                 >
                   {project.priority?.toUpperCase()}

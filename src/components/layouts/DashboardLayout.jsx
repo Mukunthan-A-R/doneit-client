@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userData } from "../../data/atom";
 import ProjectToolbar from "../ProjectToolbar";
@@ -7,17 +7,7 @@ import ProjectToolbar from "../ProjectToolbar";
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const navigate = useNavigate();
-  const location = useLocation();
   const currentUserData = useRecoilValue(userData);
-
-  useEffect(() => {
-    const token = localStorage.getItem("x-auth-token");
-    if (!token && location.pathname !== "/login") {
-      navigate("/login");
-      return;
-    }
-  }, [location.pathname]);
 
   function handleNavigate() {
     return setIsSidebarOpen(false);
@@ -100,10 +90,6 @@ export default function DashboardLayout() {
           lg:ml-[16rem] lg:w-5/6 transition-all duration-300
         `}
       >
-        <h1 className="text-xl font-medium pb-4 pt-14 lg:pt-0">
-          Welcome {currentUserData.name} !
-        </h1>
-
         <Outlet />
       </div>
     </div>

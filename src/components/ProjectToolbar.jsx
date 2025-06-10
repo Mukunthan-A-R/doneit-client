@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import CreateProject from "./modals/CreateProject";
-import FormatProjects from "./modals/FormatProjects";
 import MenuItem from "./modals/MenuItem";
 
 import { createPortal } from "react-dom";
@@ -10,11 +8,13 @@ import { LuCircleUser } from "react-icons/lu";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { TbLogout2 } from "react-icons/tb";
+import { useRecoilState } from "recoil";
+import { createProjectToggle } from "../data/atom";
 import useAuth from "../hooks/useAuth";
 
 const ProjectToolbar = ({ user_id, setNavigate }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [toggleCreateProject, setToggleCreateProject] =
+    useRecoilState(createProjectToggle);
   const { handleLogout } = useAuth();
 
   return (
@@ -46,7 +46,7 @@ const ProjectToolbar = ({ user_id, setNavigate }) => {
         </NavLink>
         <button
           className={`flex cursor-pointer w-full hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`}
-          onClick={() => setShowModal(true)}
+          onClick={() => setToggleCreateProject(true)}
         >
           <MdOutlineCreateNewFolder size={20} />
           <MenuItem text="Create Project" />
@@ -74,12 +74,8 @@ const ProjectToolbar = ({ user_id, setNavigate }) => {
       </ul>
 
       {/* Modals */}
-      {showModal &&
-        createPortal(
-          <CreateProject user_id={user_id} setShowModal={setShowModal} />,
-          document.body
-        )}
-      {isPopupOpen && <FormatProjects onCancel={setIsPopupOpen} />}
+      {toggleCreateProject &&
+        createPortal(<CreateProject user_id={user_id} />, document.body)}
     </>
   );
 };

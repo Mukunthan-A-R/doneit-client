@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { refetchTriggerAtom } from "../../data/atom";
-import { createProject } from "../../services/ProjectServices";
 import { toast } from "react-toastify";
+import { useSetRecoilState } from "recoil";
+import { createProjectToggle, refetchTriggerAtom } from "../../data/atom";
+import { createProject } from "../../services/ProjectServices";
 
-const CreateProject = ({ setShowModal, user_id }) => {
+const CreateProject = ({ user_id }) => {
   // State to store form data and validation errors
+  const setToggleCreateProject = useSetRecoilState(createProjectToggle);
+
   const [loadingData, setLoadingData] = useState(false);
   const [projectData, setProjectData] = useState({
     name: "",
@@ -101,7 +103,7 @@ const CreateProject = ({ setShowModal, user_id }) => {
       if (response) {
         console.log("Project created:", response);
         toast.success("Project created successfully!");
-        setShowModal(false);
+        setToggleCreateProject(false);
         setRefetchTrigger((prev) => prev + 1);
       }
     } catch (error) {
@@ -257,7 +259,7 @@ const CreateProject = ({ setShowModal, user_id }) => {
             <button
               type="button"
               className="bg-gray-300 text-black px-4 py-2 rounded"
-              onClick={() => setShowModal(false)}
+              onClick={() => setToggleCreateProject(false)}
             >
               Cancel
             </button>

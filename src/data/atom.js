@@ -72,3 +72,8 @@ export const refetchTriggerAtom = atom({
   default: 0,
   key: "refetchTrigger",
 });
+
+export const createProjectToggle = atom({
+  default: false,
+  key: "createProjectToggle"
+})
