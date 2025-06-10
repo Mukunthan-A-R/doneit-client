@@ -24,20 +24,16 @@ const GanttChartTimeLine = ({ projectId }) => {
     const end = new Date(projectEnd);
 
     switch (intervalType) {
-      case "daily": {
-        const diffTime = end - start;
-        return Math.ceil(diffTime / (24 * 60 * 60 * 1000));
-      }
-      case "weekly": {
-        const diffTime = end - start;
-        return Math.ceil(diffTime / (7 * 24 * 60 * 60 * 1000));
-      }
-      case "monthly": {
-        const months =
+      case "daily":
+        return Math.ceil((end - start) / (24 * 60 * 60 * 1000));
+      case "weekly":
+        return Math.ceil((end - start) / (7 * 24 * 60 * 60 * 1000));
+      case "monthly":
+        return (
           (end.getFullYear() - start.getFullYear()) * 12 +
-          (end.getMonth() - start.getMonth());
-        return months + 1;
-      }
+          (end.getMonth() - start.getMonth()) +
+          1
+        );
       default:
         return 0;
     }
@@ -67,6 +63,16 @@ const GanttChartTimeLine = ({ projectId }) => {
     });
   };
 
+  // Get color based on how close task end date is
+  const getTaskColor = (endDate) => {
+    const today = new Date();
+    const end = new Date(endDate);
+    const diff = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+    if (diff < 0) return "bg-red-500";
+    if (diff <= 3) return "bg-yellow-400";
+    return "bg-blue-600";
+  };
+
   if (isLoading)
     return (
       <div className="text-center py-6 text-gray-500 animate-pulse">
@@ -74,15 +80,10 @@ const GanttChartTimeLine = ({ projectId }) => {
       </div>
     );
 
-  if (error) {
-    return <ErrorHandler error={error} />;
-  }
+  if (error) return <ErrorHandler error={error} />;
 
   const NUM_INTERVALS = getNumIntervals();
-
-  if (tasks?.length === 0) {
-    return;
-  }
+  if (tasks?.length === 0) return;
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-4 pt-6 w-full max-w-7xl mx-auto mt-10 border border-gray-200">
@@ -144,6 +145,8 @@ const GanttChartTimeLine = ({ projectId }) => {
             Math.min(NUM_INTERVALS - colStart, duration)
           );
 
+          const taskColorClass = getTaskColor(task.end_date);
+
           return (
             <div
               key={task.task_id}
@@ -154,7 +157,7 @@ const GanttChartTimeLine = ({ projectId }) => {
               </div>
               <div className="col-span-12 relative h-6 w-full bg-gray-100 rounded overflow-hidden">
                 <div
-                  className="absolute h-full rounded-md bg-gradient-to-r from-blue-500 to-blue-700 shadow-md transition-all duration-300"
+                  className={`absolute h-full rounded-md shadow-md transition-all duration-300 ${taskColorClass}`}
                   style={{
                     left: `${(colStart / NUM_INTERVALS) * 100}%`,
                     width: `${(colSpan / NUM_INTERVALS) * 100}%`,
