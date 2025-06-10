@@ -7,7 +7,7 @@ import useProject from "../../hooks/useProject";
 import { createTask } from "../../services/TaskServices";
 import { createActivityLog } from "../../services/projectActivity";
 
-const CreateTask = ({ onClose }) => {
+const CreateTask = ({ onClose, refetchTasks }) => {
   const currentUserData = useRecoilValue(userData);
   const setRefetchTrigger = useSetRecoilState(refetchTriggerAtom);
   const user_id = currentUserData?.user_id;
@@ -149,6 +149,7 @@ const CreateTask = ({ onClose }) => {
         },
       });
 
+      refetchTasks();
       toast.success("New Task Created!");
 
       onClose();

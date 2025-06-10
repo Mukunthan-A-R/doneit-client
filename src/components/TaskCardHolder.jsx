@@ -54,6 +54,7 @@ const TaskCardHolder = ({ userRole }) => {
 
   const handleEditClick = (taskId) => {
     console.log("Edit task with ID:", taskId);
+    refetchTasks();
   };
 
   const handleDelete = async (taskId, taskTitle) => {
@@ -116,9 +117,10 @@ const TaskCardHolder = ({ userRole }) => {
           Create Task
         </button>
       </header>
-      <button onClick={refetchTasks}>trigger refetch</button>
+      {/* <button onClick={refetchTasks}>trigger refetch</button> */}
       {showCreateTask && (
         <CreateTask
+          refetchTasks={refetchTasks}
           onClose={() => setShowCreateTask(false)} // Close the modal
         />
       )}
