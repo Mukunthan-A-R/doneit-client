@@ -93,10 +93,10 @@ const TaskCardHolder = ({ userRole }) => {
   }
 
   const notStartedTasks = tasks?.filter(
-    (task) => task.status === "not started",
+    (task) => task.status === "not started"
   );
   const inProgressTasks = tasks?.filter(
-    (task) => task.status === "in progress",
+    (task) => task.status === "in progress"
   );
   const completedTasks = tasks?.filter((task) => task.status === "completed");
 
@@ -123,7 +123,9 @@ const TaskCardHolder = ({ userRole }) => {
         />
       )}
       {!isLoading && tasks?.length === 0 ? (
-        <p>No tasks have been created.</p>
+        <p className="flex flex-col justtify-center items-center p-40 text-green-800 text-lg sm:text-xl">
+          New project created! Let’s add your first task to get things moving.
+        </p>
       ) : (
         <>
           {allTasksCompleted && (
