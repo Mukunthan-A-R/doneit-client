@@ -94,10 +94,10 @@ const TaskCardHolder = ({ userRole }) => {
   }
 
   const notStartedTasks = tasks?.filter(
-    (task) => task.status === "not started"
+    (task) => task.status === "not started",
   );
   const inProgressTasks = tasks?.filter(
-    (task) => task.status === "in progress"
+    (task) => task.status === "in progress",
   );
   const completedTasks = tasks?.filter((task) => task.status === "completed");
 
@@ -222,6 +222,8 @@ const TaskColumn = ({
             task_id={task.task_id}
             title={task.title}
             status={task.status}
+            profile={task.profile_img}
+            name={task.name}
             desc={task.description}
             startDate={task.start_date}
             endDate={task.end_date}

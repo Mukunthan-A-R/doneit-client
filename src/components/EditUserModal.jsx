@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { fetchUserById } from "../services/UserData";
 import { updateUserById } from "../services/UserData"; // <-- Import here
+import { useSetRecoilState } from "recoil";
+import { userData } from "../data/atom";
 
 const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
   const [userDetails, setUserDetails] = useState(null);
@@ -12,6 +14,7 @@ const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
     company: "",
     role: "",
   });
+  const setUserState = useSetRecoilState(userData);
 
   useEffect(() => {
     const loadUserDetails = async () => {
@@ -48,6 +51,11 @@ const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
     try {
       handleSetUserDetails({ ...formData });
       await updateUserById(userId, formData);
+      setUserState((prev) => ({
+        ...prev,
+        email: formData.email,
+        name: formData.name,
+      }));
       onClose(); // Close modal after successful update
     } catch (error) {
       console.error("Failed to update user:", error);

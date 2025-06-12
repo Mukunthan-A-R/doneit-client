@@ -6,10 +6,14 @@ import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import useClickOutside from "../hooks/useClickOutside";
+import UserBadge from "./UserBadge";
 
 const TaskCard = ({
   task_id,
   title,
+  name,
+  profile,
   status,
   desc,
   startDate,
@@ -32,6 +36,7 @@ const TaskCard = ({
   const { projectId } = useParams();
 
   const [menuVisible, setMenuVisible] = useState(false);
+  const cardClickOutside = useClickOutside(() => setMenuVisible(false));
   const [isEditPopupVisible, setIsEditPopupVisible] = useState(false);
   const [errors, setErrors] = useState({
     title: "",
@@ -165,7 +170,11 @@ const TaskCard = ({
     }
 
     try {
-      const updatedTaskData = { ...formData, project_id: projectId };
+      const updatedTaskData = {
+        ...formData,
+        project_id: projectId,
+        user_id: currentUserId,
+      };
       await updateTask(task_id, updatedTaskData);
 
       await createActivityLog({
@@ -195,8 +204,12 @@ const TaskCard = ({
       {/* 3-Dot Menu */}
       <div className="absolute top-2 right-2">
         {userRole !== "client" && (
-          <button className="text-black font-bold pr-2" onClick={toggleMenu}>
-            <span className="text-xl">...</span>
+          <button
+            className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
+            ref={cardClickOutside}
+            onClick={toggleMenu}
+          >
+            •••
           </button>
         )}
 
@@ -251,6 +264,7 @@ const TaskCard = ({
       </div>
 
       {/* Task Info */}
+      {name && <UserBadge profile={profile} name={name} />}
       <h3 className="text-xl text-gray-700 font-semibold">{title}</h3>
       <p className="text-sm text-gray-600 pb-3">{desc}</p>
       <p className="text-sm text-gray-600">Start Date: {startTime}</p>

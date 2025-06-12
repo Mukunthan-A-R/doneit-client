@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import useProject from "../../hooks/useProject";
 import { createTask } from "../../services/TaskServices";
 import { createActivityLog } from "../../services/projectActivity";
+import { isAxiosError } from "axios";
 
 const CreateTask = ({ onClose, refetchTasks }) => {
   const currentUserData = useRecoilValue(userData);
@@ -131,6 +132,7 @@ const CreateTask = ({ onClose, refetchTasks }) => {
     try {
       const formattedTaskData = {
         ...taskData,
+        user_id,
         start_date: `${taskData.start_date}T00:00:00Z`,
         end_date: `${taskData.end_date}T23:59:59Z`,
       };
@@ -156,7 +158,9 @@ const CreateTask = ({ onClose, refetchTasks }) => {
       setRefetchTrigger((prev) => prev + 1);
     } catch (error) {
       console.error("Error creating task:", error);
-      alert("Failed to create task.");
+      if (isAxiosError(error)) {
+        toast.error(error.response.data);
+      }
     } finally {
       setLoadingData(false);
     }
