@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function gcd(a, b) {
   if (!b) return a;
@@ -12,7 +12,7 @@ const GeneralSettingsPanel = () => {
     width: 0,
     height: 0,
   });
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(parseFloat(document.body.style.zoom));
 
   useEffect(() => {
     // Set screen resolution once on mount (static)

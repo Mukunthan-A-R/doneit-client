@@ -132,7 +132,6 @@ const CreateTask = ({ onClose, refetchTasks }) => {
     try {
       const formattedTaskData = {
         ...taskData,
-        user_id,
         start_date: `${taskData.start_date}T00:00:00Z`,
         end_date: `${taskData.end_date}T23:59:59Z`,
       };
@@ -167,8 +166,9 @@ const CreateTask = ({ onClose, refetchTasks }) => {
   };
 
   return (
-    <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-4 pt-6 rounded-lg shadow-lg w-96">
+    <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50 animate-fade-in">
+      <div className="absolute inset-0" onClick={onClose}></div>
+      <div className="bg-white p-4 pt-6 relative rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-semibold mb-4">Create Task</h2>
 
         <form onSubmit={handleSubmit}>

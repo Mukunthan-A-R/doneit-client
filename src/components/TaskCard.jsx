@@ -173,7 +173,6 @@ const TaskCard = ({
       const updatedTaskData = {
         ...formData,
         project_id: projectId,
-        user_id: currentUserId,
       };
       await updateTask(task_id, updatedTaskData);
 

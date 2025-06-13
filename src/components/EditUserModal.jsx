@@ -68,7 +68,8 @@ const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
   if (!userId) return null;
 
   return (
-    <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 animate-fade-in backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="absolute inset-0" onClick={onClose}></div>
       <div className="bg-white rounded-xl shadow-2xl transform transition-all duration-300 w-full max-w-lg p-4 pt-6 relative">
         <button
           onClick={onClose}

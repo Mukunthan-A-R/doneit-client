@@ -32,3 +32,16 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #9ca3af #f3f4f6; /* gray-400 on gray-100 */
 }
+
+@theme {
+  --animate-fade-in: fade-in 0.25s ease-in-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 100%;
+    }
+  }
+}

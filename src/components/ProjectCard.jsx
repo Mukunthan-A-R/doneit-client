@@ -89,15 +89,15 @@ const ProjectCard = ({ project, onDelete }) => {
 
   return (
     <>
-      <div className="max-w-sm p-3 pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl hover:scale-101 transition">
+      <div className="max-w-sm p-3 pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
         {/* Menu Icon */}
-        <div className="absolute top-1 right-3">
+        <div className="absolute top-1 right-1">
           <button
-            className="text-gray-900 font-bold text-xl focus:outline-none cursor-pointer"
+            className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
             onClick={toggleDropdown}
             ref={handleClickOutsideRef}
           >
-            ...
+            •••
           </button>
 
           {/* Dropdown Menu */}
@@ -132,11 +132,11 @@ const ProjectCard = ({ project, onDelete }) => {
           <>
             <div className="flex items-center space-x-3">
               {project.status === "active" ? (
-                <div className="w-4 h-4 rounded-full bg-green-600"></div>
+                <div className="size-4 rounded-full bg-green-600"></div>
               ) : project.status === "completed" ? (
-                <div className="w-4 h-4 rounded-full bg-gray-800"></div>
+                <div className="size-4 rounded-full bg-gray-800"></div>
               ) : (
-                <div className="w-4 h-4 rounded-full bg-red-600"></div>
+                <div className="size-4 rounded-full bg-red-600"></div>
               )}
               <h2
                 className="text-xl font-semibold text-blue-800 truncate w-[160px]"
@@ -145,7 +145,7 @@ const ProjectCard = ({ project, onDelete }) => {
                 {truncate(project.name, 20)}
               </h2>
               <span
-                className={`text-xs font-semibold px-2 py-1 rounded-full mr-5 ${
+                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full mr-5 ${
                   project.priority === "high"
                     ? "bg-red-100 text-red-800"
                     : project.priority === "medium"

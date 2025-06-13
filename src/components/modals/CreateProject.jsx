@@ -20,6 +20,8 @@ const CreateProject = ({ user_id }) => {
     created: parseInt(user_id),
   });
 
+  const closeCreateProject = () => setToggleCreateProject(false);
+
   // refetch recoil
   const setRefetchTrigger = useSetRecoilState(refetchTriggerAtom);
 
@@ -115,8 +117,9 @@ const CreateProject = ({ user_id }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm animate-fade-in">
       {/* Modal Content */}
+      <div className="absolute inset-0" onClick={closeCreateProject}></div>
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full z-60">
         <h2 className="text-xl font-bold mb-4">Create Project</h2>
         <form onSubmit={handleSubmit}>
@@ -259,7 +262,7 @@ const CreateProject = ({ user_id }) => {
             <button
               type="button"
               className="bg-gray-300 text-black px-4 py-2 rounded"
-              onClick={() => setToggleCreateProject(false)}
+              onClick={closeCreateProject}
             >
               Cancel
             </button>
