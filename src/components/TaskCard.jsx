@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import useClickOutside from "../hooks/useClickOutside";
 import UserBadge from "./UserBadge";
+import { RiDragMove2Fill } from "react-icons/ri";
 
 const TaskCard = ({
   task_id,
@@ -28,6 +29,8 @@ const TaskCard = ({
 }) => {
   const currentUserData = useRecoilValue(userData);
   const currentUserId = currentUserData?.user_id;
+
+  const [isDraggable, setIsDraggable] = useState(false);
 
   const remainingTime = calculateRemainingTime(endDate);
   const endTime = formatDate(endDate);
@@ -199,10 +202,17 @@ const TaskCard = ({
   };
 
   return (
-    <div className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative">
+    <div
+      className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative"
+      draggable={isDraggable}
+      onDragStart={(e) => {
+        e.dataTransfer.effectAllowed = "move";
+        console.log(e);
+      }}
+    >
       {/* 3-Dot Menu */}
-      <div className="absolute top-2 right-2">
-        {userRole !== "client" && (
+      {userRole !== "client" && (
+        <div className="absolute top-2 right-2">
           <button
             className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
             ref={cardClickOutside}
@@ -210,57 +220,66 @@ const TaskCard = ({
           >
             •••
           </button>
-        )}
 
-        {menuVisible && (
-          <div
-            className="absolute bg-white shadow-xl rounded-md mt-2 w-32 p-2 z-50"
-            style={{
-              left: "auto",
-              right: "0",
-              top: "100%",
-              transform: "translateX(-10%)",
-            }}
-          >
-            {status !== "not started" && (
-              <button
-                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => handleStatusChange("not started")}
-              >
-                Not Started
-              </button>
-            )}
-            {status !== "in progress" && (
-              <button
-                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => handleStatusChange("in progress")}
-              >
-                In Progress
-              </button>
-            )}
-            {status !== "completed" && (
-              <button
-                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => handleStatusChange("completed")}
-              >
-                Completed
-              </button>
-            )}
-            <button
-              className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => setIsEditPopupVisible(true)}
+          {menuVisible && (
+            <div
+              className="absolute bg-white shadow-xl rounded-md mt-2 w-32 p-2 z-50"
+              style={{
+                left: "auto",
+                right: "0",
+                top: "100%",
+                transform: "translateX(-10%)",
+              }}
             >
-              Edit
-            </button>
-            <button
-              className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => onhandleDelete(task_id, title)}
-            >
-              Delete
-            </button>
-          </div>
-        )}
-      </div>
+              {status !== "not started" && (
+                <button
+                  className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => handleStatusChange("not started")}
+                >
+                  Not Started
+                </button>
+              )}
+              {status !== "in progress" && (
+                <button
+                  className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => handleStatusChange("in progress")}
+                >
+                  In Progress
+                </button>
+              )}
+              {status !== "completed" && (
+                <button
+                  className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => handleStatusChange("completed")}
+                >
+                  Completed
+                </button>
+              )}
+              <button
+                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => setIsEditPopupVisible(true)}
+              >
+                Edit
+              </button>
+              <button
+                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => onhandleDelete(task_id, title)}
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      <button
+        className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1"
+        onClick={toggleMenu}
+        onMouseDown={() => setIsDraggable(true)}
+        onMouseLeave={() => setIsDraggable(false)}
+      >
+        <RiDragMove2Fill size={20} />
+      </button>
 
       {/* Task Info */}
       {name && <UserBadge profile={profile} name={name} />}
