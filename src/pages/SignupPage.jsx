@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../services/User";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const SignupPage = () => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -201,16 +203,27 @@ const SignupPage = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full px-4 py-2.5 border ${
+              <div
+                className={` flex w-full px-4 py-2.5 border ${
                   errors.password ? "border-red-500" : "border-gray-300"
                 } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition`}
-                placeholder="••••••••"
-              />
+              >
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  className="outline-none flex flex-grow"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="text-gray-600 hover:text-gray-800 ml-2"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-red-500 text-sm mt-1">{errors.password}</p>
               )}
