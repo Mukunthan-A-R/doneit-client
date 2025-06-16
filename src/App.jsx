@@ -26,6 +26,7 @@ import TransactionAnalytics from "./pages/TransactionAnalytics";
 import TransactionHistory from "./pages/TransactionHistory";
 import UserDashboard from "./pages/UserDashboard";
 import ProtectedRoute from "./components/layouts/ProtectedRoute";
+import TasksPage from "./pages/TasksPage";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
 
           <Route element={<TaskboardLayout />}>
             <Route path="/tasks/:projectId" element={<TaskDashboard />} />
+            <Route path="/tasks-beta/:projectId" element={<TasksPage />} />
             <Route path="/analytics/:projectId" element={<Analytics />} />
             <Route path="/list/:projectId" element={<TaskListView />} />
             <Route

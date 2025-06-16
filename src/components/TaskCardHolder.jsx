@@ -154,8 +154,6 @@ const TaskCardHolder = ({ userRole }) => {
               onEditClick={handleEditClick}
               onDelete={handleDelete}
               onStatusChange={handleStatusChange}
-              projectStartDate={project?.start_date}
-              projectEndDate={project?.end_date}
             />
 
             <TaskColumn
@@ -167,8 +165,6 @@ const TaskCardHolder = ({ userRole }) => {
               onEditClick={handleEditClick}
               onDelete={handleDelete}
               onStatusChange={handleStatusChange}
-              projectStartDate={project?.start_date}
-              projectEndDate={project?.end_date}
             />
 
             <TaskColumn
@@ -180,8 +176,6 @@ const TaskCardHolder = ({ userRole }) => {
               onEditClick={handleEditClick}
               onDelete={handleDelete}
               onStatusChange={handleStatusChange}
-              projectStartDate={project?.start_date}
-              projectEndDate={project?.end_date}
             />
           </div>
         </>
@@ -202,8 +196,6 @@ const TaskColumn = ({
   onDelete,
   onStatusChange,
   userRole = "",
-  projectStartDate,
-  projectEndDate,
 }) => (
   <div className={`bg-gray-100 text-white p-4 rounded-lg  flex flex-col`}>
     <div
@@ -232,8 +224,6 @@ const TaskColumn = ({
             onhandleDelete={onDelete}
             onStatusChange={onStatusChange}
             userRole={userRole}
-            projectStartDate={projectStartDate}
-            projectEndDate={projectEndDate}
           />
         ))
       )}

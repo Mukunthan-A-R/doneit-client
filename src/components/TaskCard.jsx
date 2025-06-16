@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { userData } from "../data/atom";
+import { CurrentProjectState, userData } from "../data/atom";
 import { updateTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
@@ -24,19 +24,16 @@ const TaskCard = ({
   onhandleDelete,
   onStatusChange,
   userRole,
-  projectStartDate,
-  projectEndDate,
 }) => {
   const currentUserData = useRecoilValue(userData);
   const currentUserId = currentUserData?.user_id;
-
-  const [isDraggable, setIsDraggable] = useState(false);
 
   const remainingTime = calculateRemainingTime(endDate);
   const endTime = formatDate(endDate);
   const startTime = formatDate(startDate);
 
   const { projectId } = useParams();
+  const { project, isLoading } = useRecoilValue(CurrentProjectState);
 
   const [menuVisible, setMenuVisible] = useState(false);
   const cardClickOutside = useClickOutside(() => setMenuVisible(false));
@@ -201,15 +198,10 @@ const TaskCard = ({
     }
   };
 
+  if (isLoading) return null;
+
   return (
-    <div
-      className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative"
-      draggable={isDraggable}
-      onDragStart={(e) => {
-        e.dataTransfer.effectAllowed = "move";
-        console.log(e);
-      }}
-    >
+    <div className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative">
       {/* 3-Dot Menu */}
       {userRole !== "client" && (
         <div className="absolute top-2 right-2">
@@ -223,7 +215,7 @@ const TaskCard = ({
 
           {menuVisible && (
             <div
-              className="absolute bg-white shadow-xl rounded-md mt-2 w-32 p-2 z-50"
+              className="absolute bg-white shadow-xl rounded-md mt-2 w-32 p-2 z-50 animate-fade-in"
               style={{
                 left: "auto",
                 right: "0",
@@ -272,12 +264,7 @@ const TaskCard = ({
         </div>
       )}
 
-      <button
-        className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1"
-        onClick={toggleMenu}
-        onMouseDown={() => setIsDraggable(true)}
-        onMouseLeave={() => setIsDraggable(false)}
-      >
+      <button className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1">
         <RiDragMove2Fill size={20} />
       </button>
 
@@ -347,8 +334,8 @@ const TaskCard = ({
                   name="start_date"
                   value={formData.start_date}
                   onChange={handleInputChange}
-                  min={formatInputDate(projectStartDate)}
-                  max={formatInputDate(projectEndDate)}
+                  min={formatInputDate(project.start_date)}
+                  max={formatInputDate(project.end_date)}
                   className="w-full p-2 mt-1 border border-gray-300 rounded-md text-black"
                 />
                 {errors.start_date && (
@@ -367,8 +354,8 @@ const TaskCard = ({
                   name="end_date"
                   value={formData.end_date}
                   onChange={handleInputChange}
-                  min={formatInputDate(projectStartDate)}
-                  max={formatInputDate(projectEndDate)}
+                  min={formatInputDate(project.start_date)}
+                  max={formatInputDate(project.end_date)}
                   className="w-full p-2 mt-1 border border-gray-300 rounded-md text-black"
                 />
                 {errors.end_date && (
