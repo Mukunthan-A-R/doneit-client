@@ -10,6 +10,7 @@ import {
 } from "../services/ProjectServices";
 import { formatDate, truncate } from "../services/utils";
 import { confirmComponent } from "./modals/ConfirmToast";
+import { BiPencil, BiTrash } from "react-icons/bi";
 
 const ProjectCard = ({ project, onDelete }) => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const ProjectCard = ({ project, onDelete }) => {
 
   return (
     <>
-      <div className="max-w-sm p-3 pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
+      <div className="max-w-sm p-3 animate-fade-in pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
         {/* Menu Icon */}
         <div className="absolute top-1 right-1">
           <button
@@ -102,23 +103,25 @@ const ProjectCard = ({ project, onDelete }) => {
 
           {/* Dropdown Menu */}
           {isDropdownOpen && !isEditing && (
-            <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-md">
+            <div className="absolute right-0 mt-2 w-28 animate-fade-in bg-white border border-gray-200 rounded-lg shadow-md p-1 overflow-hidden">
               <ul>
                 <li>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-600 hover:text-white"
+                    className="text-sm flex items-center gap-1 px-2 transition-colors py-1.5 rounded-md text-gray-700 hover:bg-blue-600 hover:text-white"
                     onClick={() => setIsEditing(true)} // Enter edit mode
                   >
+                    <BiPencil />
                     Edit
                   </a>
                 </li>
                 <li>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-gray-700 hover:bg-red-600 hover:text-white"
+                    className="text-sm flex items-center gap-1 px-2 transition-colors py-1.5 rounded-md text-gray-700 hover:bg-red-600 hover:text-white"
                     onClick={handleDelete}
                   >
+                    <BiTrash />
                     Delete
                   </a>
                 </li>
