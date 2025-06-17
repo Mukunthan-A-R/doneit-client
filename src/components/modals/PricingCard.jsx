@@ -20,7 +20,7 @@ export function PricingCard({ title, price, features, highlighted = false }) {
       </ul>
       <button
         type="button"
-        className="inline-flex w-full justify-center rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-200"
+        className="inline-flex w-full justify-center rounded-lg bg-blue-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
       >
         Choose plan
       </button>
@@ -29,7 +29,7 @@ export function PricingCard({ title, price, features, highlighted = false }) {
 }
 
 function Feature({ text, disabled }) {
-  const iconColor = disabled ? "text-gray-400" : "text-cyan-600";
+  const iconColor = disabled ? "text-gray-400" : "text-blue-900";
   const textClass = `text-base font-normal leading-tight ${
     disabled
       ? "text-gray-400 line-through decoration-gray-400"
