@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import SandySoft from "../assets/SandySoft.png";
+import SandySoft from "../../public/SandySoft.png";
 import useAuth from "../hooks/useAuth";
 
 function Navbar() {
