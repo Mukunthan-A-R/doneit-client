@@ -8,6 +8,7 @@ import {
   fetchProjectById,
 } from "../services/ProjectServices";
 import { formatDate } from "../services/utils";
+import useClickOutside from "../hooks/useClickOutside";
 
 const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
 
   const setCurrentProject = useSetRecoilState(ProjectState);
   const setCurrentProjectData = useSetRecoilState(CurrentProject);
+
+  const handleClickOutsideRef = useClickOutside(() => setIsDropdownOpen(false));
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -85,17 +88,16 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
 
   return (
     <>
-      <div className="max-w-sm rounded-lg bg-white overflow-hidden relative shadow-md hover:shadow-xl duration-300 hover:scale-105 transition-transform">
+      <div className="max-w-sm p-3 pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
         {/* Menu Icon */}
-        <div className="absolute top-3 right-3">
-          {project.role === "admin" && (
-            <button
-              className="text-gray-900 font-bold text-xl focus:outline-none cursor-pointer"
-              onClick={toggleDropdown}
-            >
-              ...
-            </button>
-          )}
+        <div className="absolute top-1 right-1">
+          <button
+            className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
+            onClick={toggleDropdown}
+            ref={handleClickOutsideRef}
+          >
+            •••
+          </button>
 
           {/* Dropdown Menu */}
           {isDropdownOpen && !isEditing && (
@@ -127,43 +129,42 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
         {/* Display Card Content */}
         {!isEditing && (
           <>
-            <div className="px-6 py-4">
-              <div className="flex items-center space-x-3">
-                {project.status === "active" ? (
-                  <div className="w-4 h-4 rounded-full bg-green-600"></div>
-                ) : project.status === "completed" ? (
-                  <div className="w-4 h-4 rounded-full bg-gray-800"></div>
-                ) : (
-                  <div className="w-4 h-4 rounded-full bg-red-600"></div>
-                )}
-                <h2
-                  className="text-xl font-semibold text-blue-800 truncate w-[160px]"
-                  title={project.name}
-                >
-                  {truncate(project.name, 20)}
-                </h2>
-                <span
-                  className={`text-xs font-semibold px-2 py-1 rounded-full mr-5 ${
-                    project.priority === "high"
-                      ? "bg-red-100 text-red-800"
-                      : project.priority === "medium"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : project.priority === "low"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  {project.priority?.toUpperCase()}
-                </span>
-              </div>
-              <p className="text-gray-600 mt-2">{project.description}</p>
+            <div className="flex items-center space-x-3">
+              {project.status === "active" ? (
+                <div className="size-4 rounded-full bg-green-600"></div>
+              ) : project.status === "completed" ? (
+                <div className="size-4 rounded-full bg-gray-800"></div>
+              ) : (
+                <div className="size-4 rounded-full bg-red-600"></div>
+              )}
+              <h2
+                className="text-xl font-semibold text-blue-800 truncate w-[160px]"
+                title={project.name}
+              >
+                {truncate(project.name, 20)}
+              </h2>
+              <span
+                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full mr-5 ${
+                  project.priority === "high"
+                    ? "bg-red-100 text-red-800"
+                    : project.priority === "medium"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : project.priority === "low"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-200 text-gray-700"
+                }`}
+              >
+                {project.priority?.toUpperCase()}
+              </span>
             </div>
+            <p className="text-gray-600 mt-2">{project.description}</p>
 
-            <div className="pl-6">
+            <div>
               <p className="text-sm text-gray-600">DeadLine</p>
               <p>{formatDate(project.end_date)}</p>
             </div>
-            <div className="px-6 py-2 flex items-center justify-between">
+
+            <div className="flex items-center justify-between">
               {editedProjectData.status !== "completed" ? (
                 <div className="flex flex-col">
                   <span className="text-sm text-gray-600">Remaining Time</span>
@@ -179,9 +180,14 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
                   )}
                 </div>
               ) : (
-                <span className="text-sm text-green-600">
-                  Project Completed
-                </span>
+                <>
+                  <span className="text-sm text-green-600">
+                    Project Completed
+                  </span>
+                  <div className="absolute bottom-18 right-[-1rem] rotate-[-20deg] text-green-600 border-2 border-green-600 px-3 py-1 font-bold text-sm uppercase opacity-80 pointer-events-none">
+                    Completed
+                  </div>
+                </>
               )}
               <button
                 className="bg-blue-600 text-white text-sm py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"

@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { refetchTriggerAtom, userData } from "../data/atom";
 import { getCollaboratedProjects } from "../services/getCollaboratedProjects";
+import ErrorHandler from "./ErrorHandler";
+import ProjectCardsSkeleton from "./ProjectCardsSkeleton";
 import ProjectCollabCard from "./ProjectCollabCard";
-import { refetchTriggerAtom } from "../data/atom";
-import Skeleton from "@mui/material/Skeleton";
-import SkeletonCard from "./modals/SkeletonCard";
 
-const ProjectCollabCardHolder = ({ user_id }) => {
+const ProjectCollabCardHolder = () => {
+  const currentUserData = useRecoilValue(userData);
+  const currentUserId = parseInt(currentUserData.user_id);
+
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editTrigger, setEditTrigger] = useState(1);
 
   const refetchTrigger = useRecoilValue(refetchTriggerAtom);
-
-  const currentUserId = parseInt(user_id);
-  // console.log("projects");
-  // console.log(projects);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -40,18 +39,12 @@ const ProjectCollabCardHolder = ({ user_id }) => {
 
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
-      prevProjects.filter((project) => project.project_id !== projectId)
+      prevProjects.filter((project) => project.project_id !== projectId),
     );
   };
 
-  if (loading)
-    return (
-      <div className="flex flex-col sm:flex-row gap-10">
-        <SkeletonCard></SkeletonCard>
-        <SkeletonCard></SkeletonCard>
-      </div>
-    );
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <ProjectCardsSkeleton />;
+  if (error) return <ErrorHandler error={error} />;
 
   return (
     <div>

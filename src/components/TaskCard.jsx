@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { userData } from "../data/atom";
+import { CurrentProjectState, userData } from "../data/atom";
 import { updateTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import useClickOutside from "../hooks/useClickOutside";
 import UserBadge from "./UserBadge";
+import { RiDragMove2Fill } from "react-icons/ri";
 
 const TaskCard = ({
   task_id,
@@ -22,9 +23,12 @@ const TaskCard = ({
   onEditClick,
   onhandleDelete,
   onStatusChange,
+  isDraggable,
+  onDragStart,
+  onDragEnd,
+  onMouseDown,
+  onMouseLeave,
   userRole,
-  projectStartDate,
-  projectEndDate,
 }) => {
   const currentUserData = useRecoilValue(userData);
   const currentUserId = currentUserData?.user_id;
@@ -34,6 +38,7 @@ const TaskCard = ({
   const startTime = formatDate(startDate);
 
   const { projectId } = useParams();
+  const { project, isLoading } = useRecoilValue(CurrentProjectState);
 
   const [menuVisible, setMenuVisible] = useState(false);
   const cardClickOutside = useClickOutside(() => setMenuVisible(false));
@@ -198,11 +203,18 @@ const TaskCard = ({
     }
   };
 
+  if (isLoading) return null;
+
   return (
-    <div className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative">
+    <div
+      className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative"
+      draggable={isDraggable}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    >
       {/* 3-Dot Menu */}
-      <div className="absolute top-2 right-2">
-        {userRole !== "client" && (
+      {userRole !== "client" && (
+        <div className="absolute top-2 right-2">
           <button
             className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
             ref={cardClickOutside}
@@ -210,57 +222,65 @@ const TaskCard = ({
           >
             •••
           </button>
-        )}
 
-        {menuVisible && (
-          <div
-            className="absolute bg-white shadow-xl rounded-md mt-2 w-32 p-2 z-50"
-            style={{
-              left: "auto",
-              right: "0",
-              top: "100%",
-              transform: "translateX(-10%)",
-            }}
-          >
-            {status !== "not started" && (
-              <button
-                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => handleStatusChange("not started")}
-              >
-                Not Started
-              </button>
-            )}
-            {status !== "in progress" && (
-              <button
-                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => handleStatusChange("in progress")}
-              >
-                In Progress
-              </button>
-            )}
-            {status !== "completed" && (
-              <button
-                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => handleStatusChange("completed")}
-              >
-                Completed
-              </button>
-            )}
-            <button
-              className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => setIsEditPopupVisible(true)}
+          {menuVisible && (
+            <div
+              className="absolute bg-white shadow-xl rounded-md mt-2 w-32 p-2 z-50 animate-fade-in"
+              style={{
+                left: "auto",
+                right: "0",
+                top: "100%",
+                transform: "translateX(-10%)",
+              }}
             >
-              Edit
-            </button>
-            <button
-              className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => onhandleDelete(task_id, title)}
-            >
-              Delete
-            </button>
-          </div>
-        )}
-      </div>
+              {status !== "not started" && (
+                <button
+                  className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => handleStatusChange("not started")}
+                >
+                  Not Started
+                </button>
+              )}
+              {status !== "in progress" && (
+                <button
+                  className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => handleStatusChange("in progress")}
+                >
+                  In Progress
+                </button>
+              )}
+              {status !== "completed" && (
+                <button
+                  className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => handleStatusChange("completed")}
+                >
+                  Completed
+                </button>
+              )}
+              <button
+                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => setIsEditPopupVisible(true)}
+              >
+                Edit
+              </button>
+              <button
+                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => onhandleDelete(task_id, title)}
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      <button
+        className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1"
+        onMouseDown={onMouseDown}
+        onMouseLeave={onMouseLeave}
+      >
+        <RiDragMove2Fill size={20} />
+      </button>
 
       {/* Task Info */}
       {name && <UserBadge profile={profile} name={name} />}
@@ -328,8 +348,8 @@ const TaskCard = ({
                   name="start_date"
                   value={formData.start_date}
                   onChange={handleInputChange}
-                  min={formatInputDate(projectStartDate)}
-                  max={formatInputDate(projectEndDate)}
+                  min={formatInputDate(project.start_date)}
+                  max={formatInputDate(project.end_date)}
                   className="w-full p-2 mt-1 border border-gray-300 rounded-md text-black"
                 />
                 {errors.start_date && (
@@ -348,8 +368,8 @@ const TaskCard = ({
                   name="end_date"
                   value={formData.end_date}
                   onChange={handleInputChange}
-                  min={formatInputDate(projectStartDate)}
-                  max={formatInputDate(projectEndDate)}
+                  min={formatInputDate(project.start_date)}
+                  max={formatInputDate(project.end_date)}
                   className="w-full p-2 mt-1 border border-gray-300 rounded-md text-black"
                 />
                 {errors.end_date && (
