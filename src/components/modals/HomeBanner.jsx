@@ -1,6 +1,6 @@
 // src/components/modals/HomeBanner.js
 import React from "react";
-import BannerImg from "../../assets/BannerImg.jpg";
+import BannerImg from "../../../public/BannerImg.jpg";
 import { Link } from "react-router-dom";
 
 const HomeBanner = ({ onLearnMoreClick }) => {

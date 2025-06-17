@@ -1,6 +1,6 @@
 import React from "react";
-import GraphImg from "../../assets/Graph.jpg";
-import PaperWork from "../../assets/paperwork.avif";
+import GraphImg from "../../../public/Graph.jpg";
+import PaperWork from "../../../public//paperwork.avif";
 
 const ProductivityBoost = () => {
   return (
