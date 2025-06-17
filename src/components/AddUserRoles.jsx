@@ -27,6 +27,7 @@ const AddUserRoles = () => {
   const [reloadAssignments, setReloadAssignments] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [ownerEmail, setOwnerEmail] = useState("");
+  const [assignments, setAssignments] = useState(null);
 
   const { projectId } = useParams();
   const { project } = useProject(projectId);
@@ -59,6 +60,7 @@ const AddUserRoles = () => {
       try {
         const response = await getAssignmentsByProjectId(projectId);
         const ResData = response.data;
+        setAssignments(ResData);
 
         let filterData = ResData.filter(
           (item) => item.user_id === parseInt(currentUserData.user_id)
@@ -117,8 +119,18 @@ const AddUserRoles = () => {
   };
   const handleRoleChange = (event) => setRole(event.target.value);
 
+  function CheckExistingUser(userId) {
+    return assignments.some((user) => user.user_id === userId);
+  }
+
   const handleAddUser = async (event) => {
     event.preventDefault();
+
+    const result = CheckExistingUser(userId);
+    if (result) {
+      toast.error("The user already Exist!");
+      return;
+    }
 
     if (userDetails) {
       try {
@@ -156,8 +168,8 @@ const AddUserRoles = () => {
     }
   };
 
-  // console.log("userRole");
-  // console.log(userRole);
+  // console.log("assignments");
+  // console.log(assignments);
 
   if (loading) {
     return <p>Loading ...</p>;
