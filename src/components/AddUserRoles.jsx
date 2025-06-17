@@ -15,15 +15,17 @@ import { useDebouncedCallback } from "../hooks/useDebounceCallback";
 import useProject from "../hooks/useProject";
 import { fetchUserById } from "../services/UserData";
 import { createActivityLog } from "../services/projectActivity";
+import ErrorHandler from "./ErrorHandler";
 
 const AddUserRoles = () => {
   const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("member");
   const [userDetails, setUserDetails] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
-  const [reloadAssignments, setReloadAssignments] = useState(false); // Add a state to trigger re-fetching assignments
-  const [userRole, setUserRole] = useState("");
+  const [reloadAssignments, setReloadAssignments] = useState(false);
+  const [userRole, setUserRole] = useState(null);
   const [ownerEmail, setOwnerEmail] = useState("");
 
   const { projectId } = useParams();
@@ -33,14 +35,18 @@ const AddUserRoles = () => {
 
   useEffect(() => {
     const fetchProjectDetails = async () => {
+      setLoading(true);
       try {
         const ProjectOwner = await fetchUserById(project?.created);
         setOwnerEmail(ProjectOwner.data.email);
         if (ProjectOwner.data.user_id === currentUserData.user_id) {
           setUserRole("admin");
+          setLoading(false);
         }
       } catch (err) {
         console.log(err);
+        toast.error("Error fetching assignments");
+        setLoading(false);
       }
     };
 
@@ -49,21 +55,24 @@ const AddUserRoles = () => {
 
   useEffect(() => {
     const fetchAssignments = async () => {
+      setLoading(true);
       try {
         const response = await getAssignmentsByProjectId(projectId);
         const ResData = response.data;
-        if (setUserRole) {
-          return;
-        }
 
         let filterData = ResData.filter(
-          (item) => item.user_id === parseInt(currentUserData.user_id),
+          (item) => item.user_id === parseInt(currentUserData.user_id)
         );
 
-        if (response.success) {
+        if (filterData.length > 0) {
           setUserRole(filterData[0].role);
+          setLoading(false);
+        } else {
+          setLoading(false);
+          return;
         }
       } catch (err) {
+        setLoading(false);
         console.log("🚀 ~ fetchAssignments ~ err:", err);
         toast.error("Error fetching assignments");
       }
@@ -77,7 +86,7 @@ const AddUserRoles = () => {
       const fetchUser = async () => {
         if (ownerEmail.trim() === email.trim()) {
           toast.error(
-            `The email ${email.trim()} you are trying to add is the owner of the Project ! `,
+            `The email ${email.trim()} you are trying to add is the owner of the Project ! `
           );
           return;
         }
@@ -150,9 +159,17 @@ const AddUserRoles = () => {
   // console.log("userRole");
   // console.log(userRole);
 
+  if (loading) {
+    return <p>Loading ...</p>;
+  }
+
+  if (!userRole) {
+    return <ErrorHandler error={"Access Denied"} />;
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
-      {!["member", "client", ""].includes(userRole) && (
+      {["admin", "manager"].includes(userRole) && (
         <>
           <h1 className="text-3xl font-semibold text-center mb-6">
             Add Users by Email & Role
