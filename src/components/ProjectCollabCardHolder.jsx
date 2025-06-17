@@ -3,6 +3,8 @@ import { useRecoilValue } from "recoil";
 import { getCollaboratedProjects } from "../services/getCollaboratedProjects";
 import ProjectCollabCard from "./ProjectCollabCard";
 import { refetchTriggerAtom } from "../data/atom";
+import Skeleton from "@mui/material/Skeleton";
+import SkeletonCard from "./modals/SkeletonCard";
 
 const ProjectCollabCardHolder = ({ user_id }) => {
   const [projects, setProjects] = useState([]);
@@ -38,11 +40,17 @@ const ProjectCollabCardHolder = ({ user_id }) => {
 
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
-      prevProjects.filter((project) => project.project_id !== projectId),
+      prevProjects.filter((project) => project.project_id !== projectId)
     );
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex flex-col sm:flex-row gap-10">
+        <SkeletonCard></SkeletonCard>
+        <SkeletonCard></SkeletonCard>
+      </div>
+    );
   if (error) return <div>Error: {error}</div>;
 
   return (
