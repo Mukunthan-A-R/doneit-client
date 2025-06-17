@@ -23,6 +23,11 @@ const TaskCard = ({
   onEditClick,
   onhandleDelete,
   onStatusChange,
+  isDraggable,
+  onDragStart,
+  onDragEnd,
+  onMouseDown,
+  onMouseLeave,
   userRole,
 }) => {
   const currentUserData = useRecoilValue(userData);
@@ -201,7 +206,12 @@ const TaskCard = ({
   if (isLoading) return null;
 
   return (
-    <div className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative">
+    <div
+      className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative"
+      draggable={isDraggable}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    >
       {/* 3-Dot Menu */}
       {userRole !== "client" && (
         <div className="absolute top-2 right-2">
@@ -264,7 +274,11 @@ const TaskCard = ({
         </div>
       )}
 
-      <button className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1">
+      <button
+        className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1"
+        onMouseDown={onMouseDown}
+        onMouseLeave={onMouseLeave}
+      >
         <RiDragMove2Fill size={20} />
       </button>
 

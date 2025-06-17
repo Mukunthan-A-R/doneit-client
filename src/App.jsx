@@ -1,6 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Slide, ToastContainer } from "react-toastify";
 import DashboardLayout from "./components/layouts/DashboardLayout";
+import ProtectedRoute from "./components/layouts/ProtectedRoute";
 import TaskboardLayout from "./components/layouts/TaskboardLayout";
 import NavBar from "./components/NavBar";
 import About from "./pages/About";
@@ -19,14 +20,12 @@ import ProjectCalendar from "./pages/ProjectCalendar";
 import ResetPassword from "./pages/ResetPassword";
 import Settings from "./pages/Settings";
 import SignupPage from "./pages/SignupPage";
-import TaskDashboard from "./pages/TaskDashboard";
 import TaskListView from "./pages/TaskListView";
+import TasksPage from "./pages/TasksPage";
 import TermsOfService from "./pages/TermsOfService";
 import TransactionAnalytics from "./pages/TransactionAnalytics";
 import TransactionHistory from "./pages/TransactionHistory";
 import UserDashboard from "./pages/UserDashboard";
-import ProtectedRoute from "./components/layouts/ProtectedRoute";
-import TasksPage from "./pages/TasksPage";
 
 function App() {
   return (
@@ -46,8 +45,7 @@ function App() {
           </Route>
 
           <Route element={<TaskboardLayout />}>
-            <Route path="/tasks/:projectId" element={<TaskDashboard />} />
-            <Route path="/tasks-beta/:projectId" element={<TasksPage />} />
+            <Route path="/tasks/:projectId" element={<TasksPage />} />
             <Route path="/analytics/:projectId" element={<Analytics />} />
             <Route path="/list/:projectId" element={<TaskListView />} />
             <Route

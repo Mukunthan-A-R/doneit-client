@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { ProjectState, userData } from "../data/atom";
 import { getCollaboratedProjects } from "../services/getCollaboratedProjects";
 import { editProjectById } from "../services/ProjectServices";
 import { toast } from "react-toastify";
-import { deleteTask } from "../services/TaskServices";
+import { deleteTask, updateTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import useProjectTasks from "../hooks/useProjectTasks";
 import useProject from "../hooks/useProject";
@@ -16,15 +16,16 @@ import TaskCard from "../components/TaskCard";
 
 export default function TasksPage() {
   const [userRole, setUserRole] = useState("");
+  const [showCreateTask, setShowCreateTask] = useState(false);
+  const [isDraggable, setIsDraggable] = useState(false);
+
   const currentUserData = useRecoilValue(userData);
-
-  const { projectId } = useParams();
-
   const currentUserId = currentUserData.user_id;
 
+  const { projectId } = useParams();
   const fallbackProjectId = useRecoilValue(ProjectState);
   const activeProjectId = projectId || fallbackProjectId;
-  const [showCreateTask, setShowCreateTask] = useState(false);
+
   const { project } = useProject(projectId);
   const {
     tasks,
@@ -73,8 +74,7 @@ export default function TasksPage() {
     }
   };
 
-  const handleEditClick = (taskId) => {
-    console.log("Edit task with ID:", taskId);
+  const handleEditClick = () => {
     refetchTasks();
   };
 
@@ -100,6 +100,74 @@ export default function TasksPage() {
     }
   };
 
+  const handleDrop = async (e, taskStatus) => {
+    if (!isDraggable) return;
+    const task_id = e.dataTransfer.getData("task_id");
+    const currentTask = tasks.find((task) => task.task_id == task_id);
+    if (!currentTask) return;
+    if (currentTask.status === taskStatus) return;
+    try {
+      await updateTask(task_id, {
+        project_id: projectId,
+        status: taskStatus,
+        title: currentTask.title,
+        description: currentTask.description,
+        start_date: currentTask.start_date,
+        end_date: currentTask.end_date,
+        time_duration: currentTask.time_duration,
+      });
+      refetchTasks(true);
+      await createActivityLog({
+        user_id: currentUserId,
+        project_id: currentTask.project_id,
+        task_id: task_id,
+        action: "status-change",
+        context: {
+          oldStatus: currentTask.status,
+          newStatus: taskStatus,
+          title: currentTask.title,
+        },
+      });
+    } catch (err) {
+      console.error("Failed to update task status", err);
+
+      toast.error("Failed to update status!");
+    }
+  };
+
+  const taskCategories = useMemo(
+    () => [
+      {
+        heading: "Not Started",
+        bg: "bg-blue-900",
+        name: "not started",
+        items:
+          !isLoading && tasks && tasks.length
+            ? tasks.filter((task) => task.status === "not started")
+            : [],
+      },
+      {
+        heading: "In progress",
+        bg: "bg-yellow-600",
+        name: "in progress",
+        items:
+          !isLoading && tasks && tasks.length
+            ? tasks.filter((task) => task.status === "in progress")
+            : [],
+      },
+      {
+        heading: "Completed",
+        bg: "bg-green-600",
+        name: "completed",
+        items:
+          !isLoading && tasks && tasks.length
+            ? tasks.filter((task) => task.status === "completed")
+            : [],
+      },
+    ],
+    [tasks, isLoading],
+  );
+
   if (!activeProjectId) {
     return (
       <p className="text-xl text-red-600">Please select a project first.</p>
@@ -114,14 +182,8 @@ export default function TasksPage() {
     return <ErrorHandler error={error} />;
   }
 
-  const notStartedTasks = tasks.filter((task) => task.status === "not started");
-
-  const inProgressTasks = tasks.filter((task) => task.status === "in progress");
-
-  const completedTasks = tasks.filter((task) => task.status === "completed");
-
   const allTasksCompleted =
-    tasks.length > 0 && tasks.length === completedTasks.length;
+    tasks.length > 0 && tasks.length === taskCategories[2].items.length;
 
   return (
     <div className="flex flex-col gap-3">
@@ -159,129 +221,70 @@ export default function TasksPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-4 md:px-0 min-h-screen">
             {/* Not Started column */}
-            <div
-              className={`bg-gray-100 text-white p-4 rounded-lg  flex flex-col`}
-            >
+            {taskCategories.map((category) => (
               <div
-                className={`bg-blue-900 py-2 px-4 rounded-xl flex justify-between items-center`}
+                className={`bg-gray-100 text-white p-4 rounded-lg  flex flex-col`}
+                key={category.heading}
+                onDrop={(e) => handleDrop(e, category.name)}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                }}
               >
-                <h2 className="text-xl font-semibold text-white">
-                  Not Started
-                </h2>
-                <p>{notStartedTasks.length}</p>
+                <div
+                  className={`${category.bg} py-2 px-4 rounded-xl flex justify-between items-center`}
+                >
+                  <h2 className="text-xl font-semibold text-white">
+                    {category.heading}
+                  </h2>
+                  <p>{category.items.length}</p>
+                </div>
+                <div
+                  className="overflow-y-auto space-y-4 pr-2"
+                  style={{ flexGrow: 1 }}
+                >
+                  {category.items.length === 0 ? (
+                    <p className="text-gray-800 pt-4 pl-4 font-medium">
+                      No tasks to show
+                    </p>
+                  ) : (
+                    category.items.map((task) => (
+                      <TaskCard
+                        key={task.task_id}
+                        task_id={task.task_id}
+                        title={task.title}
+                        status={task.status}
+                        profile={task.profile_img}
+                        name={task.name}
+                        desc={task.description}
+                        startDate={task.start_date}
+                        endDate={task.end_date}
+                        timeDuration={task.time_duration}
+                        onEditClick={handleEditClick}
+                        onhandleDelete={handleDelete}
+                        onStatusChange={handleStatusChange}
+                        userRole={userRole}
+                        isDraggable={isDraggable}
+                        onDragStart={(e) => {
+                          if (!isDraggable) return;
+                          e.dataTransfer.setData("task_id", task.task_id);
+                          e.dataTransfer.effectAllowed = "move";
+                        }}
+                        onDragEnd={(e) => {
+                          if (!isDraggable) return;
+                          e.dataTransfer.setData("task_id", null);
+                        }}
+                        onMouseDown={() => {
+                          setIsDraggable(true);
+                        }}
+                        onMouseLeave={() => {
+                          setIsDraggable(false);
+                        }}
+                      />
+                    ))
+                  )}
+                </div>
               </div>
-              <div
-                className="overflow-y-auto space-y-4 pr-2"
-                style={{ flexGrow: 1 }}
-              >
-                {notStartedTasks.length === 0 ? (
-                  <p className="text-gray-800 pt-4 pl-4 font-medium">
-                    No tasks to show
-                  </p>
-                ) : (
-                  notStartedTasks.map((task) => (
-                    <TaskCard
-                      key={task.task_id}
-                      task_id={task.task_id}
-                      title={task.title}
-                      status={task.status}
-                      profile={task.profile_img}
-                      name={task.name}
-                      desc={task.description}
-                      startDate={task.start_date}
-                      endDate={task.end_date}
-                      timeDuration={task.time_duration}
-                      onEditClick={handleEditClick}
-                      onhandleDelete={handleDelete}
-                      onStatusChange={handleStatusChange}
-                      userRole={userRole}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-            {/* In Progress column */}
-            <div
-              className={`bg-gray-100 text-white p-4 rounded-lg  flex flex-col`}
-            >
-              <div
-                className={`bg-[#deaf14] py-2 px-4 rounded-xl flex justify-between items-center`}
-              >
-                <h2 className="text-xl font-semibold text-white">
-                  In progress
-                </h2>
-                <p>{notStartedTasks.length}</p>
-              </div>
-              <div
-                className="overflow-y-auto space-y-4 pr-2"
-                style={{ flexGrow: 1 }}
-              >
-                {inProgressTasks.length === 0 ? (
-                  <p className="text-gray-800 pt-4 pl-4 font-medium">
-                    No tasks to show
-                  </p>
-                ) : (
-                  inProgressTasks.map((task) => (
-                    <TaskCard
-                      key={task.task_id}
-                      task_id={task.task_id}
-                      title={task.title}
-                      status={task.status}
-                      profile={task.profile_img}
-                      name={task.name}
-                      desc={task.description}
-                      startDate={task.start_date}
-                      endDate={task.end_date}
-                      timeDuration={task.time_duration}
-                      onEditClick={handleEditClick}
-                      onhandleDelete={handleDelete}
-                      onStatusChange={handleStatusChange}
-                      userRole={userRole}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-            {/* In Progress column */}
-            <div
-              className={`bg-gray-100 text-white p-4 rounded-lg  flex flex-col`}
-            >
-              <div
-                className={`bg-green-600 py-2 px-4 rounded-xl flex justify-between items-center`}
-              >
-                <h2 className="text-xl font-semibold text-white">Completed</h2>
-                <p>{completedTasks.length}</p>
-              </div>
-              <div
-                className="overflow-y-auto space-y-4 pr-2"
-                style={{ flexGrow: 1 }}
-              >
-                {completedTasks.length === 0 ? (
-                  <p className="text-gray-800 pt-4 pl-4 font-medium">
-                    No tasks to show
-                  </p>
-                ) : (
-                  completedTasks.map((task) => (
-                    <TaskCard
-                      key={task.task_id}
-                      task_id={task.task_id}
-                      title={task.title}
-                      status={task.status}
-                      profile={task.profile_img}
-                      name={task.name}
-                      desc={task.description}
-                      startDate={task.start_date}
-                      endDate={task.end_date}
-                      timeDuration={task.time_duration}
-                      onEditClick={handleEditClick}
-                      onhandleDelete={handleDelete}
-                      onStatusChange={handleStatusChange}
-                      userRole={userRole}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
+            ))}
           </div>
         </>
       )}

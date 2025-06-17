@@ -33,7 +33,6 @@ export const fetchTasks = async (project_id) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(response);
   return response.data;
 };
 

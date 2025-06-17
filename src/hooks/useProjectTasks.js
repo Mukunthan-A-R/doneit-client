@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { fetchTasks } from "../services/TaskServices";
 import { isAxiosError } from "axios";
@@ -8,13 +8,14 @@ import { CurrentProjectTasks } from "../data/atom";
 export default function useProjectTasks(projectId) {
   const [state, setState] = useRecoilState(CurrentProjectTasks);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
+  const isSilentRefetchTriggered = useRef(false);
 
-  function refetch() {
+  function refetch(silent = false) {
+    isSilentRefetchTriggered.current = silent;
     setRefetchTrigger((prev) => prev + 1);
   }
 
   useEffect(() => {
-    console.log("effect running", state, projectId);
     if (!projectId) return;
 
     if (state.isLoading) return;
@@ -26,7 +27,7 @@ export default function useProjectTasks(projectId) {
     async function getProjectTasks() {
       setState({
         ...state,
-        isLoading: true,
+        isLoading: isSilentRefetchTriggered.current ? false : true,
         error: null,
         project_id: projectId,
       });
@@ -38,7 +39,9 @@ export default function useProjectTasks(projectId) {
           error: null,
           project_id: projectId,
         });
+        isSilentRefetchTriggered.current = false;
       } catch (error) {
+        isSilentRefetchTriggered.current = false;
         if (isAxiosError(error)) {
           toast.error(error.response || error.message);
           setState({
