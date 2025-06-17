@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { FaUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import SandySoft from "../../public/SandySoft.png";
-import useAuth from "../hooks/useAuth";
-import { IoSettingsOutline } from "react-icons/io5";
-import useClickOutside from "../hooks/useClickOutside";
 import { BiChevronDown, BiLogOut } from "react-icons/bi";
+import { IoSettingsOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import useClickOutside from "../hooks/useClickOutside";
 
 function Navbar() {
   const { user } = useAuth();
@@ -17,7 +15,7 @@ function Navbar() {
       <div className="w-7xl px-4 sm:px-6 py-3 lg:px-8 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <img src={SandySoft} alt="Logo" className="h-10 w-auto" />
+          <img src={"/SandySoft.png"} alt="Logo" className="h-10 w-auto" />
           <Link
             to="/"
             className="text-2xl font-bold text-white hover:text-blue-300 transition"
