@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { refetchTriggerAtom } from "../data/atom";
-import { fetchProjects } from "../services/ProjectServices";
-import ProjectCard from "./ProjectCard";
 import { BiPlusCircle } from "react-icons/bi";
-import { useSetRecoilState } from "recoil";
-import { createProjectToggle } from "../data/atom";
-import Skeleton from "@mui/material/Skeleton";
-import SkeletonCard from "./modals/SkeletonCard";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  createProjectToggle,
+  refetchTriggerAtom,
+  userData,
+} from "../data/atom";
+import { fetchProjects } from "../services/ProjectServices";
+import ErrorHandler from "./ErrorHandler";
+import ProjectCard from "./ProjectCard";
+import ProjectCardsSkeleton from "./ProjectCardsSkeleton";
 
-const ProjectCardHolder = ({ user_id }) => {
+const ProjectCardHolder = () => {
+  const currentUserData = useRecoilValue(userData);
+  const currentUserId = parseInt(currentUserData.user_id);
+
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const setToggleCreateProject = useSetRecoilState(createProjectToggle);
-
-  const currentUserId = parseInt(user_id);
 
   const refetchTrigger = useRecoilValue(refetchTriggerAtom);
 
@@ -40,22 +43,16 @@ const ProjectCardHolder = ({ user_id }) => {
 
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
-      prevProjects.filter((project) => project.project_id !== projectId)
+      prevProjects.filter((project) => project.project_id !== projectId),
     );
   };
 
-  if (loading)
-    return (
-      <div className="flex flex-col sm:flex-row gap-10">
-        <SkeletonCard></SkeletonCard>
-        <SkeletonCard></SkeletonCard>
-      </div>
-    );
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <ProjectCardsSkeleton />;
+
+  if (error) return <ErrorHandler error={error} />;
 
   return (
     <div>
-      {}
       <div
         className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ${
           projects.length === 0 ? "content" : ""
