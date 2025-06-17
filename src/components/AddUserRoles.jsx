@@ -60,6 +60,11 @@ const AddUserRoles = () => {
       try {
         const response = await getAssignmentsByProjectId(projectId);
         const ResData = response.data;
+
+        if (response.status === 404) {
+          setAssignments([]);
+          return;
+        }
         setAssignments(ResData);
 
         let filterData = ResData.filter(
@@ -81,7 +86,7 @@ const AddUserRoles = () => {
     };
 
     fetchAssignments();
-  }, [projectId]);
+  }, [projectId, reloadAssignments]);
 
   const handleSearchUser = useDebouncedCallback((email) => {
     if (email) {
@@ -120,6 +125,9 @@ const AddUserRoles = () => {
   const handleRoleChange = (event) => setRole(event.target.value);
 
   function CheckExistingUser(userId) {
+    if (assignments.length == 0) {
+      return;
+    }
     return assignments.some((user) => user.user_id === userId);
   }
 
@@ -175,9 +183,9 @@ const AddUserRoles = () => {
     return <p>Loading ...</p>;
   }
 
-  if (!userRole) {
-    return <ErrorHandler error={"Access Denied"} />;
-  }
+  // if (!userRole) {
+  //   return <ErrorHandler error={"Access Denied"} />;
+  // }
 
   return (
     <div className="max-w-4xl mx-auto">
