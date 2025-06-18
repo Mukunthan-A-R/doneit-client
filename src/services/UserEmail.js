@@ -25,6 +25,7 @@ export const getUserByEmail = async (email) => {
   try {
     const response = await axios.get(`${API_URL}/${email}`, {
       headers: getAuthHeaders(),
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {

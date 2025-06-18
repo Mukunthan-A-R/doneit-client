@@ -6,6 +6,7 @@ export const userData = atom({
     isLoading: false,
     error: null,
     user: null,
+    requireLogin: false,
   },
 });
 

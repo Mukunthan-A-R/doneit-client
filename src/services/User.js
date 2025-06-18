@@ -43,9 +43,7 @@ const API_URL_login = `${apiUrl}/login`;
 export const loginUser = async (credentials) => {
   try {
     const response = await axios.post(API_URL_login, credentials, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
@@ -54,4 +52,14 @@ export const loginUser = async (credentials) => {
   }
 };
 
-// https://task-manager-server-ugiw.onrender.com
+export const logoutUser = async () => {
+  try {
+    const response = await axios.get(apiUrl + "/auth/logout", {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Logout failed:", error.response?.data || error.message);
+    throw error;
+  }
+};

@@ -8,7 +8,7 @@ import ProjectCollabCard from "./ProjectCollabCard";
 
 const ProjectCollabCardHolder = () => {
   const currentUserData = useRecoilValue(userData);
-  const currentUserId = parseInt(currentUserData.user_id);
+  const currentUserId = parseInt(currentUserData.user.user_id);
 
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);

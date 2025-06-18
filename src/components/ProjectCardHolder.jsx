@@ -12,8 +12,8 @@ import ProjectCard from "./ProjectCard";
 import ProjectCardsSkeleton from "./ProjectCardsSkeleton";
 
 const ProjectCardHolder = () => {
-  const currentUserData = useRecoilValue(userData);
-  const currentUserId = parseInt(currentUserData.user_id);
+  const { user: currentUserData } = useRecoilValue(userData);
+  const currentUserId = parseInt(currentUserData?.user_id);
 
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);

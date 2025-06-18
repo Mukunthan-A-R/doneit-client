@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { CurrentProjectState } from "../data/atom";
 import { fetchProjectById } from "../services/ProjectServices";
+import { handleError } from "../services/utils";
 
 export default function useProject(id) {
   const [state, setState] = useRecoilState(CurrentProjectState);
@@ -27,7 +28,7 @@ export default function useProject(id) {
         setState({ project: data, isLoading: false, error: null, id });
       } catch (error) {
         if (isAxiosError(error)) {
-          toast.error(error.response || error.message);
+          toast.error(handleError(error));
           setState({ project: null, isLoading: false, error, id });
         } else {
           toast.error("Something went wrong in fetching project details");

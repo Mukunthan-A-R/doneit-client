@@ -25,6 +25,7 @@ export const fetchActivityLogs = async (projectId) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data; // { success: true, data: [...] }
   } catch (error) {
@@ -42,6 +43,7 @@ export const createActivityLog = async (activityData) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data; // { success: true, data: {...} }
   } catch (error) {

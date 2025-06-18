@@ -24,6 +24,7 @@ export const fetchProjects = async (user_id) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
 
     return response.data;
@@ -48,6 +49,7 @@ export const fetchProjectById = async (projectId) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
@@ -62,6 +64,7 @@ export const createProject = async (projectData) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
 
     if (response.data.success) {
@@ -84,29 +87,11 @@ export const editProjectById = async (projectId, projectData) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
     console.error("Error updating project:", error);
-    throw new Error(error.response ? error.response.data : error.message);
-  }
-};
-
-export const deleteAllProjects = async () => {
-  const token = getToken();
-  const user = {
-    user_id: 1, // replace with dynamic user_id if needed
-  };
-
-  try {
-    const response = await axios.delete(API_URL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: user,
-    });
-    return response.data;
-  } catch (error) {
     throw new Error(error.response ? error.response.data : error.message);
   }
 };
@@ -118,6 +103,7 @@ export const deleteProjectById = async (projectId) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     console.log("Project Deleted:", response.data);
     return response.data;

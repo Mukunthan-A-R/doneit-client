@@ -1,61 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { userData } from "../data/atom";
-import { fetchUserById } from "../services/UserData";
+import { useEffect, useState } from "react";
+import useAuth from "../hooks/useAuth";
 import EditUserModal from "./EditUserModal";
-import { Link } from "react-router-dom";
 
 const SettingsPage = () => {
-  const userDatas = useRecoilValue(userData);
-  const token = localStorage.getItem("x-auth-token");
+  const { isLoading, user, error } = useAuth();
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!token || !userDatas?.user_id) return;
+    if (!isLoading && user.user) {
+      setUserDetails(user.user);
+    }
+  }, [isLoading, user]);
 
-    const loadUserDetails = async () => {
-      try {
-        setLoading(true);
-        const response = await fetchUserById(userDatas.user_id);
-        if (response.success && response.status === 200) {
-          setUserDetails(response.data);
-        } else if (response.status === "HTTP 401") {
-          setError("Session expired - please log in again.");
-        } else {
-          setError("Could not fetch user details.");
-        }
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError("An unexpected error occurred.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUserDetails();
-  }, [token, userDatas]);
-
-  if (!token) {
-    return (
-      <div className="text-center text-gray-500">
-        You are not logged in. Please{" "}
-        <Link to="/login" className="text-blue-700 underline">
-          sign in
-        </Link>
-        .
-      </div>
-    );
-  }
-
-  if (!userDatas?.user_id) {
-    return <div className="text-center text-gray-500">Loading session…</div>;
-  }
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="text-center text-gray-500">Loading user details…</div>
     );
@@ -76,7 +35,7 @@ const SettingsPage = () => {
       {showEditModal && (
         <EditUserModal
           handleSetUserDetails={setUserDetails}
-          userId={userDatas.user_id}
+          userId={user.user_id}
           onClose={() => setShowEditModal(false)}
         />
       )}

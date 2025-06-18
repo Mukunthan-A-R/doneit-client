@@ -8,7 +8,7 @@ import useClickOutside from "../hooks/useClickOutside";
 function Navbar() {
   const { user } = useAuth();
 
-  const isLoggedIn = !!user?.token;
+  const isLoggedIn = !!user?.user?.token;
 
   return (
     <nav className="bg-[#0a1e3f] text-white shadow-md z-50 flex justify-center">
@@ -87,18 +87,19 @@ function UserDropdown() {
         className="flex items-center gap-1 text-gray-300 cursor-pointer hover:text-blue-400 transition"
         ref={handleClickOutside}
       >
-        {user?.profile ? (
+        {user?.user?.profile ? (
           <img
-            src={user.profile}
-            alt={user.name}
+            src={user?.user.profile}
+            alt={user?.user.name}
             className="size-7 rounded-full object-cover"
           />
         ) : (
           <div className="size-7 rounded-full bg-gray-100 text-blue-900 font-bold text-sm grid place-items-center">
-            {user?.name.split(" ")[0][0]} {user?.name.split(" ")[1]?.[0] ?? ""}
+            {user?.user?.name.split(" ")[0][0]}{" "}
+            {user?.user?.name.split(" ")[1]?.[0] ?? ""}
           </div>
         )}
-        {user?.name.split(" ")[0]}
+        {user?.user?.name.split(" ")[0]}
         <BiChevronDown />
       </button>
 

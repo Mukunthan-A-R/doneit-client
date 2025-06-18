@@ -31,7 +31,7 @@ const TaskCard = ({
   onMouseLeave,
   userRole,
 }) => {
-  const currentUserData = useRecoilValue(userData);
+  const { user: currentUserData } = useRecoilValue(userData);
   const currentUserId = currentUserData?.user_id;
 
   const remainingTime = calculateRemainingTime(endDate);

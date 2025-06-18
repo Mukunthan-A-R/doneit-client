@@ -25,6 +25,7 @@ export const getCollaboratedProjects = async (userId) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {

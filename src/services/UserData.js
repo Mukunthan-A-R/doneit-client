@@ -28,6 +28,7 @@ export const fetchUserById = async (userId) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
@@ -44,6 +45,7 @@ export const updateUserById = async (userId, userData) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {

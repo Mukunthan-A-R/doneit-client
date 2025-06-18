@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../services/User";
-import { useSetRecoilState } from "recoil";
-import { userData } from "../data/atom";
-import { toast } from "react-toastify";
-import { handleError } from "../services/utils";
+import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import ErrorHandler from "../components/ErrorHandler";
+import useAuth from "../hooks/useAuth";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -13,17 +10,9 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { isLoading, user, error: authError, login } = useAuth();
 
   const navigate = useNavigate();
-
-  const setUser = useSetRecoilState(userData);
-
-  useEffect(() => {
-    const token = localStorage.getItem("x-auth-token");
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,45 +20,20 @@ const LoginPage = () => {
     setLoading(true); // Set loading to true when form is submitted
 
     try {
-      const response = await loginUser({
-        email: email.toLowerCase(),
-        password,
-      });
-
-      // console.log(response);
-      const token = response.token;
-
-      // Store token in local storage (optional, but used elsewhere)
-      localStorage.setItem("x-auth-token", token);
-
-      const userPayload = {
-        token,
-        user_id: response.user.user_id,
-        name: response.user.name,
-        email: response.user.email,
-        loggedIn: true,
-      };
-
-      if (!response.user.is_activated) {
-        setError("Please Activate your Account !");
-        return;
-      }
-
-      // ✅ Update Recoil and let atom persist to localStorage
-      setUser(userPayload);
-
-      toast.success("Sign in successful!");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 500);
+      const loginState = await login(email, password);
+      if (loginState.success) navigate("/dashboard");
+      else throw loginState.error;
     } catch (err) {
       console.log("🚀 ~ handleSubmit ~ err:", err);
-      toast.error(handleError(error));
-      setError("Invalid email or password");
     } finally {
       setLoading(false); // Set loading to false once the process is done
     }
   };
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (authError && !user.requireLogin)
+    return <ErrorHandler error={authError} />;
 
   return (
     <div className="h-[90dvh] bg-white flex items-center justify-center px-4 py-12 relative">

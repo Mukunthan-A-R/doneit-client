@@ -8,6 +8,7 @@ export const requestPasswordReset = async (email) => {
     const response = await axios.post(
       `${API_BASE_URL}/api/password-reset/request`,
       { email },
+      { withCredentials: true },
     );
     return response.data; // { message: "Password reset email sent" }
   } catch (error) {
@@ -24,6 +25,7 @@ export const confirmPasswordReset = async (token, newPassword) => {
     const response = await axios.post(
       `${API_BASE_URL}/api/password-reset/confirm`,
       { token, newPassword },
+      { withCredentials: true },
     );
 
     console.log("response");

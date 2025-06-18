@@ -29,7 +29,7 @@ export const changePassword = async (userId, currentPassword, newPassword) => {
     const response = await axios.put(
       `${apiUrl}/${userId}`,
       { currentPassword, newPassword },
-      { headers: getAuthHeaders() },
+      { headers: getAuthHeaders(), withCredentials: true },
     );
 
     return response.data;

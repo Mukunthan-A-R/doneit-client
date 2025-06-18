@@ -26,6 +26,7 @@ export const fetchTasks = async (project_id) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    withCredentials: true,
   });
   return response.data;
 };
@@ -38,6 +39,7 @@ export const updateTask = async (taskId, taskData) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
@@ -54,6 +56,7 @@ export const createTask = async (taskData) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
@@ -70,6 +73,7 @@ export const deleteTask = async (taskId) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {

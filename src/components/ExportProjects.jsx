@@ -24,7 +24,7 @@ const convertToCSV = (data) => {
 };
 
 const ExportProjects = () => {
-  const currentUserData = useRecoilValue(userData);
+  const { user: currentUserData } = useRecoilValue(userData);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

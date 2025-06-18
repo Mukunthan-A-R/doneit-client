@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { userData } from "../../data/atom";
 import ProjectToolbar from "../ProjectToolbar";
 
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const currentUserData = useRecoilValue(userData);
 
   function handleNavigate() {
     return setIsSidebarOpen(false);
@@ -76,10 +72,7 @@ export default function DashboardLayout() {
           </span>
         </button>
 
-        <ProjectToolbar
-          setNavigate={handleNavigate}
-          user_id={currentUserData.user_id}
-        />
+        <ProjectToolbar setNavigate={handleNavigate} />
       </div>
 
       {/* Main Content */}

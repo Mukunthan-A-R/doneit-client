@@ -32,6 +32,7 @@ export const getAssignmentsByProjectId = async (projectId) => {
     const response = await axios.get(`${apiUrl}/${projectId}`, {
       params: { project_id: projectId },
       headers: getAuthHeaders(),
+      withCredentials: true,
     });
 
     return response.data;
@@ -49,6 +50,7 @@ export const createAssignment = async (assignmentData) => {
   try {
     const response = await axios.post(apiUrl, assignmentData, {
       headers: getAuthHeaders(),
+      withCredentials: true,
     });
 
     return response.data;
@@ -66,6 +68,7 @@ export const deleteAssignmentById = async (assignmentId) => {
   try {
     const response = await axios.delete(`${apiUrl}/${assignmentId}`, {
       headers: getAuthHeaders(),
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {

@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { fetchUserById } from "../services/UserData";
-import { updateUserById } from "../services/UserData"; // <-- Import here
-import { useSetRecoilState } from "recoil";
-import { userData } from "../data/atom";
+import { useEffect, useState } from "react";
+import useAuth from "../hooks/useAuth";
+import { updateUserById } from "../services/UserData";
 
-const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
-  const [userDetails, setUserDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
+const EditUserModal = ({ handleSetUserDetails, onClose }) => {
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -14,32 +10,18 @@ const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
     company: "",
     role: "",
   });
-  const setUserState = useSetRecoilState(userData);
+  const { refetch, user, isLoading } = useAuth();
 
   useEffect(() => {
-    const loadUserDetails = async () => {
-      try {
-        const response = await fetchUserById(userId);
-        if (response.success && response.status === 200) {
-          setUserDetails(response.data);
-          setFormData({
-            name: response.data.name || "",
-            email: response.data.email || "",
-            company: response.data.company || "",
-            role: response.data.role || "",
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (userId) {
-      loadUserDetails();
+    if (!isLoading && user.user) {
+      setFormData({
+        name: user.user.name || "",
+        email: user.user.email || "",
+        company: user.user.company || "",
+        role: user.user.role || "",
+      });
     }
-  }, [userId]);
+  }, [user, isLoading]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,12 +32,8 @@ const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
     setSaving(true);
     try {
       handleSetUserDetails({ ...formData });
-      await updateUserById(userId, formData);
-      setUserState((prev) => ({
-        ...prev,
-        email: formData.email,
-        name: formData.name,
-      }));
+      await updateUserById(user.user_id, formData);
+      refetch();
       onClose(); // Close modal after successful update
     } catch (error) {
       console.error("Failed to update user:", error);
@@ -65,7 +43,8 @@ const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
     }
   };
 
-  if (!userId) return null;
+  if (isLoading)
+    return <div className="text-center text-gray-500">Loading...</div>;
 
   return (
     <div className="fixed inset-0 animate-fade-in backdrop-blur-sm flex items-center justify-center z-50">
@@ -77,88 +56,82 @@ const EditUserModal = ({ handleSetUserDetails, userId, onClose }) => {
         >
           &times;
         </button>
+        (
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <h2 className="text-2xl font-bold text-blue-900 border-b pb-2 mb-4">
+            Edit User Profile
+          </h2>
 
-        {loading ? (
-          <div className="text-center text-gray-500">Loading...</div>
-        ) : userDetails ? (
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <h2 className="text-2xl font-bold text-blue-900 border-b pb-2 mb-4">
-              Edit User Profile
-            </h2>
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 p-2"
+            />
+          </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full rounded-md border border-gray-300 p-2"
-              />
-            </div>
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              disabled
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 p-2 bg-gray-100 text-gray-500 border border-gray-300 rounded px-3 py-2 w-full cursor-not-allowed"
+            />
+          </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                disabled
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full rounded-md border border-gray-300 p-2 bg-gray-100 text-gray-500 border border-gray-300 rounded px-3 py-2 w-full cursor-not-allowed"
-              />
-            </div>
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Company
+            </label>
+            <input
+              type="text"
+              name="company"
+              value={formData.company}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 p-2"
+            />
+          </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Company
-              </label>
-              <input
-                type="text"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-                className="w-full rounded-md border border-gray-300 p-2"
-              />
-            </div>
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Role
+            </label>
+            <input
+              type="text"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full rounded-md border border-gray-300 p-2"
+            />
+          </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Role
-              </label>
-              <input
-                type="text"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="w-full rounded-md border border-gray-300 p-2"
-              />
-            </div>
-
-            <div className="pt-4 flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={onClose}
-                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={saving}
-                className="bg-blue-700 text-white px-5 py-2 rounded-md hover:bg-blue-800"
-              >
-                {saving ? "Saving..." : "Save Changes"}
-              </button>
-            </div>
-          </form>
-        ) : (
-          <p className="text-center text-red-500">User not found.</p>
-        )}
+          <div className="pt-4 flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="bg-blue-700 text-white px-5 py-2 rounded-md hover:bg-blue-800"
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

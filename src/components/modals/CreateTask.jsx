@@ -9,7 +9,7 @@ import { createActivityLog } from "../../services/projectActivity";
 import { isAxiosError } from "axios";
 
 const CreateTask = ({ onClose, refetchTasks }) => {
-  const currentUserData = useRecoilValue(userData);
+  const { user: currentUserData } = useRecoilValue(userData);
   const setRefetchTrigger = useSetRecoilState(refetchTriggerAtom);
   const user_id = currentUserData?.user_id;
   const { projectId } = useParams();

@@ -9,16 +9,6 @@ import SettingsPage from "../components/SettingsPage";
 import { userData } from "../data/atom";
 
 const Settings = () => {
-  const navigate = useNavigate();
-  const currentUserData = useRecoilValue(userData);
-
-  useEffect(() => {
-    const token = localStorage.getItem("x-auth-token");
-    if (!token) {
-      navigate("/login");
-    }
-  }, [navigate]);
-
   return (
     <div className="flex-1 space-y-2 bg-white">
       <h1 className="text-2xl font-semibold">Your Settings!</h1>
@@ -28,7 +18,7 @@ const Settings = () => {
           <GeneralSettingsPanel />
         </div>
         <ExportProjects />
-        <ChangePasswordModal userId={currentUserData.user_id} />
+        <ChangePasswordModal />
         <LogoutButton />
       </div>
     </div>

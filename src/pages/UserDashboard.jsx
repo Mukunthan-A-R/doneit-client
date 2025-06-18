@@ -9,7 +9,7 @@ import { fetchUserById } from "../services/UserData";
 import { fetchTasksByUserId } from "../services/miscService";
 
 const UserDashboard = () => {
-  const user = useRecoilValue(userData);
+  const { user } = useRecoilValue(userData);
   const [projects, setProjects] = useState([]);
   const [totalProjects, setTotalProjects] = useState([]);
   const [completedProjects, setCompletedProjects] = useState(0);
@@ -99,7 +99,6 @@ const UserDashboard = () => {
           handleSetUserDetails={(data) => {
             setUserDetails(data);
           }}
-          userId={user.user_id}
           onClose={() => setShowEditModal(false)}
         />
       )}

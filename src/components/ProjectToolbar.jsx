@@ -12,10 +12,15 @@ import { useRecoilState } from "recoil";
 import { createProjectToggle } from "../data/atom";
 import useAuth from "../hooks/useAuth";
 
-const ProjectToolbar = ({ user_id, setNavigate }) => {
+const ProjectToolbar = ({ setNavigate }) => {
   const [toggleCreateProject, setToggleCreateProject] =
     useRecoilState(createProjectToggle);
-  const { handleLogout } = useAuth();
+  const {
+    handleLogout,
+    user: { user },
+  } = useAuth();
+
+  const { user_id } = user;
 
   return (
     <>

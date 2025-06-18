@@ -4,6 +4,7 @@ import { fetchTasks } from "../services/TaskServices";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { CurrentProjectTasks } from "../data/atom";
+import { handleError } from "../services/utils";
 
 export default function useProjectTasks(projectId) {
   const [state, setState] = useRecoilState(CurrentProjectTasks);
@@ -43,7 +44,7 @@ export default function useProjectTasks(projectId) {
       } catch (error) {
         isSilentRefetchTriggered.current = false;
         if (isAxiosError(error)) {
-          toast.error(error.response || error.message);
+          toast.error(handleError(error));
           setState({
             tasks: null,
             isLoading: false,
