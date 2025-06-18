@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { registerUser } from "../services/User";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const SignupPage = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+const { user, error: authError } = useAuth();
 
   const navigate = useNavigate();
 
@@ -86,7 +88,7 @@ const SignupPage = () => {
       const response = await registerUser(payload);
       console.log("User registered:", response);
       toast.success(
-        "Registration successful! Activation Mail has been sent to your account !"
+        "Registration successful! Activation Mail has been sent to your account !",
       );
 
       setTimeout(() => {
@@ -108,6 +110,11 @@ const SignupPage = () => {
       setLoading(false);
     }
   };
+
+  if (authError && !user.requireLogin)
+    return <ErrorHandler error={authError} />;
+
+  if (user.user && user.user.user_id) return <Navigate to={"/dashboard"} />;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-4 py-12">

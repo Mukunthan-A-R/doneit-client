@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import ErrorHandler from "../components/ErrorHandler";
 import useAuth from "../hooks/useAuth";
 
@@ -32,6 +32,8 @@ const LoginPage = () => {
 
   if (authError && !user.requireLogin)
     return <ErrorHandler error={authError} />;
+
+  if (user.user && user.user.user_id) return <Navigate to={"/dashboard"} />;
 
   return (
     <div className="h-[90dvh] bg-white flex items-center justify-center px-4 py-12 relative">
