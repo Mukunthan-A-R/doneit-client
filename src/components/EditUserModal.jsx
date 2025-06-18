@@ -56,7 +56,6 @@ const EditUserModal = ({ handleSetUserDetails, onClose }) => {
         >
           &times;
         </button>
-        (
         <form className="space-y-6" onSubmit={handleSubmit}>
           <h2 className="text-2xl font-bold text-blue-900 border-b pb-2 mb-4">
             Edit User Profile
@@ -85,7 +84,7 @@ const EditUserModal = ({ handleSetUserDetails, onClose }) => {
               disabled
               value={formData.email}
               onChange={handleChange}
-              className="w-full rounded-md border border-gray-300 p-2 bg-gray-100 text-gray-500 border border-gray-300 rounded px-3 py-2 w-full cursor-not-allowed"
+              className="rounded-md border 0 p-2 bg-gray-100 text-gray-500 border-gray-300 px-3 py-2 w-full cursor-not-allowed"
             />
           </div>
 
