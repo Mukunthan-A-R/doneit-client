@@ -84,6 +84,8 @@ export default function useAuth() {
         user_id: response.user.user_id,
         name: response.user.name,
         email: response.user.email,
+        company: response.user.company,
+        role: response.user.role,
         is_activated: response.user.is_activated,
       };
 

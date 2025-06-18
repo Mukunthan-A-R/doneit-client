@@ -1,15 +1,15 @@
 import { useState } from "react";
+import { BiPencil, BiTrash } from "react-icons/bi";
+import { RiDragMove2Fill } from "react-icons/ri";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { CurrentProjectState, userData } from "../data/atom";
+import useClickOutside from "../hooks/useClickOutside";
 import { updateTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
-import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import useClickOutside from "../hooks/useClickOutside";
 import UserBadge from "./UserBadge";
-import { RiDragMove2Fill } from "react-icons/ri";
-import { BiArrowToLeft, BiPencil, BiTrash } from "react-icons/bi";
 
 const TaskCard = ({
   task_id,
@@ -104,8 +104,6 @@ const TaskCard = ({
       onStatusChange(task_id, newStatus);
     } catch (err) {
       console.error("Failed to update task status", err);
-
-      toast.error("Failed to update status!");
     }
     setMenuVisible(false);
   };

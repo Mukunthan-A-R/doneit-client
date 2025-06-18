@@ -19,7 +19,7 @@ export default function TasksPage() {
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [isDraggable, setIsDraggable] = useState(false);
 
-  const currentUserData = useRecoilValue(userData);
+  const { user: currentUserData } = useRecoilValue(userData);
   const currentUserId = currentUserData.user_id;
 
   const { projectId } = useParams();
@@ -130,8 +130,6 @@ export default function TasksPage() {
       });
     } catch (err) {
       console.error("Failed to update task status", err);
-
-      toast.error("Failed to update status!");
     }
   };
 
