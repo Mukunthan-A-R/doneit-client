@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import useClickOutside from "../hooks/useClickOutside";
 import UserBadge from "./UserBadge";
 import { RiDragMove2Fill } from "react-icons/ri";
+import { BiArrowToLeft, BiPencil, BiTrash } from "react-icons/bi";
 
 const TaskCard = ({
   task_id,
@@ -207,7 +208,7 @@ const TaskCard = ({
 
   return (
     <div
-      className="p-4 ml-1 my-4 bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative"
+      className="p-4 ml-1 my-4 animate-fade-in bg-white rounded-2xl outline-gray-200 outline-1 shadow-lg relative"
       draggable={isDraggable}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
@@ -225,7 +226,7 @@ const TaskCard = ({
 
           {menuVisible && (
             <div
-              className="absolute bg-white shadow-xl rounded-md mt-2 w-32 p-2 z-50 animate-fade-in"
+              className="absolute border border-gray-200 bg-white shadow-xl rounded-lg *:hover:bg-blue-600 *:hover:text-white *:rounded-md mt-2 w-32 p-1 z-50 animate-fade-in"
               style={{
                 left: "auto",
                 right: "0",
@@ -235,38 +236,43 @@ const TaskCard = ({
             >
               {status !== "not started" && (
                 <button
-                  className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                  className="flex gap-1 items-center w-full text-left px-2 py-1 text-sm text-gray-700"
                   onClick={() => handleStatusChange("not started")}
                 >
+                  <div className="size-3 rounded-full bg-blue-900" />
                   Not Started
                 </button>
               )}
               {status !== "in progress" && (
                 <button
-                  className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                  className="flex gap-1 items-center w-full text-left px-2 py-1 text-sm text-gray-700"
                   onClick={() => handleStatusChange("in progress")}
                 >
+                  <div className="size-3 rounded-full bg-amber-500" />
                   In Progress
                 </button>
               )}
               {status !== "completed" && (
                 <button
-                  className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                  className="flex gap-1 items-center w-full text-left px-2 py-1 text-sm text-gray-700"
                   onClick={() => handleStatusChange("completed")}
                 >
+                  <div className="size-3 rounded-full bg-green-600" />
                   Completed
                 </button>
               )}
               <button
-                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                className="flex gap-1 items-center w-full text-left px-2 py-1 text-sm text-gray-700"
                 onClick={() => setIsEditPopupVisible(true)}
               >
+                <BiPencil />
                 Edit
               </button>
               <button
-                className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                className="flex gap-1 items-center w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-red-500!"
                 onClick={() => onhandleDelete(task_id, title)}
               >
+                <BiTrash />
                 Delete
               </button>
             </div>

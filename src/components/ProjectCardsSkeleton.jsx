@@ -3,11 +3,11 @@ import Skeleton from "@mui/material/Skeleton";
 export default function ProjectCardsSkeleton() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {Array.from({ length: 3 })
+      {Array.from({ length: 4 })
         .fill(1)
         .map((_, i) => (
           <div
-            className="max-w-sm p-3 pb-2 gap-1 flex flex-col rounded-lg bg-white border shadow-md border-gray-200"
+            className="p-2 gap-0.5 flex flex-col rounded-lg bg-white border shadow-md border-gray-200"
             key={i}
           >
             <div className="flex justify-between items-start">

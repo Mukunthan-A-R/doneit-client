@@ -1,7 +1,3 @@
-import React from "react";
-import GraphImg from "../../../public/Graph.jpg";
-import PaperWork from "../../../public//paperwork.avif";
-
 const ProductivityBoost = () => {
   return (
     <section className="bg-white py-24 px-6 md:px-12 lg:px-32 font-sans">
@@ -60,7 +56,7 @@ const ProductivityBoost = () => {
           <div className="lg:w-1/2 w-full">
             <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md">
               <img
-                src={GraphImg}
+                src={"/Graph.jpg"}
                 alt="Analytics and reporting dashboard for project progress tracking"
                 className="object-cover w-full h-auto max-h-80 xl:max-h-72 2xl:max-h-64 transition duration-300 ease-in-out"
               />
@@ -92,7 +88,7 @@ const ProductivityBoost = () => {
           <div className="lg:w-1/2 w-full">
             <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md">
               <img
-                src={PaperWork}
+                src={"/paperwork.avif"}
                 alt="Project planning board with deadlines and milestones"
                 className="object-cover w-full h-auto max-h-80 xl:max-h-72 2xl:max-h-64 transition duration-300 ease-in-out"
               />

@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { FaUserCircle } from "react-icons/fa";
+import { BiChevronDown, BiLogOut } from "react-icons/bi";
+import { IoSettingsOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import SandySoft from "../../public/SandySoft.png";
 import useAuth from "../hooks/useAuth";
+import useClickOutside from "../hooks/useClickOutside";
 
 function Navbar() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const { user } = useAuth();
-
-  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
 
   const isLoggedIn = !!user?.token;
 
@@ -18,7 +15,7 @@ function Navbar() {
       <div className="w-7xl px-4 sm:px-6 py-3 lg:px-8 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <img src={SandySoft} alt="Logo" className="h-10 w-auto" />
+          <img src={"/SandySoft.png"} alt="Logo" className="h-10 w-auto" />
           <Link
             to="/"
             className="text-2xl font-bold text-white hover:text-blue-300 transition"
@@ -51,7 +48,7 @@ function Navbar() {
               Login
             </Link>
           ) : (
-            <UserDropdown state={isDropdownOpen} setState={toggleDropdown} />
+            <UserDropdown />
           )}
         </div>
 
@@ -65,7 +62,7 @@ function Navbar() {
               Login
             </Link>
           ) : (
-            <UserDropdown state={isDropdownOpen} setState={toggleDropdown} />
+            <UserDropdown />
           )}
         </div>
       </div>
@@ -73,31 +70,53 @@ function Navbar() {
   );
 }
 
-function UserDropdown({ state, setState }) {
+function UserDropdown() {
   const { handleLogout, user } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  function handleDropdownClose() {
+    setIsDropdownOpen(false);
+  }
+
+  const handleClickOutside = useClickOutside(handleDropdownClose);
+
   return (
-    <div className="relative">
+    <div className="relative z-50">
       <button
-        onClick={setState}
-        className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition"
+        onClick={() => setIsDropdownOpen((prev) => !prev)}
+        className="flex items-center gap-1 text-gray-300 cursor-pointer hover:text-blue-400 transition"
+        ref={handleClickOutside}
       >
-        <FaUserCircle className="text-2xl" />
+        {user?.profile ? (
+          <img
+            src={user.profile}
+            alt={user.name}
+            className="size-7 rounded-full object-cover"
+          />
+        ) : (
+          <div className="size-7 rounded-full bg-gray-100 text-blue-900 font-bold text-sm grid place-items-center">
+            {user?.name.split(" ")[0][0]} {user?.name.split(" ")[1]?.[0] ?? ""}
+          </div>
+        )}
         {user?.name.split(" ")[0]}
+        <BiChevronDown />
       </button>
 
-      {state && (
-        <div className="absolute right-0 mt-4 w-48 bg-gray-50 text-blue-700 border border-gray-200 rounded shadow-lg z-50">
+      {isDropdownOpen && (
+        <div className="absolute animate-fade-in right-0 mt-4 w-32 bg-gray-50 text-gray-600 border border-gray-200 rounded-lg p-1 shadow-lg z-50">
           <Link
             to="/settings"
-            className="block px-4 py-2 hover:bg-white transition"
-            onClick={setState}
+            className="flex px-2 gap-1 items-center py-1.5 text-sm hover:bg-blue-600 hover:text-white rounded-md transition"
+            onClick={handleDropdownClose}
           >
+            <IoSettingsOutline />
             Settings
           </Link>
           <button
             onClick={handleLogout}
-            className="w-full text-left px-4 py-2 cursor-pointer hover:bg-white transition"
+            className="w-full flex gap-1 items-center text-left px-2 py-1.5 text-sm cursor-pointer hover:bg-red-500 rounded-md hover:text-white transition"
           >
+            <BiLogOut />
             Logout
           </button>
         </div>

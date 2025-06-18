@@ -1,6 +1,4 @@
 // src/components/modals/HomeBanner.js
-import React from "react";
-import BannerImg from "../../../public/BannerImg.jpg";
 import { Link } from "react-router-dom";
 
 const HomeBanner = ({ onLearnMoreClick }) => {
@@ -36,7 +34,7 @@ const HomeBanner = ({ onLearnMoreClick }) => {
 
         <div className="w-full max-w-md">
           <img
-            src={BannerImg}
+            src={"/BannerImg.jpg"}
             alt="Team collaboration workspace with shared task lists"
             className="w-full h-auto object-contain"
           />
