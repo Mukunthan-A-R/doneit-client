@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_URL } from "./utils";
 
-const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
+const apiUrl = API_URL;
 let token = null;
 
 try {
@@ -32,7 +33,7 @@ export const fetchTasksByUserId = async (userId) => {
     throw new Error(
       error.response?.data?.error ||
         error.message ||
-        "Failed to fetch user tasks"
+        "Failed to fetch user tasks",
     );
   }
 };

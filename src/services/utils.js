@@ -17,3 +17,10 @@ export const handleError = (error) => {
 
 export const truncate = (str, max = 20) =>
   str.length > max ? str.slice(0, max) + "..." : str;
+
+const API_URL = import.meta.env.VITE_DONE_IT_API_URL;
+if (!API_URL) {
+  throw new Error("Invalid ENV configuration");
+}
+
+export { API_URL };

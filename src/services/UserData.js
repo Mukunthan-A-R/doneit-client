@@ -1,10 +1,7 @@
 import axios from "axios";
+import { API_URL } from "./utils";
 
-const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
-
-if (!apiUrl) {
-  throw new Error("API URL is not defined in the environment variables.");
-}
+const apiUrl = API_URL;
 
 const USER_API_URL = `${apiUrl}/api/user`;
 

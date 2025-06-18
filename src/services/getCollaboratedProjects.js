@@ -1,9 +1,5 @@
 import axios from "axios";
-
-const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
-if (!apiUrl) {
-  throw new Error("API URL is not defined in the environment variables.");
-}
+import { API_URL as apiUrl } from "./utils";
 
 const API_URL = `${apiUrl}/api/collab-projects`;
 
@@ -34,7 +30,7 @@ export const getCollaboratedProjects = async (userId) => {
   } catch (error) {
     console.error(
       "Failed to fetch collaborated projects:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }

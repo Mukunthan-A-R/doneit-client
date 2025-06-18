@@ -1,6 +1,7 @@
 // registerUser.js
 import axios from "axios";
-const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
+import { API_URL as apiUrl } from "./utils";
+
 let token = null;
 
 try {
@@ -31,7 +32,7 @@ export const registerUser = async (userData) => {
   } catch (error) {
     console.error(
       "Registration failed:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }

@@ -1,10 +1,5 @@
 import axios from "axios";
-
-const apiUrl = import.meta.env.VITE_DONE_IT_API_URL;
-
-if (!apiUrl) {
-  throw new Error("API URL is not defined in the environment variables.");
-}
+import { API_URL as apiUrl } from "./utils";
 
 // Define the API URL (email will be dynamic in the path)
 const API_URL = `${apiUrl}/api/userEmail`;
@@ -35,7 +30,7 @@ export const getUserByEmail = async (email) => {
   } catch (error) {
     console.error(
       "Failed to fetch user by email:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
