@@ -425,10 +425,12 @@ const TaskCard = ({
 export default TaskCard;
 
 // Utility Functions
-const calculateRemainingTime = (endDate) => {
+const calculateRemainingTime = (givenDate) => {
   const currentDate = new Date();
-  const end = new Date(endDate);
-  const diffInMilliseconds = end - currentDate;
+  const baseDate = new Date(givenDate);
+  const endDate = new Date(baseDate);
+  endDate.setDate(baseDate.getDate() + 1);
+  const diffInMilliseconds = endDate - currentDate;
   if (diffInMilliseconds <= 0) {
     return { message: "The Task has ended", timeOver: true };
   }
