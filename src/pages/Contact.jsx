@@ -1,5 +1,6 @@
-// src/pages/Contact.jsx
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { submitContactMessage } from "../services/contact";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -7,16 +8,71 @@ export default function Contact() {
     email: "",
     message: "",
   });
+
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+
+    // Clear the error on input change
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: "" });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const validate = () => {
+    const newErrors = {};
+
+    // Name: 3–30 characters
+    if (!form.name.trim()) {
+      newErrors.name = "Name is required.";
+    } else if (form.name.length < 3 || form.name.length > 30) {
+      newErrors.name = "Name must be between 3 and 30 characters.";
+    }
+
+    // Email: basic regex pattern
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!emailPattern.test(form.email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+
+    // Message: 10–600 characters
+    if (!form.message.trim()) {
+      newErrors.message = "Message is required.";
+    } else if (form.message.length < 10 || form.message.length > 600) {
+      newErrors.message = "Message must be between 10 and 600 characters.";
+    }
+
+    return newErrors;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Add submission logic
-    setSubmitted(true);
+    const validationErrors = validate();
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    try {
+      await submitContactMessage(form); // ✅ Send to backend
+      setSubmitted(true);
+      setErrors({});
+      setForm({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Failed to send message:", error.message);
+      toast.error(
+        "Something went wrong while sending your message. Please try again."
+      );
+    }
   };
 
   return (
@@ -83,12 +139,16 @@ export default function Contact() {
                   type="text"
                   id="name"
                   name="name"
-                  required
                   value={form.name}
                   onChange={handleChange}
                   placeholder="John Doe"
-                  className="w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
+                  className={`w-full px-5 py-3 border ${
+                    errors.name ? "border-red-500" : "border-gray-300"
+                  } rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 transition`}
                 />
+                {errors.name && (
+                  <p className="mt-2 text-sm text-red-600">{errors.name}</p>
+                )}
               </div>
 
               <div>
@@ -102,12 +162,16 @@ export default function Contact() {
                   type="email"
                   id="email"
                   name="email"
-                  required
                   value={form.email}
                   onChange={handleChange}
                   placeholder="john@example.com"
-                  className="w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
+                  className={`w-full px-5 py-3 border ${
+                    errors.email ? "border-red-500" : "border-gray-300"
+                  } rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 transition`}
                 />
+                {errors.email && (
+                  <p className="mt-2 text-sm text-red-600">{errors.email}</p>
+                )}
               </div>
 
               <div>
@@ -121,12 +185,16 @@ export default function Contact() {
                   id="message"
                   name="message"
                   rows="6"
-                  required
                   value={form.message}
                   onChange={handleChange}
                   placeholder="Write your message here..."
-                  className="w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition resize-none"
+                  className={`w-full px-5 py-3 border ${
+                    errors.message ? "border-red-500" : "border-gray-300"
+                  } rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 transition resize-none`}
                 ></textarea>
+                {errors.message && (
+                  <p className="mt-2 text-sm text-red-600">{errors.message}</p>
+                )}
               </div>
 
               <button
