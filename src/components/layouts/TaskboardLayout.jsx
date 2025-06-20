@@ -1,20 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import TaskToolbar from "../TaskToolbar";
+import { useRecoilValue } from "recoil";
+import { userSubscription } from "../../data/atom";
+import TrialExpiredOverlay from "../modals/TrialExpiredOverlay";
 
 const TaskboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  const subscriptionData = useRecoilValue(userSubscription);
+  const expired = subscriptionData && !subscriptionData.is_active;
 
   const params = useParams();
   const project_id = params.projectId;
-
   function handleNavigate() {
     return setIsSidebarOpen(false);
   }
 
+  useEffect(() => {
+    let timeout;
+    if (expired) {
+      timeout = setTimeout(() => {
+        setShowOverlay(true);
+      }, 1000);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [expired]);
+
   return (
     <div className="flex flex-col lg:flex-row h-full relative overflow-x-hidden flex-1">
       {/* Sidebar */}
+      {showOverlay && <TrialExpiredOverlay />}
       <div
         className={`
           bg-blue-900 p-2 pr-0 w-[16rem]
