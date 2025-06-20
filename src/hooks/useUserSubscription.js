@@ -1,15 +1,17 @@
-// hooks/useUserSubscription.js
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { fetchUserSubscription } from "../services/userSubscription";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { handleError } from "../services/utils";
-import { userSubscription } from "../data/atom";
+import { userData, userSubscription } from "../data/atom";
 
-export default function useUserSubscription(user_id) {
+export default function useUserSubscription() {
   const [subscription, setSubscription] = useRecoilState(userSubscription);
   const [isFetching, setIsFetching] = useState(false);
+
+  const user = useRecoilValue(userData);
+  const user_id = user?.user?.user_id;
 
   const refetch = async () => {
     if (!user_id && isFetching) return;

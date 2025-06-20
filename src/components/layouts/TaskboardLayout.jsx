@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import TaskToolbar from "../TaskToolbar";
-import { useRecoilValue } from "recoil";
-import { userData, userSubscription } from "../../data/atom";
 import TrialExpiredOverlay from "../modals/TrialExpiredOverlay";
 import useUserSubscription from "../../hooks/useUserSubscription";
 
@@ -10,9 +8,7 @@ const TaskboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const user = useRecoilValue(userData);
-  const currentUserId = user?.user?.user_id;
-  const { subscription } = useUserSubscription(currentUserId);
+  const { subscription } = useUserSubscription();
   const expired = subscription && !subscription.is_active;
 
   const params = useParams();
