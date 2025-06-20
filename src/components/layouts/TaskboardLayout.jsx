@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import TaskToolbar from "../TaskToolbar";
 import { useRecoilValue } from "recoil";
-import { userSubscription } from "../../data/atom";
+import { userData, userSubscription } from "../../data/atom";
 import TrialExpiredOverlay from "../modals/TrialExpiredOverlay";
+import useUserSubscription from "../../hooks/useUserSubscription";
 
 const TaskboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const subscriptionData = useRecoilValue(userSubscription);
-  const expired = subscriptionData && !subscriptionData.is_active;
+  const user = useRecoilValue(userData);
+  const currentUserId = user?.user?.user_id;
+  const { subscription } = useUserSubscription(currentUserId);
+  const expired = subscription && !subscription.is_active;
 
   const params = useParams();
   const project_id = params.projectId;
+
   function handleNavigate() {
     return setIsSidebarOpen(false);
   }
@@ -45,7 +49,6 @@ const TaskboardLayout = () => {
         {/* Sidebar Header with Close icon */}
         <div className="flex items-center justify-between px-4 mb-4">
           <h2 className="text-white text-xl font-medium">Task Toolbar</h2>
-          {/* Close icon (mobile only) */}
           <button
             className="lg:hidden text-white"
             onClick={() => setIsSidebarOpen(false)}
@@ -56,7 +59,6 @@ const TaskboardLayout = () => {
               stroke="currentColor"
               strokeWidth="2"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 strokeLinecap="round"
@@ -67,7 +69,7 @@ const TaskboardLayout = () => {
           </button>
         </div>
 
-        {/* bUTTON */}
+        {/* Button */}
         <button
           className="absolute left-[105%] top-20 block data-[isopen=true]:opacity-0 transition lg:hidden bg-blue-800 text-white px-4 py-2 rounded shadow-md focus:outline-none z-30"
           onClick={() => setIsSidebarOpen(true)}
@@ -80,13 +82,12 @@ const TaskboardLayout = () => {
               stroke="currentColor"
               strokeWidth="2"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d="M4 6h16M4 12h16M4 18h16"
-              ></path>
+              />
             </svg>
             Menu
           </span>
