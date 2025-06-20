@@ -28,7 +28,7 @@ const TrialExpiredOverlay = () => {
         </p>
 
         <a
-          href="/settings"
+          href="/pricing"
           className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
         >
           Upgrade Plan

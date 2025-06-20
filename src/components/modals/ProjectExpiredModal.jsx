@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function ProjectExpiredModal({ plan, endDate, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
@@ -62,12 +64,12 @@ export default function ProjectExpiredModal({ plan, endDate, onClose }) {
           >
             Maybe Later
           </button>
-          <a
-            href="/settings"
+          <Link
+            href="/pricing"
             className="px-5 py-2 text-sm rounded-md bg-blue-900 hover:bg-blue-800 text-white shadow-sm"
           >
             Upgrade Now
-          </a>
+          </Link>
         </div>
       </div>
     </div>

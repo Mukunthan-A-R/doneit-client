@@ -26,6 +26,7 @@ import TermsOfService from "./pages/TermsOfService";
 import TransactionAnalytics from "./pages/TransactionAnalytics";
 import TransactionHistory from "./pages/TransactionHistory";
 import UserDashboard from "./pages/UserDashboard";
+import PricingPlans from "./pages/PricingPlans";
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-serivce" element={<TermsOfService />} />
         <Route path="/password-reset" element={<ResetPassword />} />
+        <Route path="/pricing" element={<PricingPlans />} />
         <Route path="/forgot-password/:token" element={<ForgotPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
