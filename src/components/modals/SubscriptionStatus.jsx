@@ -1,7 +1,10 @@
-// src/components/common/SubscriptionStatus.jsx
 import { differenceInDays, isBefore } from "date-fns";
+import { useRecoilValue } from "recoil";
+import { userSubscription } from "../../data/atom";
 
-const SubscriptionStatus = ({ subscription }) => {
+const SubscriptionStatus = () => {
+  const subscription = useRecoilValue(userSubscription);
+
   if (!subscription || !subscription.plan_name || !subscription.end_date)
     return null;
 

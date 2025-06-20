@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { useRecoilValue } from "recoil";
-import { userSubscription } from "../../data/atom";
 import LiveClock from "./LiveClock";
 import SubscriptionStatus from "./SubscriptionStatus";
 
@@ -13,8 +11,6 @@ const UserHeaderInfo = () => {
     timezone: "",
   });
   const { user } = useAuth();
-
-  const subscriptionData = useRecoilValue(userSubscription);
 
   useEffect(() => {
     const fetchLocation = async () => {
@@ -47,7 +43,7 @@ const UserHeaderInfo = () => {
         <p className="text-base font-bold text-gray-600">
           Timezone: {location.timezone}
         </p>
-        <SubscriptionStatus subscription={subscriptionData} />
+        <SubscriptionStatus />
       </div>
       <LiveClock />
     </div>
