@@ -60,3 +60,14 @@ export const createProjectToggle = atom({
   default: false,
   key: "createProjectToggle",
 });
+
+export const userSubscription = atom({
+  key: "userSubscription",
+  default: {
+    user_id: null,
+    plan_name: null,
+    start_date: null,
+    end_date: null,
+    is_active: null,
+  },
+});

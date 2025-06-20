@@ -1,9 +1,20 @@
 import ProjectCardHolder from "../components/ProjectCardHolder";
-
 import ProjectCollabCardHolder from "../components/ProjectCollabCardHolder";
 import UserHeaderInfo from "../components/modals/UserHeaderInfo";
+import useUserSubscription from "../hooks/useUserSubscription";
+import { useRecoilValue } from "recoil";
+import { userData } from "../data/atom";
 
 const Dashboard = () => {
+  const user = useRecoilValue(userData);
+  const currentUserId = user?.user?.user_id;
+
+  if (currentUserId) {
+    const { subscription, isLoading } = useUserSubscription(currentUserId);
+  } else {
+    console.log("Cannot fetch users plan. reconnectiong ...");
+  }
+
   return (
     <>
       <UserHeaderInfo />
