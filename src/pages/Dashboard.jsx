@@ -10,7 +10,7 @@ const Dashboard = () => {
   const currentUserId = user?.user?.user_id;
 
   if (currentUserId) {
-    const { subscription, isLoading } = useUserSubscription(currentUserId);
+    const { subscription } = useUserSubscription(currentUserId);
   } else {
     console.log("Cannot fetch users plan. reconnectiong ...");
   }
