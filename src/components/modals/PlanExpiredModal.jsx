@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function ProjectExpiredModal({ plan, endDate, onClose }) {
+export default function PlanExpiredModal({ plan, endDate, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl border border-gray-200 p-6 animate-fadeIn">

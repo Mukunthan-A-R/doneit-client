@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import ProjectToolbar from "../ProjectToolbar";
 import { useRecoilValue } from "recoil";
 import { userSubscription } from "../../data/atom";
-import ProjectExpiredModal from "../modals/ProjectExpiredModal";
+import PlanExpiredModal from "../modals/PlanExpiredModal";
 
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -16,8 +16,8 @@ export default function DashboardLayout() {
 
   return (
     <div className="flex flex-col lg:flex-row h-full relative overflow-x-hidden flex-1">
-      {showOverlay && !subscriptionData.is_active && (
-        <ProjectExpiredModal
+      {showOverlay && subscriptionData.is_active === false && (
+        <PlanExpiredModal
           plan={subscriptionData.plan_name}
           endDate={subscriptionData.end_date}
           onClose={() => setShowOverlay(false)}
