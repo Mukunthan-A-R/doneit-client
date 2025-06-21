@@ -1,12 +1,8 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 import ChangePasswordModal from "../components/ChangePasswordModal";
 import ExportProjects from "../components/ExportProjects";
 import GeneralSettingsPanel from "../components/GeneralSettingsPanel";
 import LogoutButton from "../components/LogoutButton";
 import SettingsPage from "../components/SettingsPage";
-import { userData } from "../data/atom";
 
 const Settings = () => {
   return (

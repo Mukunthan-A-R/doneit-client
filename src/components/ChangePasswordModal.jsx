@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { changePassword } from "../services/changePassword";
+import PasswordInput from "./modals/PasswordInput";
+import { userData } from "../data/atom";
+import { useRecoilValue } from "recoil";
 
-export default function ChangePasswordModal({ userId }) {
+export default function ChangePasswordModal() {
+  const currentUser = useRecoilValue(userData);
+  const userId = currentUser.user.user_id;
+
   const [isOpen, setIsOpen] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -73,102 +79,66 @@ export default function ChangePasswordModal({ userId }) {
   }
 
   return (
-    <>
+    <div
+      className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50"
+      onClick={closeModal}
+    >
       <div
-        className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50"
-        onClick={closeModal}
+        className="bg-white rounded shadow-lg max-w-md w-full p-6 relative"
+        onClick={(e) => e.stopPropagation()}
       >
-        <div
-          className="bg-white rounded shadow-lg max-w-md w-full p-6 relative"
-          onClick={(e) => e.stopPropagation()}
+        <button
+          onClick={closeModal}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+          aria-label="Close modal"
         >
+          &#x2715;
+        </button>
+
+        <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+          Change Password
+        </h2>
+
+        {error && (
+          <div className="mb-4 text-red-600 bg-red-100 px-4 py-2 rounded">
+            {error}
+          </div>
+        )}
+        {message && (
+          <div className="mb-4 text-green-700 bg-green-100 px-4 py-2 rounded">
+            {message}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <PasswordInput
+            id="currentPassword"
+            label="Your Current Password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+          />
+          <PasswordInput
+            id="newPassword"
+            label="New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <PasswordInput
+            id="confirmPassword"
+            label="Confirm Your New Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+
           <button
-            onClick={closeModal}
-            className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
-            aria-label="Close modal"
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 disabled:opacity-50"
           >
-            &#x2715;
+            {loading ? "Changing..." : "Change Password"}
           </button>
-
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-            Change Password
-          </h2>
-
-          {error && (
-            <div className="mb-4 text-red-600 bg-red-100 px-4 py-2 rounded">
-              {error}
-            </div>
-          )}
-          {message && (
-            <div className="mb-4 text-green-700 bg-green-100 px-4 py-2 rounded">
-              {message}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="currentPassword"
-                className="block mb-1 font-medium text-gray-700"
-              >
-                Your Current Password
-              </label>
-              <input
-                id="currentPassword"
-                type="password"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                required
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="newPassword"
-                className="block mb-1 font-medium text-gray-700"
-              >
-                New Password
-              </label>
-              <input
-                id="newPassword"
-                type="password"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                minLength={6}
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block mb-1 font-medium text-gray-700"
-              >
-                Confirm Your New Password
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                minLength={6}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? "Changing..." : "Change Password"}
-            </button>
-          </form>
-        </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
