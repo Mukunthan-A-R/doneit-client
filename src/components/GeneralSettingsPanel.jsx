@@ -12,7 +12,10 @@ const GeneralSettingsPanel = () => {
     width: 0,
     height: 0,
   });
-  const [zoom, setZoom] = useState(parseFloat(document.body.style.zoom));
+  const [zoom, setZoom] = useState(() => {
+    const initialZoom = parseFloat(document.body.style.zoom);
+    return isNaN(initialZoom) ? 1 : initialZoom;
+  });
 
   useEffect(() => {
     // Set screen resolution once on mount (static)
