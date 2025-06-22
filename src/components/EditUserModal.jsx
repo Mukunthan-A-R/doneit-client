@@ -12,6 +12,8 @@ const EditUserModal = ({ handleSetUserDetails, onClose }) => {
   });
   const { refetch, user, isLoading } = useAuth();
 
+  console.log(user);
+
   useEffect(() => {
     if (!isLoading && user.user) {
       setFormData({
@@ -32,7 +34,7 @@ const EditUserModal = ({ handleSetUserDetails, onClose }) => {
     setSaving(true);
     try {
       handleSetUserDetails({ ...formData });
-      await updateUserById(user.user_id, formData);
+      await updateUserById(user.user.user_id, formData);
       refetch();
       onClose(); // Close modal after successful update
     } catch (error) {

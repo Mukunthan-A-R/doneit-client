@@ -35,7 +35,6 @@ const SettingsPage = () => {
       {showEditModal && (
         <EditUserModal
           handleSetUserDetails={setUserDetails}
-          userId={user.user_id}
           onClose={() => setShowEditModal(false)}
         />
       )}
