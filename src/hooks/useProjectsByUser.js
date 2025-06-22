@@ -1,10 +1,10 @@
 import { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { getCollaboratedProjects } from "../services/getCollaboratedProjects";
+import { fetchProjects } from "../services/ProjectServices";
 import { handleError } from "../services/utils";
 
-export default function useCollabProject(id) {
+export default function useProjectsByUser(id) {
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,18 +17,18 @@ export default function useCollabProject(id) {
   useEffect(() => {
     if (!id) return;
 
-    const fetchCollabProjects = async () => {
+    const getProjects = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const { data } = await getCollaboratedProjects(id);
+        const { data } = await fetchProjects(id);
         setProjects(data);
       } catch (error) {
         if (isAxiosError(error)) {
           toast.error(handleError(error));
           setError(error);
         } else {
-          toast.error("Something went wrong while fetching collab projects");
+          toast.error("Something went wrong in fetching projects");
           setError(error);
         }
       } finally {
@@ -36,7 +36,7 @@ export default function useCollabProject(id) {
       }
     };
 
-    fetchCollabProjects();
+    getProjects();
   }, [id, refetchTrigger]);
 
   return {

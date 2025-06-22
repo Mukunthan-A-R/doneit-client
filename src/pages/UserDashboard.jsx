@@ -7,79 +7,42 @@ import { fetchProjects } from "../services/ProjectServices";
 import { fetchTasksByUserId } from "../services/miscService";
 import SettingsPage from "../components/SettingsPage.jsx";
 import useCollabProject from "../hooks/useCollabProjects.js";
+import useProjectsByUser from "../hooks/useProjectsByUser.js";
 
 const UserDashboard = () => {
   const { user } = useRecoilValue(userData);
   const [projects, setProjects] = useState([]);
-  const [totalProjects, setTotalProjects] = useState([]);
-  const [completedProjects, setCompletedProjects] = useState(0);
-  const [overdueProjects, setOverdueProjects] = useState(0);
+  // const [completedProjects, setCompletedProjects] = useState(0);
+  // const [overdueProjects, setOverdueProjects] = useState(0);
   const [todaysTasks, setTodaysTasks] = useState([]);
 
+  let completedProjects = 0;
+  let overdueProjects = 0;
   // Fetching Collab Projects
   const { project, isLoading, error } = useCollabProject(user.user_id);
+  const {
+    project: userProjects,
+    isLoading: isUserProjectsLoading,
+    error: userProjectsError,
+  } = useProjectsByUser(user.user_id);
 
-  useEffect(() => {
-    if (!project) return;
-    if (!isLoading) {
-      // Filter ongoing projects
-      const ongoingProjects = project?.filter((project) => {
-        const currentDate = new Date();
-        const endDate = new Date(project.end_date);
-        return project.status === "active" && endDate >= currentDate;
-      });
-      setProjects((prevProjects) => [...prevProjects, ...ongoingProjects]);
+  let allUserAssignedProjects = [
+    ...(Array.isArray(project) ? project : []),
+    ...(Array.isArray(userProjects) ? userProjects : []),
+  ];
+
+  // Filter ongoing projects
+  const allOngoingProjects = allUserAssignedProjects.filter((project) => {
+    const currentDate = new Date();
+    const endDate = new Date(project.end_date);
+    if (project.status === "completed") {
+      completedProjects += 1;
     }
-  }, [project]);
-
-  useEffect(() => {
-    const loadProjects = async () => {
-      const projectData = await fetchProjects(user.user_id);
-      setTotalProjects(projectData.data.length);
-      if (projectData.status === 404) {
-        console.error("Error: " + projectData.message);
-        return;
-      }
-
-      // Filter ongoing projects
-      const ongoingProjects = projectData.data.filter((project) => {
-        const currentDate = new Date();
-        const endDate = new Date(project.end_date);
-        return project.status === "active" && endDate >= currentDate;
-      });
-
-      // setProjects(ongoingProjects);
-      setProjects((prevProjects) => [...prevProjects, ...ongoingProjects]);
-
-      // Calculate completed and overdue projects
-      let completedCount = 0;
-      let overdueCount = 0;
-
-      projectData.data.forEach((project) => {
-        const currentDate = new Date();
-        const endDate = new Date(project.end_date);
-
-        if (project.status === "completed") {
-          completedCount++;
-        } else if (project.status === "active" && endDate < currentDate) {
-          overdueCount++;
-        }
-      });
-
-      setCompletedProjects(completedCount);
-      setOverdueProjects(overdueCount);
-    };
-
-    loadProjects();
-  }, [user.user_id]);
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="text-center py-6 text-gray-500 animate-pulse">
-  //       Loading user data...
-  //     </div>
-  //   );
-  // }
+    if (project.status === "on-hold") {
+      overdueProjects += 1;
+    }
+    return project.status === "active" && endDate >= currentDate;
+  });
 
   useEffect(() => {
     const getTasks = async () => {
@@ -94,6 +57,14 @@ const UserDashboard = () => {
     getTasks();
   }, [user.user_id]);
 
+  if (isLoading && isUserProjectsLoading) {
+    return (
+      <div className="text-center py-6 text-gray-500 animate-pulse">
+        Loading user data...
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex overflow-hidden text-gray-800 font-sans">
       {/* Main Content */}
@@ -106,8 +77,11 @@ const UserDashboard = () => {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
             {[
-              { title: "Projects Today", count: projects.length },
-              { title: "Total Projects", count: totalProjects },
+              { title: "Projects Today", count: allOngoingProjects.length },
+              {
+                title: "Total Projects",
+                count: allUserAssignedProjects.length,
+              },
               { title: "Completed", count: completedProjects },
               {
                 title: "Overdue",
@@ -138,8 +112,8 @@ const UserDashboard = () => {
               Ongoing Projects
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {projects.length > 0 ? (
-                projects.map((project) => (
+              {allOngoingProjects.length > 0 ? (
+                allOngoingProjects.map((project) => (
                   <div
                     key={project.project_id}
                     className="bg-white p-4 rounded shadow border-l-4 border-blue-700"
