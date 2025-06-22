@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import EditUserModal from "../components/EditUserModal";
 import ProjectProgressTime from "../components/ProjectProgressTime";
 import StatsCards from "../components/modals/StatsCards.js";
 import { userData } from "../data/atom";
 import { fetchProjects } from "../services/ProjectServices";
-import { fetchUserById } from "../services/UserData";
 import { fetchTasksByUserId } from "../services/miscService";
 import SettingsPage from "../components/SettingsPage.jsx";
+import useCollabProject from "../hooks/useCollabProjects.js";
 
 const UserDashboard = () => {
   const { user } = useRecoilValue(userData);
@@ -17,11 +16,26 @@ const UserDashboard = () => {
   const [overdueProjects, setOverdueProjects] = useState(0);
   const [todaysTasks, setTodaysTasks] = useState([]);
 
+  // Fetching Collab Projects
+  const { project, isLoading, error } = useCollabProject(user.user_id);
+
+  useEffect(() => {
+    if (!project) return;
+    if (!isLoading) {
+      // Filter ongoing projects
+      const ongoingProjects = project?.filter((project) => {
+        const currentDate = new Date();
+        const endDate = new Date(project.end_date);
+        return project.status === "active" && endDate >= currentDate;
+      });
+      setProjects((prevProjects) => [...prevProjects, ...ongoingProjects]);
+    }
+  }, [project]);
+
   useEffect(() => {
     const loadProjects = async () => {
       const projectData = await fetchProjects(user.user_id);
       setTotalProjects(projectData.data.length);
-
       if (projectData.status === 404) {
         console.error("Error: " + projectData.message);
         return;
@@ -34,7 +48,8 @@ const UserDashboard = () => {
         return project.status === "active" && endDate >= currentDate;
       });
 
-      setProjects(ongoingProjects);
+      // setProjects(ongoingProjects);
+      setProjects((prevProjects) => [...prevProjects, ...ongoingProjects]);
 
       // Calculate completed and overdue projects
       let completedCount = 0;
@@ -57,6 +72,14 @@ const UserDashboard = () => {
 
     loadProjects();
   }, [user.user_id]);
+
+  // if (isLoading) {
+  //   return (
+  //     <div className="text-center py-6 text-gray-500 animate-pulse">
+  //       Loading user data...
+  //     </div>
+  //   );
+  // }
 
   useEffect(() => {
     const getTasks = async () => {
