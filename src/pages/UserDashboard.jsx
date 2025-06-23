@@ -3,7 +3,6 @@ import { useRecoilValue } from "recoil";
 import ProjectProgressTime from "../components/ProjectProgressTime";
 import StatsCards from "../components/modals/StatsCards.js";
 import { userData } from "../data/atom";
-import { fetchProjects } from "../services/ProjectServices";
 import { fetchTasksByUserId } from "../services/miscService";
 import SettingsPage from "../components/SettingsPage.jsx";
 import useCollabProject from "../hooks/useCollabProjects.js";
@@ -70,7 +69,7 @@ const UserDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* User Info Section */}
-        <SettingsPage></SettingsPage>
+        <SettingsPage edit={false}></SettingsPage>
 
         {/* Dashboard Content */}
         <main className="flex-1 overflow-y-auto pt-4">

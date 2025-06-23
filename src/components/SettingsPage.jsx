@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import EditUserModal from "./EditUserModal";
 
-const SettingsPage = () => {
+const SettingsPage = ({ edit = true }) => {
   const { isLoading, user, error } = useAuth();
+
+  console.log(edit);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
@@ -60,12 +62,14 @@ const SettingsPage = () => {
             </p>
           </div>
         </div>
-        <button
-          className="text-blue-700 hover:underline font-medium"
-          onClick={() => setShowEditModal(true)}
-        >
-          Edit Profile
-        </button>
+        {edit && (
+          <button
+            className="text-blue-700 hover:underline font-medium"
+            onClick={() => setShowEditModal(true)}
+          >
+            Edit Profile
+          </button>
+        )}
       </section>
     </div>
   );
