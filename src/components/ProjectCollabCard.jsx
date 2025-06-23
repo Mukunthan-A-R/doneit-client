@@ -9,6 +9,7 @@ import {
 } from "../services/ProjectServices";
 import { formatDate } from "../services/utils";
 import useClickOutside from "../hooks/useClickOutside";
+import useProject from "../hooks/useProject";
 
 const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
   const setCurrentProjectData = useSetRecoilState(CurrentProject);
 
   const handleClickOutsideRef = useClickOutside(() => setIsDropdownOpen(false));
+
+  const { refetch } = useProject(project.project_id);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -51,6 +54,7 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
           created: projectOwner.data.created, // Assume "created" remains unchanged, hence it is passed as is
         });
         setCurrentProject(project.project_id);
+        refetch();
         console.log("Project updated successfully:", updatedProject);
         setIsEditing(false); // Close the edit mode after successful update
         // location.reload();

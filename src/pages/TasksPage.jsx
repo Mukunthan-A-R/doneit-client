@@ -27,6 +27,7 @@ export default function TasksPage() {
   const activeProjectId = projectId || fallbackProjectId;
 
   const { project } = useProject(projectId);
+
   const {
     tasks,
     refetch: refetchTasks,
@@ -163,7 +164,7 @@ export default function TasksPage() {
             : [],
       },
     ],
-    [tasks, isLoading],
+    [tasks, isLoading]
   );
 
   if (!activeProjectId) {
