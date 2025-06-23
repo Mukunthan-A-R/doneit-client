@@ -31,6 +31,7 @@ const UserAssignmentsDisplay = ({
 
         if (response.status === 404) {
           setAssignments([]);
+          setLoading(false);
           return;
         }
 
@@ -71,7 +72,7 @@ const UserAssignmentsDisplay = ({
 
   const handleDelete = async (assignmentId, userToDelete) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this assignment?",
+      "Are you sure you want to delete this assignment?"
     );
     if (!confirmDelete) return;
 
@@ -156,7 +157,7 @@ const UserAssignmentsDisplay = ({
                             onClick={() =>
                               handleDelete(
                                 parseInt(assignment.assignment_id),
-                                users[assignment.user_id],
+                                users[assignment.user_id]
                               )
                             }
                             color="red"

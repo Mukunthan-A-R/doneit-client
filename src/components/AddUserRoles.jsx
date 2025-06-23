@@ -63,12 +63,13 @@ const AddUserRoles = () => {
 
         if (response.status === 404) {
           setAssignments([]);
+          setLoading(false);
           return;
         }
         setAssignments(ResData);
 
         let filterData = ResData.filter(
-          (item) => item.user_id === parseInt(currentUserData.user_id),
+          (item) => item.user_id === parseInt(currentUserData.user_id)
         );
 
         if (filterData.length > 0) {
@@ -93,7 +94,7 @@ const AddUserRoles = () => {
       const fetchUser = async () => {
         if (ownerEmail.trim() === email.trim()) {
           toast.error(
-            `The email ${email.trim()} you are trying to add is the owner of the Project ! `,
+            `The email ${email.trim()} you are trying to add is the owner of the Project ! `
           );
           return;
         }
