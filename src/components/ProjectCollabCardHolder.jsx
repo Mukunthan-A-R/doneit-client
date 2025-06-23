@@ -39,7 +39,7 @@ const ProjectCollabCardHolder = () => {
 
   const handleDeleteProject = (projectId) => {
     setProjects((prevProjects) =>
-      prevProjects.filter((project) => project.project_id !== projectId),
+      prevProjects.filter((project) => project.project_id !== projectId)
     );
   };
 

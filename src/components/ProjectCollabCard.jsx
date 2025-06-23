@@ -91,13 +91,15 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
       <div className="max-w-sm p-3 pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
         {/* Menu Icon */}
         <div className="absolute top-1 right-1">
-          <button
-            className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
-            onClick={toggleDropdown}
-            ref={handleClickOutsideRef}
-          >
-            •••
-          </button>
+          {project.role === "admin" && (
+            <button
+              className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
+              onClick={toggleDropdown}
+              ref={handleClickOutsideRef}
+            >
+              •••
+            </button>
+          )}
 
           {/* Dropdown Menu */}
           {isDropdownOpen && !isEditing && (
@@ -148,10 +150,10 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
                   project.priority === "high"
                     ? "bg-red-100 text-red-800"
                     : project.priority === "medium"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : project.priority === "low"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-200 text-gray-700"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : project.priority === "low"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-gray-200 text-gray-700"
                 }`}
               >
                 {project.priority?.toUpperCase()}
@@ -159,6 +161,10 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
             </div>
             <p className="text-gray-600 mt-2">{project.description}</p>
 
+            <span className="flex">
+              <p className="text-gray-600">Your Role: </p>
+              <p>{project.role}</p>
+            </span>
             <div>
               <p className="text-sm text-gray-600">DeadLine</p>
               <p>{formatDate(project.end_date)}</p>
