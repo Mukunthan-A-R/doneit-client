@@ -278,13 +278,15 @@ const TaskCard = ({
         </div>
       )}
 
-      <button
-        className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1"
-        onMouseDown={onMouseDown}
-        onMouseLeave={onMouseLeave}
-      >
-        <RiDragMove2Fill size={20} />
-      </button>
+      {userRole !== "client" && (
+        <button
+          className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1"
+          onMouseDown={onMouseDown}
+          onMouseLeave={onMouseLeave}
+        >
+          <RiDragMove2Fill size={20} />
+        </button>
+      )}
 
       {/* Task Info */}
       {name && <UserBadge profile={profile} name={name} />}
