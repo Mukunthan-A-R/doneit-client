@@ -7,12 +7,11 @@ const StatsCards = ({ todaysTasks }) => {
   const filteredTasks = todaysTasks.filter((task) => {
     const startDate = task.start_date?.split("T")[0];
     const endDate = task.end_date?.split("T")[0];
-    const isTodayInRange =
-      (startDate <= today && endDate >= today) ||
-      startDate === today ||
-      endDate === today;
 
-    if (!isTodayInRange) return false;
+    const isOngoingToday =
+      startDate && endDate && startDate <= today && endDate >= today;
+
+    if (!isOngoingToday) return false;
 
     if (filter === "all") return true;
     return task.status === filter;
