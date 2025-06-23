@@ -9,12 +9,14 @@ const Dashboard = () => {
   return (
     <>
       <UserHeaderInfo />
-      <h1 className="text-xl font-semibold pb-4 pt-2 lg:pt-0">Your Projects</h1>
+      <header className="bg-blue-950 text-white py-2 px-4  shadow rounded-lg flex items-center justify-between my-4 gap-4 md:gap-0 mb-4 mt-6">
+        <h1 className="text-2xl font-bold">Your Projects </h1>
+      </header>
       <ProjectCardHolder />
       <div className="mt-8">
-        <h1 className="text-xl font-semibold pb-4 pt-2 lg:pt-0">
-          Your Collab Projects
-        </h1>
+        <header className="bg-blue-950 text-white py-2 px-4  shadow rounded-lg flex items-center justify-between my-4 gap-4 md:gap-0 mb-4">
+          <h1 className="text-2xl font-bold">Your Collab Projects </h1>
+        </header>
         <ProjectCollabCardHolder />
       </div>
     </>
