@@ -33,7 +33,7 @@ const ProjectCard = ({ project, onDelete }) => {
     try {
       console.log("varudhaa");
       const confirmed = await confirmComponent(
-        "Are you sure you want to delete this Project?\n This action cannot be undone.",
+        "Are you sure you want to delete this Project?\n This action cannot be undone."
       );
       if (!confirmed) {
         console.log("🚀 ~ handleDelete ~ confirmed:", confirmed);
@@ -152,10 +152,10 @@ const ProjectCard = ({ project, onDelete }) => {
                   project.priority === "high"
                     ? "bg-red-100 text-red-800"
                     : project.priority === "medium"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : project.priority === "low"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-200 text-gray-700"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : project.priority === "low"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-gray-200 text-gray-700"
                 }`}
               >
                 {project.priority?.toUpperCase()}
@@ -249,10 +249,10 @@ const ProjectCard = ({ project, onDelete }) => {
                 Start Date
               </label>
               <input
-                type="datetime-local"
+                type="date"
                 id="start_date"
                 name="start_date"
-                value={editedProjectData.start_date.slice(0, 16)} // Format to "YYYY-MM-DDTHH:MM"
+                value={editedProjectData.start_date.slice(0, 10)} // Format to "YYYY-MM-DD"
                 onChange={handleInputChange}
                 className="mt-2 p-2 border border-gray-300 rounded w-full"
               />
@@ -262,10 +262,10 @@ const ProjectCard = ({ project, onDelete }) => {
                 End Date
               </label>
               <input
-                type="datetime-local"
+                type="date"
                 id="end_date"
                 name="end_date"
-                value={editedProjectData.end_date.slice(0, 16)} // Format to "YYYY-MM-DDTHH:MM"
+                value={editedProjectData.end_date.slice(0, 10)} // Format to "YYYY-MM-DD"
                 onChange={handleInputChange}
                 className="mt-2 p-2 border border-gray-300 rounded w-full"
               />

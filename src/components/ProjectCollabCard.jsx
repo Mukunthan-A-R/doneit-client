@@ -248,10 +248,10 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
                 Start Date
               </label>
               <input
-                type="datetime-local"
+                type="date"
                 id="start_date"
                 name="start_date"
-                value={editedProjectData.start_date.slice(0, 16)} // Format to "YYYY-MM-DDTHH:MM"
+                value={editedProjectData.start_date.slice(0, 10)} // Format to "YYYY-MM-DD"
                 onChange={handleInputChange}
                 className="mt-2 p-2 border border-gray-300 rounded w-full"
               />
@@ -261,10 +261,10 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
                 End Date
               </label>
               <input
-                type="datetime-local"
+                type="date"
                 id="end_date"
                 name="end_date"
-                value={editedProjectData.end_date.slice(0, 16)} // Format to "YYYY-MM-DDTHH:MM"
+                value={editedProjectData.end_date.slice(0, 10)} // Format to "YYYY-MM-DD"
                 onChange={handleInputChange}
                 className="mt-2 p-2 border border-gray-300 rounded w-full"
               />
