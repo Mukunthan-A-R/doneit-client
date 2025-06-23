@@ -13,6 +13,8 @@ import { confirmComponent } from "./modals/ConfirmToast";
 import { BiPencil, BiTrash } from "react-icons/bi";
 
 const ProjectCard = ({ project, onDelete }) => {
+  // console.log(project);
+
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -265,7 +267,9 @@ const ProjectCard = ({ project, onDelete }) => {
                 type="date"
                 id="end_date"
                 name="end_date"
-                value={editedProjectData.end_date.slice(0, 10)} // Format to "YYYY-MM-DD"
+                value={new Date(editedProjectData.end_date).toLocaleDateString(
+                  "en-CA"
+                )}
                 onChange={handleInputChange}
                 className="mt-2 p-2 border border-gray-300 rounded w-full"
               />
