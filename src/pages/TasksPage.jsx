@@ -26,7 +26,7 @@ export default function TasksPage() {
   const fallbackProjectId = useRecoilValue(ProjectState);
   const activeProjectId = projectId || fallbackProjectId;
 
-  const { project } = useProject(projectId);
+  const { project, refetch } = useProject(projectId);
 
   const {
     tasks,
@@ -74,6 +74,7 @@ export default function TasksPage() {
       if (response) {
         toast.success("Project marked as Active!");
       }
+      refetch();
     } catch (err) {
       console.log(err);
     }
@@ -94,6 +95,7 @@ export default function TasksPage() {
       if (response) {
         toast.success("Project marked as completed!");
       }
+      refetch();
     } catch (err) {
       console.log(err);
     }
