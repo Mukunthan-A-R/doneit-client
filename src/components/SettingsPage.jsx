@@ -1,17 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import EditUserModal from "./EditUserModal";
+import { toast } from "react-toastify";
 
 const SettingsPage = ({ edit = true }) => {
-  const { isLoading, user, error } = useAuth();
+  const { isLoading, user, error, refetch } = useAuth();
   const [showEditModal, setShowEditModal] = useState(false);
-  const [userDetails, setUserDetails] = useState(null);
 
-  useEffect(() => {
-    if (!isLoading && user.user) {
-      setUserDetails(user.user);
-    }
-  }, [isLoading, user]);
+  const userDetails = user.user || {};
 
   if (isLoading) {
     return (
@@ -33,8 +29,11 @@ const SettingsPage = ({ edit = true }) => {
     <div className="w-full">
       {showEditModal && (
         <EditUserModal
-          handleSetUserDetails={setUserDetails}
-          onClose={() => setShowEditModal(false)}
+          onClose={() => {
+            setShowEditModal(false);
+            refetch();
+            toast.success("User details updated successfully!");
+          }}
         />
       )}
 
