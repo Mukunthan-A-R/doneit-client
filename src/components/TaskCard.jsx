@@ -212,7 +212,7 @@ const TaskCard = ({
       onDragEnd={onDragEnd}
     >
       {/* 3-Dot Menu */}
-      {userRole !== "client" && (
+      {userRole !== "client" && project.status !== "completed" && (
         <div className="absolute top-2 right-2">
           <button
             className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
@@ -221,7 +221,6 @@ const TaskCard = ({
           >
             •••
           </button>
-
           {menuVisible && (
             <div
               className="absolute border border-gray-200 bg-white shadow-xl rounded-lg *:hover:bg-blue-600 *:hover:text-white *:rounded-md mt-2 w-32 p-1 z-50 animate-fade-in"
@@ -278,7 +277,7 @@ const TaskCard = ({
         </div>
       )}
 
-      {userRole !== "client" && (
+      {userRole !== "client" && project.status !== "completed" && (
         <button
           className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1"
           onMouseDown={onMouseDown}
