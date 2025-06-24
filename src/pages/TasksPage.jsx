@@ -59,6 +59,26 @@ export default function TasksPage() {
     refetchTasks();
   };
 
+  const handleProjectStatus = async () => {
+    const editData = {
+      name: project?.name,
+      description: project?.description,
+      start_date: project?.start_date,
+      end_date: project?.end_date,
+      status: "active",
+      priority: project?.priority,
+      created: project?.created,
+    };
+    try {
+      const response = await editProjectById(activeProjectId, editData);
+      if (response) {
+        toast.success("Project marked as Active!");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleCompleteProject = async () => {
     const editData = {
       name: project?.name,
@@ -69,9 +89,13 @@ export default function TasksPage() {
       priority: project?.priority,
       created: project?.created,
     };
-    const response = await editProjectById(fallbackProjectId, editData);
-    if (response) {
-      toast.success("Project marked as completed!");
+    try {
+      const response = await editProjectById(activeProjectId, editData);
+      if (response) {
+        toast.success("Project marked as completed!");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -212,7 +236,10 @@ export default function TasksPage() {
         </p>
       ) : (
         <>
-          {allTasksCompleted && (
+          {allTasksCompleted && project?.status === "completed" && (
+            <ChangeProjectStatus handleProjectStatus={handleProjectStatus} />
+          )}
+          {allTasksCompleted && project?.status !== "completed" && (
             <AllTasksCompletedBanner
               handleCompleteProject={handleCompleteProject}
             />
@@ -303,6 +330,24 @@ function AllTasksCompletedBanner({ handleCompleteProject }) {
       >
         Mark Project as Completed
       </button>
+    </div>
+  );
+}
+
+function ChangeProjectStatus({ handleProjectStatus }) {
+  return (
+    <div className="col-span-3 p-8 bg-white dark:bg-blue-950 border border-blue-800 rounded-2xl shadow-xl transition-all duration-300 mt-6">
+      <p className="text-gray-900 dark:text-white text-2xl font-semibold mb-4 text-center">
+        Do you want to change the project status?
+      </p>
+      <div className="flex justify-center">
+        <button
+          onClick={handleProjectStatus}
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white text-base font-semibold rounded-lg shadow-lg transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
+        >
+          Mark Project as Active
+        </button>
+      </div>
     </div>
   );
 }
