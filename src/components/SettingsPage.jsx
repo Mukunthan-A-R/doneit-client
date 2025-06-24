@@ -3,9 +3,13 @@ import useAuth from "../hooks/useAuth";
 import EditUserModal from "./EditUserModal";
 
 const SettingsPage = ({ edit = true }) => {
-  const { isLoading, user, error } = useAuth();
+  const { refetch, isLoading, user, error } = useAuth();
   const [showEditModal, setShowEditModal] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
+
+  const handleRefecthUserData = () => {
+    refetch();
+  };
 
   useEffect(() => {
     if (!isLoading && user.user) {
@@ -33,6 +37,7 @@ const SettingsPage = ({ edit = true }) => {
     <div className="w-full">
       {showEditModal && (
         <EditUserModal
+          refecthUserData={handleRefecthUserData}
           handleSetUserDetails={setUserDetails}
           onClose={() => setShowEditModal(false)}
         />

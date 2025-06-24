@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { updateUserById } from "../services/UserData";
 
-const EditUserModal = ({ handleSetUserDetails, onClose }) => {
+const EditUserModal = ({ refecthUserData, handleSetUserDetails, onClose }) => {
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -10,9 +10,7 @@ const EditUserModal = ({ handleSetUserDetails, onClose }) => {
     company: "",
     role: "",
   });
-  const { refetch, user, isLoading } = useAuth();
-
-  console.log(user);
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
     if (!isLoading && user.user) {
@@ -35,12 +33,12 @@ const EditUserModal = ({ handleSetUserDetails, onClose }) => {
     try {
       handleSetUserDetails({ ...formData });
       await updateUserById(user.user.user_id, formData);
-      refetch();
       onClose(); // Close modal after successful update
     } catch (error) {
       console.error("Failed to update user:", error);
       // Optionally show a message here
     } finally {
+      refecthUserData();
       setSaving(false);
     }
   };
