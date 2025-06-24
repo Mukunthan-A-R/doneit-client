@@ -3,6 +3,7 @@ import { changePassword } from "../services/changePassword";
 import PasswordInput from "./modals/PasswordInput";
 import { userData } from "../data/atom";
 import { useRecoilValue } from "recoil";
+import { toast } from "react-toastify";
 
 export default function ChangePasswordModal() {
   const currentUser = useRecoilValue(userData);
@@ -47,10 +48,11 @@ export default function ChangePasswordModal() {
     setLoading(false);
 
     if (result.success) {
-      setMessage(result.message || "Password changed successfully.");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      toast.success("Password changed successfully!");
+      closeModal();
     } else {
       setError(result.message || "Failed to change password.");
     }

@@ -10,7 +10,6 @@ import useProjectsByUser from "../hooks/useProjectsByUser.js";
 
 const UserDashboard = () => {
   const { user } = useRecoilValue(userData);
-  const [projects, setProjects] = useState([]);
   // const [completedProjects, setCompletedProjects] = useState(0);
   // const [overdueProjects, setOverdueProjects] = useState(0);
   const [todaysTasks, setTodaysTasks] = useState([]);
@@ -18,13 +17,10 @@ const UserDashboard = () => {
   let completedProjects = 0;
   let overdueProjects = 0;
   // Fetching Collab Projects
-  const { project, isLoading, error } = useCollabProject(user.user_id);
+  const { project, isLoading } = useCollabProject(user.user_id);
   // Fetching User Projects
-  const {
-    project: userProjects,
-    isLoading: isUserProjectsLoading,
-    error: userProjectsError,
-  } = useProjectsByUser(user.user_id);
+  const { project: userProjects, isLoading: isUserProjectsLoading } =
+    useProjectsByUser(user.user_id);
 
   let allUserAssignedProjects = [
     ...(Array.isArray(project) ? project : []),
@@ -57,7 +53,7 @@ const UserDashboard = () => {
     getTasks();
   }, [user.user_id]);
 
-  if (isLoading && isUserProjectsLoading) {
+  if (isLoading || isUserProjectsLoading) {
     return (
       <div className="text-center py-6 text-gray-500 animate-pulse">
         Loading user data...
@@ -70,7 +66,7 @@ const UserDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* User Info Section */}
-        <SettingsPage edit={false}></SettingsPage>
+        <SettingsPage edit={false} />
 
         {/* Dashboard Content */}
         <main className="flex-1 overflow-y-auto pt-4">
@@ -142,8 +138,8 @@ const UserDashboard = () => {
                           project.priority === "high"
                             ? "bg-red-500"
                             : project.priority === "medium"
-                            ? "bg-yellow-500"
-                            : "bg-green-500"
+                              ? "bg-yellow-500"
+                              : "bg-green-500"
                         }`}
                       >
                         {project.priority}

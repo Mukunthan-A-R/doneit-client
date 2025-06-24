@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { updateUserById } from "../services/UserData";
 
-const EditUserModal = ({ refecthUserData, handleSetUserDetails, onClose }) => {
+const EditUserModal = ({ onClose }) => {
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -31,7 +31,6 @@ const EditUserModal = ({ refecthUserData, handleSetUserDetails, onClose }) => {
     e.preventDefault();
     setSaving(true);
     try {
-      handleSetUserDetails({ ...formData });
       await updateUserById(user.user.user_id, formData);
       onClose(); // Close modal after successful update
     } catch (error) {

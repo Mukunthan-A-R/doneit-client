@@ -11,7 +11,7 @@ export default function useAuth() {
   const [state, setState] = useRecoilState(userData);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
-  function refetch() {
+  async function refetch() {
     setRefetchTrigger((prev) => prev + 1);
   }
 
@@ -39,7 +39,9 @@ export default function useAuth() {
         });
       } catch (error) {
         if (isAxiosError(error)) {
-          toast.error(handleError(error));
+          if (error.response?.status !== 401) {
+            toast.error(handleError(error));
+          }
           setState({ user: null, isLoading: false, error, requireLogin: true });
         } else {
           toast.error("Something went wrong in fetching user details");
@@ -94,6 +96,8 @@ export default function useAuth() {
           email: userPayload.email,
           name: userPayload.name,
           token: userPayload.token,
+          company: userPayload.company,
+          role: userPayload.role,
           user_id: userPayload.user_id,
           is_activated: userPayload.is_activated,
         },
