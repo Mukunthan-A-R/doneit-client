@@ -163,7 +163,12 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
                 {project.priority?.toUpperCase()}
               </span>
             </div>
-            <p className="text-gray-600 mt-2">{project.description}</p>
+            <p
+              className="text-gray-600 mt-2 text-sm truncate w-full cursor-help pr-10"
+              title={project.description}
+            >
+              {project.description}
+            </p>
 
             <span className="flex">
               <p className="text-gray-600">Your Role: </p>

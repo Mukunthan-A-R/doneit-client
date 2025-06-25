@@ -163,7 +163,12 @@ const ProjectCard = ({ project, onDelete }) => {
                 {project.priority?.toUpperCase()}
               </span>
             </div>
-            <p className="text-gray-600 mt-2">{project.description}</p>
+            <p
+              className="text-gray-600 mt-2 text-sm truncate w-full pr-10 cursor-pointer"
+              title={project.description}
+            >
+              {project.description}
+            </p>
 
             <div>
               <p className="text-sm text-gray-600">DeadLine</p>
