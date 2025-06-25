@@ -289,8 +289,20 @@ const TaskCard = ({
 
       {/* Task Info */}
       {name && <UserBadge profile={profile} name={name} />}
-      <h3 className="text-xl text-gray-700 font-semibold">{title}</h3>
-      <p className="text-sm text-gray-600 pb-3">{desc}</p>
+      <h3
+        className="text-xl text-gray-700 font-semibold truncate cursor-pointer"
+        title={title}
+      >
+        {title}
+      </h3>
+
+      <p
+        className="text-sm text-gray-600 pb-3 truncate w-full cursor-pointer pr-10"
+        title={desc}
+      >
+        {desc}
+      </p>
+
       <p className="text-sm text-gray-600">Start Date: {startTime}</p>
       <p className="text-sm text-gray-600">End Date: {endTime}</p>
       <p className="text-sm text-gray-600">Work Hours: {timeDuration} hrs</p>
