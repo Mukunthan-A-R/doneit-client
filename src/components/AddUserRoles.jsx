@@ -30,9 +30,9 @@ const AddUserRoles = () => {
   const [assignments, setAssignments] = useState(null);
 
   const { projectId } = useParams();
-  const { project } = useProject(projectId);
+  const { project, error } = useProject(projectId);
 
-  const { user: currentUserData } = useRecoilValue(userData);
+  const { user: currentUserData, error: authError } = useRecoilValue(userData);
 
   useEffect(() => {
     const fetchProjectDetails = async () => {
@@ -69,7 +69,7 @@ const AddUserRoles = () => {
         setAssignments(ResData);
 
         let filterData = ResData.filter(
-          (item) => item.user_id === parseInt(currentUserData.user_id)
+          (item) => item.user_id === parseInt(currentUserData.user_id),
         );
 
         if (filterData.length > 0) {
@@ -94,7 +94,7 @@ const AddUserRoles = () => {
       const fetchUser = async () => {
         if (ownerEmail.trim() === email.trim()) {
           toast.error(
-            `The email ${email.trim()} you are trying to add is the owner of the Project ! `
+            `The email ${email.trim()} you are trying to add is the owner of the Project ! `,
           );
           return;
         }
@@ -184,9 +184,9 @@ const AddUserRoles = () => {
     return <p>Loading ...</p>;
   }
 
-  // if (!userRole) {
-  //   return <ErrorHandler error={"Access Denied"} />;
-  // }
+  if (error || authError) {
+    return <ErrorHandler error={error || authError} />;
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
