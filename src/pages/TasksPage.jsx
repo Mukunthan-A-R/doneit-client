@@ -13,6 +13,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import CreateTask from "../components/modals/CreateTask";
 import TaskCard from "../components/TaskCard";
+import ErrorHandler from "../components/ErrorHandler";
 
 export default function TasksPage() {
   const [userRole, setUserRole] = useState("");
@@ -34,6 +35,11 @@ export default function TasksPage() {
     isLoading,
     error,
   } = useProjectTasks(projectId);
+
+  if (error) {
+    console.log("error in task page");
+    console.log(error);
+  }
 
   useEffect(() => {
     const fetchProjects = async () => {
