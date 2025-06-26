@@ -21,7 +21,7 @@ export default function useAuth() {
     async function getUser() {
       setState({ ...state, isLoading: true, error: null, requireLogin: false });
       try {
-        const { data } = await axios.get(API_URL + "/auth/me", {
+        const { data } = await axios.get(API_URL + "/api/auth/me", {
           withCredentials: true,
         });
         setState({

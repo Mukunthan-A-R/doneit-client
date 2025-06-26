@@ -32,13 +32,13 @@ export const registerUser = async (userData) => {
   } catch (error) {
     console.error(
       "Registration failed:",
-      error.response?.data || error.message,
+      error.response?.data || error.message
     );
     throw error;
   }
 };
 
-const API_URL_login = `${apiUrl}/login`;
+const API_URL_login = `${apiUrl}/api/login`;
 
 export const loginUser = async (credentials) => {
   try {
@@ -54,7 +54,7 @@ export const loginUser = async (credentials) => {
 
 export const logoutUser = async () => {
   try {
-    const response = await axios.get(apiUrl + "/auth/logout", {
+    const response = await axios.get(apiUrl + "/api/auth/logout", {
       withCredentials: true,
     });
     return response.data;
