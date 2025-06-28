@@ -4,30 +4,33 @@ import ErrorHandler from "./ErrorHandler";
 
 const NUM_DAYS = 12;
 
-const getDayOffset = (start, end) => {
-  const diff = (new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24);
-  return Math.round(diff);
-};
-
+// Format date for header cells
 const formatDate = (dateStr) => {
   const options = { month: "short", day: "numeric" };
   return new Date(dateStr).toLocaleDateString(undefined, options);
 };
 
+// Get display date for header columns
 const getDateForOffset = (baseDate, offset) => {
   const date = new Date(baseDate);
-  date.setDate(baseDate?.getDate() + offset);
+  date.setDate(date.getDate() + offset);
   return formatDate(date);
 };
 
-// Get task color based on current date and task end date
+// Get offset (in days) between two dates
+const getDayOffset = (start, end) => {
+  const diff = (new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24);
+  return Math.round(diff);
+};
+
+// Determine task color
 const getTaskColor = (endDate) => {
   const today = new Date();
   const end = new Date(endDate);
   const diff = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
-  if (diff < 0) return "bg-red-500"; // Task overdue
+  if (diff < 0) return "bg-red-500"; // Overdue
   if (diff <= 3) return "bg-yellow-400"; // Due soon
-  return "bg-blue-600"; // Default
+  return "bg-blue-600"; // Normal
 };
 
 const GanttChart = ({ projectId }) => {
@@ -35,13 +38,11 @@ const GanttChart = ({ projectId }) => {
   const [baseDate, setBaseDate] = useState(null);
 
   useEffect(() => {
-    if (tasks?.length > 0) {
-      const earliest = tasks.reduce((min, task) =>
-        new Date(task.start_date) < new Date(min.start_date) ? task : min
-      );
-      setBaseDate(new Date(earliest.start_date));
-    }
-  }, [tasks]);
+    const today = new Date();
+    const twoDaysBefore = new Date(today);
+    twoDaysBefore.setDate(today.getDate() - 2);
+    setBaseDate(twoDaysBefore);
+  }, []);
 
   if (isLoading)
     return (
@@ -50,9 +51,7 @@ const GanttChart = ({ projectId }) => {
       </div>
     );
 
-  if (error) {
-    return <ErrorHandler error={error} />;
-  }
+  if (error) return <ErrorHandler error={error} />;
 
   return (
     <>
@@ -85,16 +84,19 @@ const GanttChart = ({ projectId }) => {
 
             {/* Task Rows */}
             <div className="space-y-3">
-              {tasks?.map((task) => {
-                const offset = getDayOffset(baseDate, task.start_date);
-                const duration =
-                  getDayOffset(task.start_date, task.end_date) + 1;
+              {tasks.map((task) => {
+                const startOffset = getDayOffset(baseDate, task.start_date);
+                const endOffset = getDayOffset(baseDate, task.end_date);
 
-                const colStart = Math.max(0, Math.min(NUM_DAYS - 1, offset));
-                const colSpan = Math.max(
-                  1,
-                  Math.min(NUM_DAYS - colStart, duration)
-                );
+                // Skip if task is completely outside the visible window
+                if (endOffset < 0 || startOffset > NUM_DAYS - 1) {
+                  return null;
+                }
+
+                // Clamp the task bar to visible range
+                const colStart = Math.max(0, startOffset);
+                const colEnd = Math.min(NUM_DAYS - 1, endOffset);
+                const colSpan = Math.max(1, colEnd - colStart + 1);
 
                 const taskColorClass = getTaskColor(task.end_date);
 
@@ -127,7 +129,7 @@ const GanttChart = ({ projectId }) => {
             <div className="mt-8 text-sm text-gray-500 text-center italic">
               Displaying a {NUM_DAYS}-day window starting from{" "}
               <span className="font-semibold text-gray-700">
-                {formatDate(baseDate)}
+                {baseDate ? formatDate(baseDate) : "N/A"}
               </span>
             </div>
           </div>
