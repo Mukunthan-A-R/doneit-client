@@ -306,16 +306,19 @@ const TaskCard = ({
       <p className="text-sm text-gray-600">Start Date: {startTime}</p>
       <p className="text-sm text-gray-600">End Date: {endTime}</p>
       <p className="text-sm text-gray-600">Work Hours: {timeDuration} hrs</p>
-      {remainingTime.timeOver === false ? (
-        <span className="flex gap-1 text-sm text-gray-600">
-          <p>{remainingTime.message}:</p>
-          <p>{remainingTime.days}d</p>
-          <p>{remainingTime.hours}h</p>
-          <p>{remainingTime.minutes}m</p>
-        </span>
-      ) : (
-        <p className="text-sm text-red-500">{remainingTime.message}</p>
-      )}
+      {status !== "completed" &&
+        (remainingTime.timeOver === false ? (
+          <span className="flex gap-1 text-sm text-gray-600">
+            <p>{remainingTime.message}:</p>
+            <p>{remainingTime.days}d</p>
+            <p>{remainingTime.hours}h</p>
+            <p>{remainingTime.minutes}m</p>
+          </span>
+        ) : (
+          <p className="text-sm font-bold text-red-500">
+            {remainingTime.message}
+          </p>
+        ))}
 
       {/* Edit Popup */}
       {isEditPopupVisible && (
@@ -445,7 +448,7 @@ const calculateRemainingTime = (givenDate) => {
   endDate.setDate(baseDate.getDate() + 1);
   const diffInMilliseconds = endDate - currentDate;
   if (diffInMilliseconds <= 0) {
-    return { message: "The Task has ended", timeOver: true };
+    return { message: "Time limit reached", timeOver: true };
   }
   const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
   const diffInMinutes = Math.floor(diffInSeconds / 60);
