@@ -191,7 +191,7 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
                       <p>{remainingTime.minutes} min</p>
                     </span>
                   ) : (
-                    <span className="text-red-600">Task Overdue</span>
+                    <span className="text-red-600">Project Overdue</span>
                   )}
                 </div>
               ) : (

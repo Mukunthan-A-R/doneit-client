@@ -187,7 +187,7 @@ const ProjectCard = ({ project, onDelete }) => {
                       <p>{remainingTime.minutes} min</p>
                     </span>
                   ) : (
-                    <span className="text-red-600">Task Overdue</span>
+                    <span className="text-red-600">Project Overdue</span>
                   )}
                 </div>
               ) : (
