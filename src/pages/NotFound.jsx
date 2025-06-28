@@ -23,7 +23,7 @@ const NotFound = () => {
         Go Back Home
       </button>
 
-      <svg
+      {/* <svg
         className="w-64 h-64 mt-16 text-red-600 opacity-40"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -37,7 +37,7 @@ const NotFound = () => {
           strokeWidth="4"
           d="M20 20l24 24M44 20L20 44"
         />
-      </svg>
+      </svg> */}
     </div>
   );
 };
