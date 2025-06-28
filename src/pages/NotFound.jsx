@@ -6,9 +6,7 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4 text-center">
-      <h1 className="text-9xl font-extrabold text-red-600 animate-pulse mb-4">
-        404
-      </h1>
+      <h1 className="text-9xl font-extrabold text-red-600 mb-4">404</h1>
       <h2 className="text-3xl sm:text-4xl font-semibold text-gray-800 mb-2">
         Oops! Page Not Found
       </h2>
@@ -26,7 +24,7 @@ const NotFound = () => {
       </button>
 
       <svg
-        className="w-64 h-64 mt-16 animate-bounce text-red-600 opacity-40"
+        className="w-64 h-64 mt-16 text-red-600 opacity-40"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 64 64"
