@@ -10,7 +10,9 @@ const UserHeaderInfo = () => {
     country: "",
     timezone: "",
   });
-  const { user } = useAuth();
+  const {
+    user: { user },
+  } = useAuth();
 
   useEffect(() => {
     const fetchLocation = async () => {

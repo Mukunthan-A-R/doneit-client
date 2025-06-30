@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BiPencil, BiTrash } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSetRecoilState } from "recoil";
@@ -8,9 +9,8 @@ import {
   deleteProjectById,
   editProjectById,
 } from "../services/ProjectServices";
-import { formatDate, truncate } from "../services/utils";
+import { formatDate } from "../services/utils";
 import { confirmComponent } from "./modals/ConfirmToast";
-import { BiPencil, BiTrash } from "react-icons/bi";
 
 const ProjectCard = ({ project, onDelete }) => {
   // console.log(project);
@@ -35,7 +35,7 @@ const ProjectCard = ({ project, onDelete }) => {
     try {
       console.log("varudhaa");
       const confirmed = await confirmComponent(
-        "Are you sure you want to delete this Project?\n This action cannot be undone."
+        "Are you sure you want to delete this Project?\n This action cannot be undone.",
       );
       if (!confirmed) {
         console.log("🚀 ~ handleDelete ~ confirmed:", confirmed);
@@ -92,7 +92,7 @@ const ProjectCard = ({ project, onDelete }) => {
 
   return (
     <>
-      <div className="max-w-sm p-3 animate-fade-in pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
+      <div className="w-[280px] p-3 animate-fade-in pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
         {/* Menu Icon */}
         <div className="absolute top-1 right-1">
           <button
@@ -108,24 +108,22 @@ const ProjectCard = ({ project, onDelete }) => {
             <div className="absolute right-0 mt-2 w-28 animate-fade-in bg-white border border-gray-200 rounded-lg shadow-md p-1 overflow-hidden">
               <ul>
                 <li>
-                  <a
-                    href="#"
-                    className="text-sm flex items-center gap-1 px-2 transition-colors py-1.5 rounded-md text-gray-700 hover:bg-blue-600 hover:text-white"
+                  <button
+                    className="text-sm w-full cursor-pointer flex items-center gap-1 px-2 transition-colors py-1.5 rounded-md text-gray-700 hover:bg-blue-600 hover:text-white"
                     onClick={() => setIsEditing(true)} // Enter edit mode
                   >
                     <BiPencil />
                     Edit
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="text-sm flex items-center gap-1 px-2 transition-colors py-1.5 rounded-md text-gray-700 hover:bg-red-600 hover:text-white"
+                  <button
+                    className="text-sm w-full cursor-pointer flex items-center gap-1 px-2 transition-colors py-1.5 rounded-md text-gray-700 hover:bg-red-600 hover:text-white"
                     onClick={handleDelete}
                   >
                     <BiTrash />
                     Delete
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -135,29 +133,31 @@ const ProjectCard = ({ project, onDelete }) => {
         {/* Display Card Content */}
         {!isEditing && (
           <>
-            <div className="flex items-center space-x-3">
-              {project.status === "active" ? (
-                <div className="size-4 rounded-full bg-green-600"></div>
-              ) : project.status === "completed" ? (
-                <div className="size-4 rounded-full bg-gray-800"></div>
-              ) : (
-                <div className="size-4 rounded-full bg-red-600"></div>
-              )}
-              <h2
-                className="text-xl font-semibold text-blue-800 truncate w-[160px]"
-                title={project.name}
-              >
-                {truncate(project.name, 20)}
-              </h2>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-2">
+                {project.status === "active" ? (
+                  <div className="size-4 rounded-full bg-green-600"></div>
+                ) : project.status === "completed" ? (
+                  <div className="size-4 rounded-full bg-gray-800"></div>
+                ) : (
+                  <div className="size-4 rounded-full bg-red-600"></div>
+                )}
+                <h2
+                  className="text-xl font-semibold text-blue-800 truncate w-[160px]"
+                  title={project.name}
+                >
+                  {project.name}
+                </h2>
+              </div>
               <span
                 className={`text-[10px] font-semibold px-2 py-0.5 rounded-full mr-5 ${
                   project.priority === "high"
                     ? "bg-red-100 text-red-800"
                     : project.priority === "medium"
-                    ? "bg-yellow-100 text-yellow-800"
-                    : project.priority === "low"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-gray-200 text-gray-700"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : project.priority === "low"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-200 text-gray-700"
                 }`}
               >
                 {project.priority?.toUpperCase()}
@@ -273,7 +273,7 @@ const ProjectCard = ({ project, onDelete }) => {
                 id="end_date"
                 name="end_date"
                 value={new Date(editedProjectData.end_date).toLocaleDateString(
-                  "en-CA"
+                  "en-CA",
                 )}
                 onChange={handleInputChange}
                 className="mt-2 p-2 border border-gray-300 rounded w-full"

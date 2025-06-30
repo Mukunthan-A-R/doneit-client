@@ -97,7 +97,7 @@ const TaskboardLayout = () => {
         className={`
           w-full bg-white md:p-6 p-3 relative
           ${isSidebarOpen ? "ml-[16rem]" : "ml-0"}
-          lg:ml-[16rem] lg:w-5/6 transition-all duration-300 mt-10 sm:mt-0
+          lg:ml-[16rem] transition-all duration-300 mt-10 sm:mt-0
         `}
       >
         <Outlet />
