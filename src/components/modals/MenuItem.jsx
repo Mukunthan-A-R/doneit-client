@@ -1,8 +1,6 @@
-import React from "react";
-
-const MenuItem = ({ text }) => {
+const MenuItem = ({ text, className = "" }) => {
   return (
-    <li className="py-2 px-4">
+    <li className={`py-2 px-4 ${className}`}>
       <p className="py-1 font-sans font-medium text-white ">{text}</p>
     </li>
   );

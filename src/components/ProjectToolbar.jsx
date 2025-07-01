@@ -1,20 +1,23 @@
-import { NavLink } from "react-router-dom";
-import CreateProject from "./modals/CreateProject";
-import MenuItem from "./modals/MenuItem";
-
 import { createPortal } from "react-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { LuCircleUser } from "react-icons/lu";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { TbLogout2 } from "react-icons/tb";
-import { useRecoilState } from "recoil";
-import { createProjectToggle } from "../data/atom";
+import { NavLink } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  createProjectToggle,
+  sideBarToggle as sideBarToggleAtom,
+} from "../data/atom";
 import useAuth from "../hooks/useAuth";
+import CreateProject from "./modals/CreateProject";
+import MenuItem from "./modals/MenuItem";
 
 const ProjectToolbar = ({ setNavigate }) => {
   const [toggleCreateProject, setToggleCreateProject] =
     useRecoilState(createProjectToggle);
+  const sideBarToggle = useRecoilValue(sideBarToggleAtom);
   const {
     handleLogout,
     user: { user },
@@ -24,7 +27,10 @@ const ProjectToolbar = ({ setNavigate }) => {
 
   return (
     <>
-      <ul className="py-6 text-white h-full">
+      <ul
+        className="py-6 pl-1 text-white h-full md:data-[isdesktopsidebaropen=true]:w-14 relative isolate transition border"
+        data-isdesktopsidebaropen={sideBarToggle}
+      >
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>
@@ -34,8 +40,11 @@ const ProjectToolbar = ({ setNavigate }) => {
           }
           onClick={setNavigate}
         >
-          <RxDashboard size={20} />
-          <MenuItem text="Dashboard" />
+          <RxDashboard size={20} className="shrink-0" />
+          <MenuItem
+            text="Dashboard"
+            className={`${sideBarToggle ? "md:hidden" : ""}`}
+          />
         </NavLink>
         <NavLink
           to="/user-dashboard"
@@ -46,15 +55,21 @@ const ProjectToolbar = ({ setNavigate }) => {
           }
           onClick={setNavigate}
         >
-          <LuCircleUser size={20} />
-          <MenuItem text="User Data" />
+          <LuCircleUser size={20} className="shrink-0" />
+          <MenuItem
+            className={`${sideBarToggle ? "md:hidden" : ""}`}
+            text="User Data"
+          />
         </NavLink>
         <button
           className={`flex cursor-pointer w-full hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`}
           onClick={() => setToggleCreateProject(true)}
         >
-          <MdOutlineCreateNewFolder size={20} />
-          <MenuItem text="Create Project" />
+          <MdOutlineCreateNewFolder size={20} className="shrink-0" />
+          <MenuItem
+            className={`${sideBarToggle ? "md:hidden" : ""}`}
+            text="Create Project"
+          />
         </button>
         <NavLink
           to="/settings"
@@ -65,16 +80,22 @@ const ProjectToolbar = ({ setNavigate }) => {
           }
           onClick={setNavigate}
         >
-          <IoSettingsOutline size={20} />
-          <MenuItem text="Settings" />
+          <IoSettingsOutline size={20} className="shrink-0" />
+          <MenuItem
+            className={`${sideBarToggle ? "md:hidden" : ""}`}
+            text="Settings"
+          />
         </NavLink>
 
         <button
           className={`flex cursor-pointer w-full hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`}
           onClick={() => handleLogout()}
         >
-          <TbLogout2 size={20} />
-          <MenuItem text="Logout" />
+          <TbLogout2 size={20} className="shrink-0" />
+          <MenuItem
+            className={`${sideBarToggle ? "md:hidden" : ""}`}
+            text="Logout"
+          />
         </button>
       </ul>
 

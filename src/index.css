@@ -7,6 +7,8 @@
 
 body {
   @apply font-sans;
+  --sidebar-close: 3.5rem;
+  --sidebar-open: 16rem;
 }
 
 #root {
@@ -35,6 +37,7 @@ body {
 
 @theme {
   --animate-fade-in: fade-in 0.25s ease-in-out;
+  --animate-fade-out: fade-in 0.25s ease-in-out reverse forwards;
 
   @keyframes fade-in {
     from {

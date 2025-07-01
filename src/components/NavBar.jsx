@@ -125,7 +125,7 @@ function UserDropdown() {
           />
         ) : (
           <div className="size-7 rounded-full bg-gray-100 text-blue-900 font-bold text-sm grid place-items-center">
-            {user?.user?.name.split(" ")[0][0]}{" "}
+            {user?.user?.name.split(" ")[0][0]}
             {user?.user?.name.split(" ")[1]?.[0] ?? ""}
           </div>
         )}

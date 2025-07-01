@@ -61,6 +61,11 @@ export const createProjectToggle = atom({
   key: "createProjectToggle",
 });
 
+export const sideBarToggle = atom({
+  default: false,
+  key: "sideBarToggle",
+});
+
 export const userSubscription = atom({
   key: "userSubscription",
   default: {
