@@ -65,7 +65,7 @@ const ProjectToolbar = ({ setNavigate }) => {
   return (
     <>
       <ul
-        className=" pl-1 text-white h-full md:data-[isdesktopsidebaropen=true]:w-14 relative isolate transition"
+        className="mt-4 pl-1 text-white h-full md:data-[isdesktopsidebaropen=true]:w-14 relative isolate transition"
         data-isdesktopsidebaropen={sideBarToggle}
       >
         {toolbarItems.map((item) =>

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import MenuItem from "./modals/MenuItem";
 
 import { AiOutlineUserAdd } from "react-icons/ai";
@@ -11,138 +11,94 @@ import { MdTimeline } from "react-icons/md";
 import { PiFireSimpleBold } from "react-icons/pi";
 import { SiSimpleanalytics } from "react-icons/si";
 import { VscPieChart } from "react-icons/vsc";
+import { useRecoilValue } from "recoil";
+import { sideBarToggle as sideBarToggleAtom } from "../data/atom";
 
-const TaskToolbar = ({ project_id, setNavigate }) => {
+const navItems = [
+  {
+    to: (id) => `/tasks/${id}`,
+    icon: <FaTasks size={20} className="shrink-0" />,
+    text: "Task Tracker",
+  },
+  {
+    to: (id) => `/analytics/${id}`,
+    icon: <SiSimpleanalytics size={20} className="shrink-0" />,
+    text: "Analysis",
+  },
+  {
+    to: (id) => `/graph/${id}`,
+    icon: <MdTimeline size={20} className="shrink-0" />,
+    text: "Graph",
+  },
+  {
+    to: (id) => `/heat-map/${id}`,
+    icon: <PiFireSimpleBold size={20} className="shrink-0" />,
+    text: "Heat Map",
+  },
+  {
+    to: (id) => `/project-calendar/${id}`,
+    icon: <IoCalendarClearOutline size={20} className="shrink-0" />,
+    text: "Calendar",
+  },
+  {
+    to: (id) => `/list/${id}`,
+    icon: <BiTask size={20} className="shrink-0" />,
+    text: "Task List",
+  },
+  {
+    to: (id) => `/adduser/${id}`,
+    icon: <AiOutlineUserAdd size={20} className="shrink-0" />,
+    text: "Add User",
+  },
+  {
+    to: (id) => `/transaction/${id}`,
+    icon: <LuDatabase size={20} className="shrink-0" />,
+    text: "Logs",
+  },
+  {
+    to: (id) => `/transaction-analytics/${id}`,
+    icon: <VscPieChart size={20} className="shrink-0" />,
+    text: "Insights",
+  },
+];
+
+const TaskToolbar = ({ setNavigate }) => {
+  const { projectId } = useParams();
+  const sideBarToggle = useRecoilValue(sideBarToggleAtom);
+
   return (
     <>
       <NavLink
         to="/dashboard"
         className={({ isActive }) =>
-          `flex ${
-            isActive ? "bg-blue-700" : ""
-          } py-3 gap-2 text-left text-white hover:bg-blue-800 items-center pl-4`
+          `flex ${isActive ? "bg-blue-700" : ""} py-3 gap-2 text-left text-white hover:bg-blue-800 items-center pl-4`
         }
       >
-        <BsArrowLeft size={20} />
-        Back to dashboard
+        <BsArrowLeft size={20} className="shrink-0" />
+        <p className={`${sideBarToggle ? "md:hidden" : ""}`}>
+          Back to dashboard
+        </p>
       </NavLink>
-      <ul>
-        <NavLink
-          to={`/tasks/${project_id}`}
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <FaTasks size={20} />
-          <MenuItem text="Task Tracker" />
-        </NavLink>
-        <NavLink
-          to={`/analytics/${project_id}`}
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <SiSimpleanalytics size={20} />
-          <MenuItem text="Analysis" />
-        </NavLink>
-        <NavLink
-          to={`/graph/${project_id}`}
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <MdTimeline size={20} />
-          <MenuItem text="Graph" />
-        </NavLink>
-        <NavLink
-          to={`/heat-map/${project_id}`}
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <PiFireSimpleBold size={20} />
-          <MenuItem text="Heat Map" />
-        </NavLink>
-        <NavLink
-          to={`/project-calendar/${project_id}`}
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <IoCalendarClearOutline size={20} />
-          <MenuItem text="Calendar" />
-        </NavLink>
-        <NavLink
-          to={`/list/${project_id}`}
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <BiTask size={20} />
-          <MenuItem text="Task List" />
-        </NavLink>
-        <NavLink
-          to={`/adduser/${project_id}`}
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <AiOutlineUserAdd size={20} />
-          <MenuItem text="Add User" />
-        </NavLink>
-        <NavLink
-          to={`/transaction/${project_id}`}
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <LuDatabase size={20} />
-          <MenuItem text="Logs" />
-        </NavLink>
-        <NavLink
-          to={`/transaction-analytics/${project_id}`}
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <VscPieChart size={20} />
-          <MenuItem text="Insights" />
-        </NavLink>
-        {/* <MenuItem text="Format Tasks" /> */}
-        {/* <NavLink
-        to="/settings"
-        className={({ isActive }) => `flex ${isActive? 'bg-blue-600': ''} text-white hover:bg-blue-800 items-center pl-4`}
+      <ul
+        className="md:data-[isdesktopsidebaropen=true]:w-14 pl-1 mt-3"
+        data-isdesktopsidebaropen={sideBarToggle}
       >
-        <IoSettingsOutline size={20} />
-        <MenuItem text="Settings" />
-      </NavLink> */}
+        {navItems.map(({ to, icon, text }) => (
+          <NavLink
+            key={text}
+            to={to(projectId)}
+            className={({ isActive }) =>
+              `flex ${isActive ? "bg-blue-700" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4 ${sideBarToggle ? "md:p-3.5" : ""}`
+            }
+            onClick={setNavigate}
+          >
+            {icon}
+            <MenuItem
+              text={text}
+              className={`${sideBarToggle ? "md:hidden" : ""}`}
+            />
+          </NavLink>
+        ))}
       </ul>
     </>
   );
