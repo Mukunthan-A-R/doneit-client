@@ -38,21 +38,27 @@ export default function DashboardLayout() {
         `}
         data-isdesktopsidebaropen={sideBarToggle}
       >
-        {/* Title and Close button */}
-        <div className="flex items-center justify-between px-4 mb-4">
-          <h2
-            className="text-white font-sans text-xl font-medium md:data-[isdesktopsidebaropen=true]:hidden"
-            data-isdesktopsidebaropen={sideBarToggle}
-          >
-            Project Toolbar
-          </h2>
-          {/* Close button visible on mobile only */}
-          <button
-            className="lg:hidden text-white"
-            onClick={() => setIsSidebarOpen(false)}
-          >
+        {/* Side bar Toggle button for desktop */}
+        <button
+          className="p-2 md:flex hidden bg-white absolute -right-11 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition rounded-lg cursor-pointer text-blue-900 border-[1px] border-gray-200 shadow-[0_0_10px_rgba(0,0,0,0.1)] top-14"
+          onClick={() => setSideBarToggle((prev) => !prev)}
+        >
+          {sideBarToggle ? (
+            <GoSidebarCollapse size={20} />
+          ) : (
+            <GoSidebarExpand size={20} />
+          )}
+        </button>
+
+        {/* Side bar toggle for mobile */}
+        <button
+          className="absolute -right-12 top-15 block transition lg:hidden bg-blue-800 text-white p-2.5 rounded shadow-md focus:outline-none z-30"
+          onClick={() => setIsSidebarOpen((prev) => !prev)}
+          data-isopen={isSidebarOpen}
+        >
+          {isSidebarOpen ? (
             <svg
-              className="w-6 h-6"
+              className="size-5"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -65,43 +71,24 @@ export default function DashboardLayout() {
                 d="M6 18L18 6M6 6l12 12"
               ></path>
             </svg>
-          </button>
-        </div>
-
-        {/* Side bar Toggle button for desktop */}
-        <button
-          className="p-2 md:flex hidden bg-blue-900 absolute -right-10 rounded-lg cursor-pointer text-white top-14"
-          onClick={() => setSideBarToggle((prev) => !prev)}
-        >
-          {sideBarToggle ? (
-            <GoSidebarCollapse size={20} />
           ) : (
-            <GoSidebarExpand size={20} />
+            <span className="flex items-center">
+              <svg
+                className="size-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+            </span>
           )}
-        </button>
-
-        <button
-          className="absolute left-[105%] top-20 block data-[isopen=true]:opacity-0 transition lg:hidden bg-blue-800 text-white px-4 py-2 rounded shadow-md focus:outline-none z-30"
-          onClick={() => setIsSidebarOpen(true)}
-          data-isopen={isSidebarOpen}
-        >
-          <span className="flex items-center">
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>
-            </svg>
-            Menu
-          </span>
         </button>
 
         <ProjectToolbar setNavigate={handleNavigate} />

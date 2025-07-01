@@ -13,6 +13,7 @@ import {
 import useAuth from "../hooks/useAuth";
 import CreateProject from "./modals/CreateProject";
 import MenuItem from "./modals/MenuItem";
+import { useMemo } from "react";
 
 const ProjectToolbar = ({ setNavigate }) => {
   const [toggleCreateProject, setToggleCreateProject] =
@@ -25,78 +26,80 @@ const ProjectToolbar = ({ setNavigate }) => {
 
   const { user_id } = user;
 
+  const toolbarItems = useMemo(
+    () => [
+      {
+        type: "nav",
+        to: "/dashboard",
+        icon: <RxDashboard size={20} className="shrink-0" />,
+        text: "Dashboard",
+      },
+      {
+        type: "nav",
+        to: "/user-dashboard",
+        icon: <LuCircleUser size={20} className="shrink-0" />,
+        text: "User Data",
+      },
+      {
+        type: "button",
+        onClick: () => setToggleCreateProject(true),
+        icon: <MdOutlineCreateNewFolder size={20} className="shrink-0" />,
+        text: "Create Project",
+      },
+      {
+        type: "nav",
+        to: "/settings",
+        icon: <IoSettingsOutline size={20} className="shrink-0" />,
+        text: "Settings",
+      },
+      {
+        type: "button",
+        onClick: () => handleLogout(),
+        icon: <TbLogout2 size={20} className="shrink-0" />,
+        text: "Logout",
+      },
+    ],
+    [],
+  );
+
   return (
     <>
       <ul
-        className="py-6 pl-1 text-white h-full md:data-[isdesktopsidebaropen=true]:w-14 relative isolate transition border"
+        className=" pl-1 text-white h-full md:data-[isdesktopsidebaropen=true]:w-14 relative isolate transition"
         data-isdesktopsidebaropen={sideBarToggle}
       >
-        <NavLink
-          to="/dashboard"
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <RxDashboard size={20} className="shrink-0" />
-          <MenuItem
-            text="Dashboard"
-            className={`${sideBarToggle ? "md:hidden" : ""}`}
-          />
-        </NavLink>
-        <NavLink
-          to="/user-dashboard"
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <LuCircleUser size={20} className="shrink-0" />
-          <MenuItem
-            className={`${sideBarToggle ? "md:hidden" : ""}`}
-            text="User Data"
-          />
-        </NavLink>
-        <button
-          className={`flex cursor-pointer w-full hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`}
-          onClick={() => setToggleCreateProject(true)}
-        >
-          <MdOutlineCreateNewFolder size={20} className="shrink-0" />
-          <MenuItem
-            className={`${sideBarToggle ? "md:hidden" : ""}`}
-            text="Create Project"
-          />
-        </button>
-        <NavLink
-          to="/settings"
-          className={({ isActive }) =>
-            `flex ${
-              isActive ? "bg-blue-700" : ""
-            } hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`
-          }
-          onClick={setNavigate}
-        >
-          <IoSettingsOutline size={20} className="shrink-0" />
-          <MenuItem
-            className={`${sideBarToggle ? "md:hidden" : ""}`}
-            text="Settings"
-          />
-        </NavLink>
-
-        <button
-          className={`flex cursor-pointer w-full hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4`}
-          onClick={() => handleLogout()}
-        >
-          <TbLogout2 size={20} className="shrink-0" />
-          <MenuItem
-            className={`${sideBarToggle ? "md:hidden" : ""}`}
-            text="Logout"
-          />
-        </button>
+        {toolbarItems.map((item) =>
+          item.type === "nav" ? (
+            <NavLink
+              key={item.text}
+              to={item.to}
+              className={({ isActive }) =>
+                `flex ${
+                  isActive ? "bg-blue-700" : ""
+                } hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4 ${sideBarToggle ? "md:p-3.5" : ""}`
+              }
+              onClick={setNavigate}
+            >
+              {item.icon}
+              <MenuItem
+                text={item.text}
+                className={`${sideBarToggle ? "md:hidden" : ""}`}
+              />
+            </NavLink>
+          ) : (
+            <button
+              key={item.text}
+              className={`flex cursor-pointer w-full hover:bg-blue-800 rounded-ss-md rounded-es-md items-center pl-4  ${sideBarToggle ? "md:p-3.5" : ""}`}
+              onClick={item.onClick}
+            >
+              {item.icon}
+              <MenuItem
+                className={`${sideBarToggle ? "md:hidden" : ""}`}
+                text={item.text}
+              />
+            </button>
+          ),
+        )}
       </ul>
 
       {/* Modals */}

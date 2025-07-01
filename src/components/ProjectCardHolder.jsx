@@ -52,30 +52,28 @@ const ProjectCardHolder = () => {
   if (error) return <ErrorHandler error={error} />;
 
   return (
-    <div>
+    <div
+      // className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ${
+      className={`flex flex-wrap gap-6 ${
+        projects.length === 0 ? "content" : ""
+      }`}
+    >
       <div
-        // className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ${
-        className={`flex flex-wrap gap-6 ${
-          projects.length === 0 ? "content" : ""
-        }`}
+        role="button"
+        aria-roledescription="Click to create a new project"
+        onClick={() => setToggleCreateProject(true)}
+        className="md:w-[280px] w-full cursor-pointer text-blue-700 py-8 rounded-lg bg-white flex flex-col justify-center items-center gap-3 overflow-hidden relative shadow-md hover:shadow-xl hover:scale-101 transition border-2 border-gray-300 border-dashed"
       >
-        <div
-          role="button"
-          aria-roledescription="Click to create a new project"
-          onClick={() => setToggleCreateProject(true)}
-          className="w-[280px] cursor-pointer text-blue-700 py-8 rounded-lg bg-white flex flex-col justify-center items-center gap-3 overflow-hidden relative shadow-md hover:shadow-xl hover:scale-101 transition border-2 border-gray-300 border-dashed"
-        >
-          <BiPlusCircle size={32} /> Create project
-        </div>
-
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.project_id}
-            project={project}
-            onDelete={handleDeleteProject}
-          />
-        ))}
+        <BiPlusCircle size={32} /> Create project
       </div>
+
+      {projects.map((project) => (
+        <ProjectCard
+          key={project.project_id}
+          project={project}
+          onDelete={handleDeleteProject}
+        />
+      ))}
     </div>
   );
 };

@@ -92,7 +92,7 @@ const ProjectCard = ({ project, onDelete }) => {
 
   return (
     <>
-      <div className="w-[280px] p-3 animate-fade-in pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
+      <div className="md:w-[280px] w-full p-3 animate-fade-in pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
         {/* Menu Icon */}
         <div className="absolute top-1 right-1">
           <button
