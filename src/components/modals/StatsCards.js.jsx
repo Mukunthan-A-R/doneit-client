@@ -24,7 +24,7 @@ const StatsCards = ({ todaysTasks }) => {
       <div className="p-4 border-b border-gray-200 bg-blue-700 text-white flex justify-between items-center">
         <div>
           <h2 className="font-semibold text-lg">
-            Today's Tasks ({filteredTasks.length})
+            Today's Tasks from Your Projects ({filteredTasks.length})
           </h2>
           <p className="text-sm text-blue-100">Date: {todayDate}</p>
         </div>
