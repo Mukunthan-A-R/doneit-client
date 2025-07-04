@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
-import { Outlet, useParams } from "react-router-dom";
+import { GoSidebarCollapse, GoSidebarExpand } from "react-icons/go";
+import { Outlet } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { sideBarToggle as sideBarToggleAtom } from "../../data/atom";
+import useUserSubscription from "../../hooks/useUserSubscription";
 import TaskToolbar from "../TaskToolbar";
 import TrialExpiredOverlay from "../modals/TrialExpiredOverlay";
-import useUserSubscription from "../../hooks/useUserSubscription";
-
 const TaskboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
-
+  const [sideBarToggle, setSideBarToggle] = useRecoilState(sideBarToggleAtom);
   const { subscription } = useUserSubscription();
   const expired = subscription && !subscription.is_active;
-
-  const params = useParams();
-  const project_id = params.projectId;
 
   function handleNavigate() {
     return setIsSidebarOpen(false);
@@ -37,20 +36,33 @@ const TaskboardLayout = () => {
         className={`
           bg-blue-900 p-2 pr-0 w-[16rem]
           transition-all duration-300 flex flex-col
-          fixed top-0 h-full pt-20 gap-3 z-40
+          fixed top-0 h-full pt-20 z-40
           ${isSidebarOpen ? "left-0" : "-left-64"}
-          lg:left-0
+          lg:left-0 md:data-[isdesktopsidebaropen=true]:w-14 pl-0
         `}
+        data-isdesktopsidebaropen={sideBarToggle}
       >
-        {/* Sidebar Header with Close icon */}
-        <div className="flex items-center justify-between px-4 mb-4">
-          <h2 className="text-white text-xl font-medium">Task Toolbar</h2>
-          <button
-            className="lg:hidden text-white"
-            onClick={() => setIsSidebarOpen(false)}
-          >
+        {/* Side bar Toggle button for desktop */}
+        <button
+          className="p-2 md:flex hidden bg-white absolute -right-11 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition rounded-lg cursor-pointer text-blue-900 border-[1px] border-gray-200 shadow-[0_0_10px_rgba(0,0,0,0.1)] top-14"
+          onClick={() => setSideBarToggle((prev) => !prev)}
+        >
+          {sideBarToggle ? (
+            <GoSidebarCollapse size={20} />
+          ) : (
+            <GoSidebarExpand size={20} />
+          )}
+        </button>
+
+        {/* Mobile toggle button */}
+        <button
+          className="absolute -right-12 top-15 block transition lg:hidden bg-blue-800 text-white p-2.5 rounded shadow-md focus:outline-none z-30"
+          onClick={() => setIsSidebarOpen((prev) => !prev)}
+          data-isopen={isSidebarOpen}
+        >
+          {isSidebarOpen ? (
             <svg
-              className="w-6 h-6"
+              className="size-5"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -62,43 +74,36 @@ const TaskboardLayout = () => {
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-          </button>
-        </div>
-
-        {/* Button */}
-        <button
-          className="absolute left-[105%] top-20 block data-[isopen=true]:opacity-0 transition lg:hidden bg-blue-800 text-white px-4 py-2 rounded shadow-md focus:outline-none z-30"
-          onClick={() => setIsSidebarOpen(true)}
-          data-isopen={isSidebarOpen}
-        >
-          <span className="flex items-center">
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-            Menu
-          </span>
+          ) : (
+            <span className="flex items-center">
+              <svg
+                className="size-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </span>
+          )}
         </button>
 
-        <TaskToolbar setNavigate={handleNavigate} project_id={project_id} />
+        <TaskToolbar setNavigate={handleNavigate} />
       </div>
 
       {/* Main Content */}
       <div
         className={`
-          w-full bg-white md:p-6 p-3 relative
+          w-full bg-white p-6 relative
           ${isSidebarOpen ? "ml-[16rem]" : "ml-0"}
-          lg:ml-[16rem] lg:w-5/6 transition-all duration-300 mt-10 sm:mt-0
+          lg:data-[isdesktopsidebaropen=true]:ml-16 lg:data-[isdesktopsidebaropen=false]:ml-64 transition-all duration-300
         `}
+        data-isdesktopsidebaropen={sideBarToggle}
       >
         <Outlet />
       </div>

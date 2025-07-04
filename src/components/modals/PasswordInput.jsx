@@ -36,7 +36,7 @@ const PasswordInput = ({
           className="ml-2 text-gray-600 hover:text-gray-800"
           aria-label={showPassword ? "Hide password" : "Show password"}
         >
-          {showPassword ? <FaEyeSlash /> : <FaEye />}
+          {!showPassword ? <FaEyeSlash /> : <FaEye />}
         </button>
       </div>
     </div>

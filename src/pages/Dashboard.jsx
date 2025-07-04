@@ -4,12 +4,12 @@ import UserHeaderInfo from "../components/modals/UserHeaderInfo";
 import useUserSubscription from "../hooks/useUserSubscription";
 
 const Dashboard = () => {
-  const { subscription } = useUserSubscription();
+  useUserSubscription();
 
   return (
     <>
       <UserHeaderInfo />
-      <header className="bg-blue-950 text-white py-2 px-4  shadow rounded-lg flex items-center justify-between my-4 gap-4 md:gap-0 mb-4 mt-6">
+      <header className="bg-blue-950 text-white py-2 px-4 w-full shadow rounded-lg flex items-center justify-between my-4 gap-4 md:gap-0 mb-4 mt-6">
         <h1 className="text-2xl font-bold">Your Projects </h1>
       </header>
       <ProjectCardHolder />

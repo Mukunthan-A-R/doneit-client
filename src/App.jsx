@@ -27,11 +27,13 @@ import TransactionAnalytics from "./pages/TransactionAnalytics";
 import TransactionHistory from "./pages/TransactionHistory";
 import UserDashboard from "./pages/UserDashboard";
 import PricingPlans from "./pages/PricingPlans";
+import ScrollRestoration from "./components/ScrollRestoration";
 
 function App() {
   return (
     <Router>
       <NavBar />
+      <ScrollRestoration />
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/login" element={<LoginPage />} />
