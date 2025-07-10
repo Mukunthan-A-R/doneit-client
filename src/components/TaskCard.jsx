@@ -10,6 +10,7 @@ import { updateTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
 import UserBadge from "./UserBadge";
+import TagUserPopup from "./TagUserPopup";
 
 const TaskCard = ({
   task_id,
@@ -42,6 +43,7 @@ const TaskCard = ({
   const { projectId } = useParams();
   const { project, isLoading } = useRecoilValue(CurrentProjectState);
 
+  const [isTagPopupVisible, setIsTagPopupVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const cardClickOutside = useClickOutside(() => setMenuVisible(false));
   const [isEditPopupVisible, setIsEditPopupVisible] = useState(false);
@@ -215,6 +217,12 @@ const TaskCard = ({
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
     >
+      <button
+        onClick={() => setIsTagPopupVisible(true)}
+        className="mt-2 text-sm text-blue-600 underline hover:text-blue-800"
+      >
+        Tag Users
+      </button>
       {/* 3-Dot Menu */}
       {userRole !== "client" && project.status !== "completed" && (
         <div className="absolute top-2 right-2">
@@ -451,6 +459,13 @@ const TaskCard = ({
             </form>
           </div>
         </div>
+      )}
+      {isTagPopupVisible && (
+        <TagUserPopup
+          assignedUsers={assignedUsers}
+          taskId={task_id}
+          onClose={() => setIsTagPopupVisible(false)}
+        />
       )}
     </div>
   );
