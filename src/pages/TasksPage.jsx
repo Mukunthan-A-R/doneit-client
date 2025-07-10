@@ -6,10 +6,12 @@ import { getCollaboratedProjects } from "../services/getCollaboratedProjects";
 import { editProjectById } from "../services/ProjectServices";
 import { toast } from "react-toastify";
 import { deleteTask, updateTask } from "../services/TaskServices";
+import { getAllAssignmentsByProject } from "../services/taskAssignmentService";
 import { createActivityLog } from "../services/projectActivity";
+import { IoMdAddCircleOutline } from "react-icons/io";
+
 import useProjectTasks from "../hooks/useProjectTasks";
 import useProject from "../hooks/useProject";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import CreateTask from "../components/modals/CreateTask";
 import TaskCard from "../components/TaskCard";
@@ -19,6 +21,7 @@ export default function TasksPage() {
   const [userRole, setUserRole] = useState("");
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [isDraggable, setIsDraggable] = useState(false);
+  const [taskAssignments, setTaskAssignments] = useState({});
 
   const { user: currentUserData } = useRecoilValue(userData);
   const currentUserId = currentUserData.user_id;
@@ -60,6 +63,31 @@ export default function TasksPage() {
 
     if (currentUserId) fetchProjects();
   }, [currentUserId]);
+
+  useEffect(() => {
+    const fetchTaskAssignments = async () => {
+      try {
+        const assignmentList = await getAllAssignmentsByProject(projectId);
+
+        const map = {};
+        assignmentList.forEach(
+          ({ task_id, user_id, user_name, user_email }) => {
+            if (!map[task_id]) map[task_id] = [];
+            map[task_id].push({ user_id, name: user_name, email: user_email });
+          }
+        );
+
+        setTaskAssignments(map);
+
+        // console.log("map");
+        // console.log(map);
+      } catch (err) {
+        console.error("Failed to load task assignments:", err);
+      }
+    };
+
+    fetchTaskAssignments();
+  }, [projectId]);
 
   const handleStatusChange = () => {
     refetchTasks();
@@ -293,6 +321,7 @@ export default function TasksPage() {
                         startDate={task.start_date}
                         endDate={task.end_date}
                         timeDuration={task.time_duration}
+                        assignedUsers={taskAssignments[task.task_id] || []}
                         onEditClick={handleEditClick}
                         onhandleDelete={handleDelete}
                         onStatusChange={handleStatusChange}

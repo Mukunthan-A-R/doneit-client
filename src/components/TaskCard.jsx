@@ -21,6 +21,7 @@ const TaskCard = ({
   startDate,
   endDate,
   timeDuration,
+  assignedUsers,
   onEditClick,
   onhandleDelete,
   onStatusChange,
@@ -60,6 +61,9 @@ const TaskCard = ({
     const dd = String(date.getDate()).padStart(2, "0");
     return `${yyyy}-${mm}-${dd}`;
   };
+
+  console.log("assignedUsers");
+  console.log(assignedUsers);
 
   const [formData, setFormData] = useState({
     title,
@@ -319,6 +323,20 @@ const TaskCard = ({
             {remainingTime.message}
           </p>
         ))}
+
+      {assignedUsers.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {assignedUsers.map((user) => (
+            <span
+              key={user.user_id}
+              className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs"
+              title={user.email}
+            >
+              {user.name}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Edit Popup */}
       {isEditPopupVisible && (
