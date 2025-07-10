@@ -11,7 +11,10 @@ import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
 import UserBadge from "./UserBadge";
 import TagUserPopup from "./TagUserPopup";
-import { assignUserToTask } from "../services/taskAssignmentService";
+import {
+  assignUserToTask,
+  removeUserFromTask,
+} from "../services/taskAssignmentService";
 
 const TaskCard = ({
   task_id,
@@ -250,8 +253,27 @@ const TaskCard = ({
     }
   };
 
-  const handleDeleteTag = () => {
-    console.log("fuck you ass hole !");
+  const handleDeleteTag = async (task_id, user_id) => {
+    console.log("user_id");
+    console.log(user_id);
+
+    console.log("task_id");
+    console.log(task_id);
+
+    try {
+      const res = await removeUserFromTask(task_id, user_id);
+      if (res.success) {
+        toast.success("User untagged successfully!");
+
+        // Optional: remove from local state if you're storing assignedUsers
+        // setAssignedUsers(prev => prev.filter(user => user.user_id !== userDetails.user_id));
+      } else {
+        toast.error(res.message || "Failed to untag user.");
+      }
+    } catch (error) {
+      console.error("Error untagging user:", error);
+      toast.error("An error occurred while untagging the user.");
+    }
   };
 
   if (isLoading) return null;
