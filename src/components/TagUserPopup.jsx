@@ -1,15 +1,62 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdClose, MdDelete } from "react-icons/md";
+import { getUserByEmail } from "../services/UserEmail";
+import { useDebouncedCallback } from "../hooks/useDebounceCallback";
+import { isAxiosError } from "axios";
 
-const TagUserPopup = ({ assignedUsers, taskId, onClose, onDeleteTag }) => {
-  const [inputValue, setInputValue] = useState("");
+const TagUserPopup = ({
+  assignedUsers = [],
+  taskId,
+  onClose,
+  onDeleteTag,
+  onAddTag,
+}) => {
+  const [email, setEmail] = useState("");
+  const [userDetails, setUserDetails] = useState(null);
+  const [userNotFound, setUserNotFound] = useState(false);
+  const [searching, setSearching] = useState(false);
+
+  const handleSearchUser = useDebouncedCallback(async (value) => {
+    if (!value.trim()) return;
+
+    try {
+      setSearching(true);
+      const response = await getUserByEmail(value.trim());
+      setUserDetails(response.data);
+      setUserNotFound(false);
+    } catch (error) {
+      if (isAxiosError(error) && error?.response?.status === 404) {
+        setUserDetails(null);
+        setUserNotFound(true);
+      }
+    } finally {
+      setSearching(false);
+    }
+  }, 500);
+
+  const handleEmailChange = (e) => {
+    const val = e.target.value;
+    setEmail(val);
+    setUserDetails(null);
+    setUserNotFound(false);
+    handleSearchUser(val);
+  };
+
+  const handleAddClick = () => {
+    if (userDetails) {
+      onAddTag(userDetails, taskId, assignedUsers);
+      setEmail("");
+      setUserDetails(null);
+      setUserNotFound(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/10 backdrop-blur-[2px] flex items-center justify-center z-50">
       <div className="bg-white text-black rounded-xl shadow-2xl p-6 w-[90%] max-w-3xl max-h-[90vh] overflow-auto relative border border-gray-200">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Manage Task Tags</h2>
+          <h2 className="text-xl font-semibold">Tag Users to Task</h2>
           <button
             onClick={onClose}
             className="text-gray-700 hover:text-red-500"
@@ -18,29 +65,42 @@ const TagUserPopup = ({ assignedUsers, taskId, onClose, onDeleteTag }) => {
           </button>
         </div>
 
-        {/* Input with Add button */}
-        <div className="mb-6 flex gap-2">
+        {/* Input Row */}
+        <div className="flex gap-2 mb-4">
           <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Enter user email or name to tag..."
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            placeholder="Enter user email"
             className="flex-grow border border-gray-300 rounded-md p-2"
           />
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            onClick={() => {
-              if (inputValue.trim()) {
-                alert(
-                  `Tag "${inputValue}" to task ${taskId} (functionality not yet wired)`
-                );
-                setInputValue("");
-              }
-            }}
+            onClick={handleAddClick}
+            disabled={!userDetails}
+            className={`px-4 py-2 rounded-md text-white transition ${
+              userDetails
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
           >
             Add
           </button>
         </div>
+
+        {/* Status Message */}
+        {searching && (
+          <p className="text-gray-500 text-sm mb-2">Searching...</p>
+        )}
+        {userNotFound && !searching && (
+          <p className="text-red-500 text-sm mb-2">
+            No user found with that email.
+          </p>
+        )}
+        {userDetails && !userNotFound && (
+          <p className="text-green-600 text-sm mb-2">
+            User found: {userDetails.name}
+          </p>
+        )}
 
         {/* Assigned Users Table */}
         {assignedUsers?.length > 0 ? (

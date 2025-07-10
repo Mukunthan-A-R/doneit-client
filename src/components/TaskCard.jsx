@@ -11,6 +11,7 @@ import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
 import UserBadge from "./UserBadge";
 import TagUserPopup from "./TagUserPopup";
+import { assignUserToTask } from "../services/taskAssignmentService";
 
 const TaskCard = ({
   task_id,
@@ -63,9 +64,6 @@ const TaskCard = ({
     const dd = String(date.getDate()).padStart(2, "0");
     return `${yyyy}-${mm}-${dd}`;
   };
-
-  console.log("assignedUsers");
-  console.log(assignedUsers);
 
   const [formData, setFormData] = useState({
     title,
@@ -206,6 +204,54 @@ const TaskCard = ({
     } finally {
       // window.location.reload();
     }
+  };
+
+  const handleAddTag = async (userDetails, task_id, assignedUsers = []) => {
+    const alreadyAssigned = assignedUsers.some(
+      (user) => user.user_id === userDetails.user_id
+    );
+
+    console.log("alreadyAssigned");
+    console.log(alreadyAssigned);
+
+    if (alreadyAssigned) {
+      toast.error("User is already tagged to this task.");
+      return;
+    }
+
+    try {
+      const newTagData = {
+        task_id: task_id,
+        user_id: userDetails.user_id,
+        assigned_by: currentUserId,
+      };
+
+      console.log("newTagData");
+      console.log(newTagData);
+
+      // const res = await assignUserToTask(newTagData); // API call to backend
+      const res = await assignUserToTask(
+        task_id,
+        userDetails.user_id,
+        currentUserId
+      );
+
+      if (res.success) {
+        toast.success("User tagged successfully!");
+
+        // Optionally: Refresh assignedUsers if stored in state
+        // setAssignedUsers(prev => [...prev, userDetails]);
+      } else {
+        toast.error(res.message || "Failed to tag user.");
+      }
+    } catch (error) {
+      console.error("Error tagging user to task:", error);
+      toast.error("An error occurred while tagging user.");
+    }
+  };
+
+  const handleDeleteTag = () => {
+    console.log("fuck you ass hole !");
   };
 
   if (isLoading) return null;
@@ -465,6 +511,8 @@ const TaskCard = ({
           assignedUsers={assignedUsers}
           taskId={task_id}
           onClose={() => setIsTagPopupVisible(false)}
+          onDeleteTag={handleDeleteTag}
+          onAddTag={handleAddTag}
         />
       )}
     </div>
