@@ -10,11 +10,14 @@ import { updateTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
 import { formatDate } from "../services/utils";
 import UserBadge from "./UserBadge";
+import { HiUserAdd } from "react-icons/hi";
 import TagUserPopup from "./TagUserPopup";
 import {
   assignUserToTask,
   removeUserFromTask,
 } from "../services/taskAssignmentService";
+import { IoPersonAddOutline } from "react-icons/io5";
+import { FaUserPlus } from "react-icons/fa";
 
 const TaskCard = ({
   task_id,
@@ -285,12 +288,6 @@ const TaskCard = ({
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
     >
-      <button
-        onClick={() => setIsTagPopupVisible(true)}
-        className="mt-2 text-sm text-blue-600 underline hover:text-blue-800"
-      >
-        Tag Users
-      </button>
       {/* 3-Dot Menu */}
       {userRole !== "client" && project.status !== "completed" && (
         <div className="absolute top-2 right-2">
@@ -368,7 +365,21 @@ const TaskCard = ({
       )}
 
       {/* Task Info */}
-      {name && <UserBadge profile={profile} name={name} />}
+      <div
+        className="flex flex-row justify-between   gap-4"
+        style={{ marginRight: "15%" }}
+      >
+        <span>{name && <UserBadge profile={profile} name={name} />}</span>
+
+        <button
+          onClick={() => setIsTagPopupVisible(true)}
+          title="Assign Users"
+          className="text-gray-500 hover:text-blue-600  rounded-full transition-colors duration-150 "
+        >
+          <FaUserPlus className="w-5 h-5" />
+        </button>
+      </div>
+
       <h3
         className="text-xl text-gray-700 font-semibold truncate cursor-pointer"
         title={title}
