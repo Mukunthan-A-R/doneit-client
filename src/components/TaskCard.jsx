@@ -246,11 +246,16 @@ const TaskCard = ({
         toast.success("User tagged successfully!");
 
         // Optionally: Refresh assignedUsers if stored in state
-        // setAssignedUsers(prev => [...prev, userDetails]);
       } else {
         toast.error(res.message || "Failed to tag user.");
       }
     } catch (error) {
+      if (error.response.data.status === 403) {
+        console.error("Error tagging user to task:", error);
+        toast.error(error.response.data.message);
+        return;
+      }
+
       console.error("Error tagging user to task:", error);
       toast.error("An error occurred while tagging user.");
     }
