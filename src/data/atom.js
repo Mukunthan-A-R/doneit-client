@@ -76,3 +76,8 @@ export const userSubscription = atom({
     is_active: null,
   },
 });
+
+export const tagUserReload = atom({
+  default: 0,
+  key: "tagUserReload",
+});

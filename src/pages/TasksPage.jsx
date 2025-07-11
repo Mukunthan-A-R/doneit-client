@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { ProjectState, userData } from "../data/atom";
+import { ProjectState, tagUserReload, userData } from "../data/atom";
 import { getCollaboratedProjects } from "../services/getCollaboratedProjects";
 import { editProjectById } from "../services/ProjectServices";
 import { toast } from "react-toastify";
@@ -29,6 +29,8 @@ export default function TasksPage() {
   const { projectId } = useParams();
   const fallbackProjectId = useRecoilValue(ProjectState);
   const activeProjectId = projectId || fallbackProjectId;
+
+  const taskTagRender = useRecoilValue(tagUserReload);
 
   const { project, refetch } = useProject(projectId);
 
@@ -87,7 +89,7 @@ export default function TasksPage() {
     };
 
     fetchTaskAssignments();
-  }, [projectId]);
+  }, [projectId, taskTagRender]);
 
   const handleStatusChange = () => {
     refetchTasks();

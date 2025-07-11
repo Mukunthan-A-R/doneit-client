@@ -3,8 +3,8 @@ import { BiPencil, BiTrash } from "react-icons/bi";
 import { RiDragMove2Fill } from "react-icons/ri";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
-import { CurrentProjectState, userData } from "../data/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { CurrentProjectState, tagUserReload, userData } from "../data/atom";
 import useClickOutside from "../hooks/useClickOutside";
 import { updateTask } from "../services/TaskServices";
 import { createActivityLog } from "../services/projectActivity";
@@ -49,6 +49,8 @@ const TaskCard = ({
 
   const { projectId } = useParams();
   const { project, isLoading } = useRecoilValue(CurrentProjectState);
+
+  const [taskTagReload, setTaskTagReload] = useRecoilState(tagUserReload);
 
   const [isTagPopupVisible, setIsTagPopupVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
@@ -259,6 +261,9 @@ const TaskCard = ({
       console.error("Error tagging user to task:", error);
       toast.error("An error occurred while tagging user.");
     }
+    setTaskTagReload(taskTagReload + 1);
+    console.log("taskTagReload");
+    console.log(taskTagReload);
   };
 
   const handleDeleteTag = async (task_id, user_id) => {
@@ -282,6 +287,9 @@ const TaskCard = ({
       console.error("Error untagging user:", error);
       toast.error("An error occurred while untagging the user.");
     }
+    setTaskTagReload(taskTagReload + 1);
+    console.log("taskTagReload");
+    console.log(taskTagReload);
   };
 
   if (isLoading) return null;
