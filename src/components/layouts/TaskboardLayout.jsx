@@ -44,7 +44,7 @@ const TaskboardLayout = () => {
       >
         {/* Side bar Toggle button for desktop */}
         <button
-          className="p-2 md:flex hidden bg-white absolute -right-11 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition rounded-lg cursor-pointer text-blue-900 border-[1px] border-gray-200 shadow-[0_0_10px_rgba(0,0,0,0.1)] top-14"
+          className="p-2 md:flex hidden bg-white absolute -right-4 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition rounded-lg cursor-pointer text-blue-900 border-[1px] border-gray-200 shadow-[0_0_10px_rgba(0,0,0,0.1)] top-14"
           onClick={() => setSideBarToggle((prev) => !prev)}
         >
           {sideBarToggle ? (
