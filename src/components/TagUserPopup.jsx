@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdClose, MdDelete } from "react-icons/md";
 import { getUserByEmail } from "../services/UserEmail";
 import { useDebouncedCallback } from "../hooks/useDebounceCallback";
@@ -15,6 +15,22 @@ const TagUserPopup = ({
   const [userDetails, setUserDetails] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
   const [searching, setSearching] = useState(false);
+
+  const handleEmailChange = (e) => {
+    const val = e.target.value;
+    setEmail(val);
+    setUserDetails(null);
+    setUserNotFound(false);
+    handleSearchUser(val);
+  };
+
+  const handleAddClick = () => {
+    if (!userDetails) return;
+    onAddTag(userDetails, taskId, assignedUsers);
+    setEmail("");
+    setUserDetails(null);
+    setUserNotFound(false);
+  };
 
   const handleSearchUser = useDebouncedCallback(async (value) => {
     if (!value.trim()) return;
@@ -34,23 +50,6 @@ const TagUserPopup = ({
     }
   }, 500);
 
-  const handleEmailChange = (e) => {
-    const val = e.target.value;
-    setEmail(val);
-    setUserDetails(null);
-    setUserNotFound(false);
-    handleSearchUser(val);
-  };
-
-  const handleAddClick = () => {
-    if (userDetails) {
-      onAddTag(userDetails, taskId, assignedUsers);
-      setEmail("");
-      setUserDetails(null);
-      setUserNotFound(false);
-    }
-  };
-
   return (
     <div className="fixed inset-0 bg-black/10 backdrop-blur-[2px] flex items-center justify-center z-50">
       <div className="bg-white text-black rounded-xl shadow-2xl p-6 w-[90%] max-w-3xl max-h-[90vh] overflow-auto relative border border-gray-200">
@@ -65,7 +64,7 @@ const TagUserPopup = ({
           </button>
         </div>
 
-        {/* Input Row */}
+        {/* Input */}
         <div className="flex gap-2 mb-4">
           <input
             type="email"
@@ -87,7 +86,7 @@ const TagUserPopup = ({
           </button>
         </div>
 
-        {/* Status Message */}
+        {/* Status */}
         {searching && (
           <p className="text-gray-500 text-sm mb-2">Searching...</p>
         )}
@@ -102,7 +101,7 @@ const TagUserPopup = ({
           </p>
         )}
 
-        {/* Assigned Users Table */}
+        {/* Assigned Users */}
         {assignedUsers?.length > 0 ? (
           <div className="overflow-x-auto rounded-md border border-gray-200">
             <table className="w-full table-auto text-sm">
@@ -122,6 +121,7 @@ const TagUserPopup = ({
                       <button
                         onClick={() => onDeleteTag(taskId, user.user_id)}
                         className="text-red-600 hover:text-red-800"
+                        title="Remove User"
                       >
                         <MdDelete size={18} />
                       </button>
