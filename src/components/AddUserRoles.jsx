@@ -69,7 +69,7 @@ const AddUserRoles = () => {
         setAssignments(ResData);
 
         let filterData = ResData.filter(
-          (item) => item.user_id === parseInt(currentUserData.user_id),
+          (item) => item.user_id === parseInt(currentUserData.user_id)
         );
 
         if (filterData.length > 0) {
@@ -94,7 +94,7 @@ const AddUserRoles = () => {
       const fetchUser = async () => {
         if (ownerEmail.trim() === email.trim()) {
           toast.error(
-            `The email ${email.trim()} you are trying to add is the owner of the Project ! `,
+            `The email ${email.trim()} you are trying to add is the owner of the Project ! `
           );
           return;
         }
@@ -244,8 +244,8 @@ const AddUserRoles = () => {
       )}
       {/* Pass the reloadAssignments state to UserAssignmentsDisplay to trigger re-fetch */}
       <UserAssignmentsDisplay
+        assignments={assignments}
         currentUserData={currentUserData}
-        projectId={projectId}
         userRole={userRole}
         reloadAssignments={reloadAssignments}
         setReloadAssignments={setReloadAssignments}
