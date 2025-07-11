@@ -264,7 +264,13 @@ export default function TasksPage() {
               onClick={() =>
                 setTaskViewMode((prev) => (prev === "all" ? "tagged" : "all"))
               }
-              className="flex items-center justify-center p-2 text-white rounded-md w-fit px-4 cursor-pointer border border-white transition duration-300 gap-2 transform hover:scale-105"
+              className={`flex items-center justify-center p-2 rounded-md w-fit px-4 cursor-pointer border transition duration-300 gap-2 transform hover:scale-105
+    ${
+      taskViewMode === "all"
+        ? "text-white"
+        : "bg-gray-100 text-gray-800 border-gray-500"
+    }
+  `}
             >
               {taskViewMode === "all"
                 ? "Showing: All Tasks"
