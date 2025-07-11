@@ -285,7 +285,14 @@ const TaskCard = ({
     >
       {/* 3-Dot Menu */}
       {userRole !== "client" && project.status !== "completed" && (
-        <div className="absolute top-2 right-2">
+        <div className="absolute top-2 right-2 flex gap-4">
+          <button
+            onClick={() => setIsTagPopupVisible(true)}
+            title="Assign Users"
+            className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
+          >
+            <FaUserPlus className="w-5 h-5" />
+          </button>
           <button
             className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8"
             ref={cardClickOutside}
@@ -365,14 +372,6 @@ const TaskCard = ({
         style={{ marginRight: "15%" }}
       >
         <span>{name && <UserBadge profile={profile} name={name} />}</span>
-
-        <button
-          onClick={() => setIsTagPopupVisible(true)}
-          title="Assign Users"
-          className="text-gray-500 hover:text-blue-600  rounded-full transition-colors duration-150 "
-        >
-          <FaUserPlus className="w-5 h-5" />
-        </button>
       </div>
 
       <h3
