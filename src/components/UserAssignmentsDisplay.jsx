@@ -127,6 +127,7 @@ const UserAssignmentsDisplay = ({
                 <th className="px-4 py-3 text-left text-gray-700">User</th>
                 <th className="px-4 py-3 text-left text-gray-700">Role</th>
                 <th className="px-4 py-3 text-left text-gray-700">Company</th>
+                <th className="px-4 py-3 text-left text-gray-700">Email</th>
                 <th className="px-4 py-3 text-left text-gray-700">
                   Assigned At
                 </th>
@@ -147,6 +148,13 @@ const UserAssignmentsDisplay = ({
                     <td className="px-4 py-4">
                       {user ? user.company : "Loading..."}
                     </td>
+                    <td
+                      className="px-4 py-4 max-w-[170px] truncate"
+                      title={user?.email}
+                    >
+                      {user ? user.email : "Loading..."}
+                    </td>
+
                     <td className="px-4 py-4">
                       {new Date(assignment.assigned_at).toLocaleDateString()}
                     </td>
