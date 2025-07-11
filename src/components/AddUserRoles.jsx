@@ -27,7 +27,7 @@ const AddUserRoles = () => {
   const [userNotFound, setUserNotFound] = useState(false);
   const [reloadAssignments, setReloadAssignments] = useState(false);
   const [userRole, setUserRole] = useState(null);
-  const [ownerEmail, setOwnerEmail] = useState("");
+  const [owner, setOwner] = useState("");
   const [assignments, setAssignments] = useState(null);
 
   // External Data
@@ -42,7 +42,7 @@ const AddUserRoles = () => {
       try {
         const response = await fetchUserById(project?.created);
         const projectOwner = response.data;
-        setOwnerEmail(projectOwner.email);
+        setOwner(projectOwner);
 
         if (projectOwner.user_id === currentUserData.user_id) {
           setUserRole("admin");
@@ -99,10 +99,8 @@ const AddUserRoles = () => {
       return;
     }
 
-    if (ownerEmail.trim() === email.trim()) {
-      toast.error(
-        `The email ${email.trim()} you are trying to add is the owner of the Project!`
-      );
+    if (owner.email.trim() === email.trim()) {
+      toast.error("You can't add the project owner.");
       return;
     }
 
@@ -241,6 +239,7 @@ const AddUserRoles = () => {
 
       {/* Assignment Display */}
       <UserAssignmentsDisplay
+        owner={owner}
         assignments={assignments}
         currentUserData={currentUserData}
         userRole={userRole}

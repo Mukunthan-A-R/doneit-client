@@ -11,6 +11,7 @@ const UserAssignmentsDisplay = ({
   setReloadAssignments,
   userRole,
   currentUserData,
+  owner,
 }) => {
   const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -77,7 +78,7 @@ const UserAssignmentsDisplay = ({
     }
   };
 
-  // Helper: Render table row for each assignment
+  // Helper: Render assignment row
   const renderAssignmentRow = (assignment) => {
     const user = users[assignment.user_id];
 
@@ -115,10 +116,45 @@ const UserAssignmentsDisplay = ({
   // UI rendering
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-2xl font-semibold text-center mb-6">
+      {/* Project Owner Table */}
+      {owner && (
+        <div className="mb-8">
+          <h2 className="text-2xl font-semibold text-center my-4">
+            Project Owner
+          </h2>
+          <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+            <table className="min-w-full table-auto">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-3 text-left text-gray-700">User</th>
+                  <th className="px-4 py-3 text-left text-gray-700">Role</th>
+                  <th className="px-4 py-3 text-left text-gray-700">Company</th>
+                  <th className="px-4 py-3 text-left text-gray-700">Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b">
+                  <td className="px-4 py-4">{owner.name}</td>
+                  <td className="px-4 py-4">{"Super Admin"}</td>
+                  <td className="px-4 py-4">{owner.company}</td>
+                  <td
+                    className="px-4 py-4 max-w-[170px] truncate"
+                    title={owner.email}
+                  >
+                    {owner.email}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      <h2 className="text-2xl font-semibold text-center mb-4">
         User Assignments
       </h2>
 
+      {/* Assignment Table */}
       {loading && (
         <p className="text-center text-gray-500">Loading assignments...</p>
       )}
