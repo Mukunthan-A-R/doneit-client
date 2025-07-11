@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { isAxiosError } from "axios";
+import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
+
+import { useDebouncedCallback } from "../hooks/useDebounceCallback";
+import useProject from "../hooks/useProject";
+import { userData } from "../data/atom";
+import { fetchUserById } from "../services/UserData";
 import { getUserByEmail } from "../services/UserEmail";
+import { createActivityLog } from "../services/projectActivity";
 import {
   createAssignment,
   getAssignmentsByProjectId,
 } from "../services/collaboratorUserData";
-import UserAssignmentsDisplay from "./UserAssignmentsDisplay";
 
-import { isAxiosError } from "axios";
-import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
-import { userData } from "../data/atom";
-import { useDebouncedCallback } from "../hooks/useDebounceCallback";
-import useProject from "../hooks/useProject";
-import { fetchUserById } from "../services/UserData";
-import { createActivityLog } from "../services/projectActivity";
+import UserAssignmentsDisplay from "./UserAssignmentsDisplay";
 import ErrorHandler from "./ErrorHandler";
 
 const AddUserRoles = () => {
@@ -29,164 +30,159 @@ const AddUserRoles = () => {
   const [ownerEmail, setOwnerEmail] = useState("");
   const [assignments, setAssignments] = useState(null);
 
+  // External Data
   const { projectId } = useParams();
-  const { project, error } = useProject(projectId);
-
+  const { project, error: projectError } = useProject(projectId);
   const { user: currentUserData, error: authError } = useRecoilValue(userData);
 
+  // Effects: Fetch Project Owner
   useEffect(() => {
-    const fetchProjectDetails = async () => {
+    const fetchProjectOwner = async () => {
       setLoading(true);
       try {
-        const ProjectOwner = await fetchUserById(project?.created);
-        setOwnerEmail(ProjectOwner.data.email);
-        if (ProjectOwner.data.user_id === currentUserData.user_id) {
+        const response = await fetchUserById(project?.created);
+        const projectOwner = response.data;
+        setOwnerEmail(projectOwner.email);
+
+        if (projectOwner.user_id === currentUserData.user_id) {
           setUserRole("admin");
-          setLoading(false);
         }
       } catch (err) {
-        console.log(err);
-        toast.error("Error fetching assignments");
+        console.error(err);
+        toast.error("Error fetching project owner");
+      } finally {
         setLoading(false);
       }
     };
 
-    if (project?.created) fetchProjectDetails();
+    if (project?.created) fetchProjectOwner();
   }, [projectId, project?.created]);
 
+  // Effects: Fetch Assignments
   useEffect(() => {
     const fetchAssignments = async () => {
       setLoading(true);
       try {
         const response = await getAssignmentsByProjectId(projectId);
-        const ResData = response.data;
+        const assignmentsData = response.data;
 
         if (response.status === 404) {
           setAssignments([]);
-          setLoading(false);
           return;
         }
-        setAssignments(ResData);
 
-        let filterData = ResData.filter(
-          (item) => item.user_id === parseInt(currentUserData.user_id)
+        setAssignments(assignmentsData);
+
+        const currentUserAssignment = assignmentsData.find(
+          (a) => a.user_id === parseInt(currentUserData.user_id)
         );
 
-        if (filterData.length > 0) {
-          setUserRole(filterData[0].role);
-          setLoading(false);
-        } else {
-          setLoading(false);
-          return;
+        if (currentUserAssignment) {
+          setUserRole(currentUserAssignment.role);
         }
       } catch (err) {
-        setLoading(false);
-        console.log("🚀 ~ fetchAssignments ~ err:", err);
+        console.error("🚀 ~ fetchAssignments ~ err:", err);
         toast.error("Error fetching assignments");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchAssignments();
   }, [projectId, reloadAssignments]);
 
+  // Debounced Email Search
   const handleSearchUser = useDebouncedCallback((email) => {
-    if (email) {
-      const fetchUser = async () => {
-        if (ownerEmail.trim() === email.trim()) {
-          toast.error(
-            `The email ${email.trim()} you are trying to add is the owner of the Project ! `
-          );
-          return;
-        }
-        try {
-          const data = await getUserByEmail(email.trim());
-          setUserId(data.data.user_id);
-          setUserDetails(data);
-          setUserNotFound(false);
-        } catch (error) {
-          if (isAxiosError(error)) {
-            if (error.status === 404) {
-              setUserDetails(null);
-              setUserNotFound(true);
-            }
-          }
-        }
-      };
-      fetchUser();
-    } else {
+    if (!email) {
       setUserDetails(null);
       setUserNotFound(false);
-    }
-  }, 500);
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-    handleSearchUser(event.target.value);
-  };
-  const handleRoleChange = (event) => setRole(event.target.value);
-
-  function CheckExistingUser(userId) {
-    if (assignments.length == 0) {
-      return;
-    }
-    return assignments.some((user) => user.user_id === userId);
-  }
-
-  const handleAddUser = async (event) => {
-    event.preventDefault();
-
-    const result = CheckExistingUser(userId);
-    if (result) {
-      toast.error("The user already Exist!");
       return;
     }
 
-    if (userDetails) {
+    if (ownerEmail.trim() === email.trim()) {
+      toast.error(
+        `The email ${email.trim()} you are trying to add is the owner of the Project!`
+      );
+      return;
+    }
+
+    const fetchUser = async () => {
       try {
-        const newUser = {
-          user_id: userId,
-          project_id: projectId,
-          role: role,
-          status: "pending",
-        };
-
-        const response = await createAssignment(newUser);
-        console.log("Assignment created successfully:", response);
-
-        await createActivityLog({
-          user_id: currentUserData.user_id, // who performed the action
-          project_id: projectId,
-          action: "add-user",
-          context: {
-            addedUserId: userId, // user id added
-            addedUserEmail: userDetails.data.email, // real email
-            addedUserName: userDetails.data.name, // real name
-            addedUserRole: role,
-          },
-        });
-
-        setReloadAssignments((prev) => !prev);
-
-        setEmail("");
-        setRole("member");
-        setUserDetails(null);
+        const userData = await getUserByEmail(email.trim());
+        setUserId(userData.data.user_id);
+        setUserDetails(userData);
         setUserNotFound(false);
       } catch (error) {
-        console.error("Error adding user:", error);
+        if (isAxiosError(error) && error.status === 404) {
+          setUserDetails(null);
+          setUserNotFound(true);
+        }
       }
+    };
+
+    fetchUser();
+  }, 500);
+
+  // Event Handlers
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    handleSearchUser(value);
+  };
+
+  const handleRoleChange = (e) => setRole(e.target.value);
+
+  const checkExistingUser = (userId) => {
+    if (!assignments?.length) return false;
+    return assignments.some((user) => user.user_id === userId);
+  };
+
+  const handleAddUser = async (e) => {
+    e.preventDefault();
+
+    if (checkExistingUser(userId)) {
+      toast.error("The user already exists!");
+      return;
+    }
+
+    if (!userDetails) return;
+
+    try {
+      const newUser = {
+        user_id: userId,
+        project_id: projectId,
+        role,
+        status: "pending",
+      };
+
+      await createAssignment(newUser);
+
+      await createActivityLog({
+        user_id: currentUserData.user_id,
+        project_id: projectId,
+        action: "add-user",
+        context: {
+          addedUserId: userId,
+          addedUserEmail: userDetails.data.email,
+          addedUserName: userDetails.data.name,
+          addedUserRole: role,
+        },
+      });
+
+      setReloadAssignments((prev) => !prev);
+      setEmail("");
+      setRole("member");
+      setUserDetails(null);
+      setUserNotFound(false);
+    } catch (error) {
+      console.error("Error adding user:", error);
     }
   };
 
-  // console.log("assignments");
-  // console.log(assignments);
-
-  if (loading) {
-    return <p>Loading ...</p>;
-  }
-
-  if (error || authError) {
-    return <ErrorHandler error={error || authError} />;
-  }
+  // UI Rendering
+  if (loading) return <p>Loading ...</p>;
+  if (projectError || authError)
+    return <ErrorHandler error={projectError || authError} />;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -242,7 +238,8 @@ const AddUserRoles = () => {
           </div>
         </>
       )}
-      {/* Pass the reloadAssignments state to UserAssignmentsDisplay to trigger re-fetch */}
+
+      {/* Assignment Display */}
       <UserAssignmentsDisplay
         assignments={assignments}
         currentUserData={currentUserData}
