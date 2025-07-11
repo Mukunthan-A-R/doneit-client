@@ -18,6 +18,7 @@ import {
 } from "../services/taskAssignmentService";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { FaUserPlus } from "react-icons/fa";
+import AvatarStack from "./modals/AvatarStack";
 
 const TaskCard = ({
   task_id,
@@ -405,19 +406,12 @@ const TaskCard = ({
           </p>
         ))}
 
-      {assignedUsers.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-2">
-          {assignedUsers.map((user) => (
-            <span
-              key={user.user_id}
-              className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs"
-              title={user.email}
-            >
-              {user.name}
-            </span>
-          ))}
-        </div>
-      )}
+      <span
+        className="cursor-pointer"
+        onClick={() => setIsTagPopupVisible(true)}
+      >
+        <AvatarStack users={assignedUsers} size="w-10 h-10" maxVisible={5} />
+      </span>
 
       {/* Edit Popup */}
       {isEditPopupVisible && (
