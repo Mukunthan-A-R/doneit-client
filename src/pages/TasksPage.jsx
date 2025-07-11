@@ -22,6 +22,7 @@ export default function TasksPage() {
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [isDraggable, setIsDraggable] = useState(false);
   const [taskAssignments, setTaskAssignments] = useState({});
+  const [taskViewMode, setTaskViewMode] = useState("all");
 
   const { user: currentUserData } = useRecoilValue(userData);
   const currentUserId = currentUserData.user_id;
@@ -80,9 +81,6 @@ export default function TasksPage() {
         );
 
         setTaskAssignments(map);
-
-        // console.log("map");
-        // console.log(map);
       } catch (err) {
         console.error("Failed to load task assignments:", err);
       }
@@ -147,8 +145,6 @@ export default function TasksPage() {
       refetchTasks();
 
       toast.success("Task Deleted Successfully!");
-
-      // Log delete activity
       await createActivityLog({
         user_id: currentUserId,
         projectId: activeProjectId,
@@ -196,6 +192,17 @@ export default function TasksPage() {
     }
   };
 
+  const filteredTasks = useMemo(() => {
+    if (taskViewMode === "tagged") {
+      return tasks.filter((task) =>
+        (taskAssignments[task.task_id] || []).some(
+          (user) => user.user_id === currentUserId
+        )
+      );
+    }
+    return tasks;
+  }, [tasks, taskAssignments, taskViewMode, currentUserId]);
+
   const taskCategories = useMemo(
     () => [
       {
@@ -203,8 +210,8 @@ export default function TasksPage() {
         bg: "bg-blue-900",
         name: "not started",
         items:
-          !isLoading && tasks && tasks.length
-            ? tasks.filter((task) => task.status === "not started")
+          !isLoading && filteredTasks.length
+            ? filteredTasks.filter((task) => task.status === "not started")
             : [],
       },
       {
@@ -212,8 +219,8 @@ export default function TasksPage() {
         bg: "bg-yellow-600",
         name: "in progress",
         items:
-          !isLoading && tasks && tasks.length
-            ? tasks.filter((task) => task.status === "in progress")
+          !isLoading && filteredTasks.length
+            ? filteredTasks.filter((task) => task.status === "in progress")
             : [],
       },
       {
@@ -221,12 +228,12 @@ export default function TasksPage() {
         bg: "bg-green-600",
         name: "completed",
         items:
-          !isLoading && tasks && tasks.length
-            ? tasks.filter((task) => task.status === "completed")
+          !isLoading && filteredTasks.length
+            ? filteredTasks.filter((task) => task.status === "completed")
             : [],
       },
     ],
-    [tasks, isLoading]
+    [filteredTasks, isLoading]
   );
 
   if (!activeProjectId) {
@@ -251,13 +258,28 @@ export default function TasksPage() {
       <ProjectTitleCard />
       <header className="bg-blue-950 text-white py-2 px-4  shadow rounded-lg flex items-center justify-between my-4 mb-0 gap-4 md:gap-0">
         <h1 className="text-2xl font-bold">Task Tracker </h1>
-        <button
-          onClick={() => setShowCreateTask(true)}
-          className="flex items-center justify-center p-2 text-white rounded-md w-fit px-4 cursor-pointer border border-white transition duration-300 gap-2 transform hover:scale-105"
-        >
-          <IoMdAddCircleOutline size={20} />
-          Create Task
-        </button>
+        <div className="flex gap-10">
+          <div className="relative">
+            <button
+              onClick={() =>
+                setTaskViewMode((prev) => (prev === "all" ? "tagged" : "all"))
+              }
+              className="flex items-center justify-center p-2 text-white rounded-md w-fit px-4 cursor-pointer border border-white transition duration-300 gap-2 transform hover:scale-105"
+            >
+              {taskViewMode === "all"
+                ? "Showing: All Tasks"
+                : "Showing: My Tasks"}
+            </button>
+          </div>
+
+          <button
+            onClick={() => setShowCreateTask(true)}
+            className="flex items-center justify-center p-2 text-white rounded-md w-fit px-4 cursor-pointer border border-white transition duration-300 gap-2 transform hover:scale-105"
+          >
+            <IoMdAddCircleOutline size={20} />
+            Create Task
+          </button>
+        </div>
       </header>
 
       {/* Create task modal */}
