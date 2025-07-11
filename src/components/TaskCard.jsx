@@ -234,10 +234,6 @@ const TaskCard = ({
         assigned_by: currentUserId,
       };
 
-      console.log("newTagData");
-      console.log(newTagData);
-
-      // const res = await assignUserToTask(newTagData); // API call to backend
       const res = await assignUserToTask(
         task_id,
         userDetails.user_id,
@@ -246,8 +242,6 @@ const TaskCard = ({
 
       if (res.success) {
         toast.success("User tagged successfully!");
-
-        // Optionally: Refresh assignedUsers if stored in state
       } else {
         toast.error(res.message || "Failed to tag user.");
       }
@@ -262,24 +256,13 @@ const TaskCard = ({
       toast.error("An error occurred while tagging user.");
     }
     setTaskTagReload(taskTagReload + 1);
-    console.log("taskTagReload");
-    console.log(taskTagReload);
   };
 
   const handleDeleteTag = async (task_id, user_id) => {
-    console.log("user_id");
-    console.log(user_id);
-
-    console.log("task_id");
-    console.log(task_id);
-
     try {
       const res = await removeUserFromTask(task_id, user_id);
       if (res.success) {
         toast.success("User untagged successfully!");
-
-        // Optional: remove from local state if you're storing assignedUsers
-        // setAssignedUsers(prev => prev.filter(user => user.user_id !== userDetails.user_id));
       } else {
         toast.error(res.message || "Failed to untag user.");
       }
@@ -288,8 +271,6 @@ const TaskCard = ({
       toast.error("An error occurred while untagging the user.");
     }
     setTaskTagReload(taskTagReload + 1);
-    console.log("taskTagReload");
-    console.log(taskTagReload);
   };
 
   if (isLoading) return null;
