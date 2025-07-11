@@ -542,24 +542,30 @@ const TaskCard = ({
 
 export default TaskCard;
 
-// Utility Functions
+// Utility Function: Time left until the end of a given day
 const calculateRemainingTime = (givenDate) => {
-  const currentDate = new Date();
+  const now = new Date();
   const baseDate = new Date(givenDate);
-  const endDate = new Date(baseDate);
-  endDate.setDate(baseDate.getDate() + 1);
-  const diffInMilliseconds = endDate - currentDate;
-  if (diffInMilliseconds <= 0) {
-    return { message: "Time limit reached", timeOver: true };
+
+  // Set the end time to 23:59:59.999 of the given date
+  const endOfDay = new Date(baseDate);
+  endOfDay.setHours(23, 59, 59, 999);
+  const diffMs = endOfDay - now;
+  if (diffMs <= 0) {
+    return {
+      timeOver: true,
+      message: "Time limit reached",
+    };
   }
-  const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  const diffInDays = Math.floor(diffInHours / 24);
-  const remainingHours = diffInHours % 24;
-  const remainingMinutes = diffInMinutes % 60;
+
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  const remainingHours = diffHours % 24;
+  const remainingMinutes = diffMinutes % 60;
   return {
-    days: diffInDays,
+    days: diffDays,
     hours: remainingHours,
     minutes: remainingMinutes,
     timeOver: false,
