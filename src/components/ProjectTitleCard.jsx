@@ -25,15 +25,14 @@ const ProjectTitleCard = () => {
                 project?.priority === "low"
                   ? "bg-green-500"
                   : project?.priority === "medium"
-                    ? "bg-orange-500"
-                    : "bg-red-500"
+                  ? "bg-orange-500"
+                  : "bg-red-500"
               }`}
             >
               {project?.priority}
             </span>
-
-            {showInfo && <ProjectInfo onClose={() => setShowInfo(false)} />}
           </p>
+          {showInfo && <ProjectInfo onClose={() => setShowInfo(false)} />}
         </span>
         <button
           onClick={() => setShowInfo(true)}
