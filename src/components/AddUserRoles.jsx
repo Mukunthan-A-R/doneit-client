@@ -10,30 +10,39 @@ import { userData } from "../data/atom";
 import { fetchUserById } from "../services/UserData";
 import { getUserByEmail } from "../services/UserEmail";
 import { createActivityLog } from "../services/projectActivity";
-import {
-  createAssignment,
-  getAssignmentsByProjectId,
-} from "../services/collaboratorUserData";
+import { createAssignment } from "../services/collaboratorUserData";
 
 import UserAssignmentsDisplay from "./UserAssignmentsDisplay";
 import ErrorHandler from "./ErrorHandler";
+import useProjectAssignments from "../hooks/useProjectAssignments";
 
 const AddUserRoles = () => {
-  const [userId, setUserId] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("member");
-  const [userDetails, setUserDetails] = useState(null);
-  const [userNotFound, setUserNotFound] = useState(false);
-  const [reloadAssignments, setReloadAssignments] = useState(false);
-  const [userRole, setUserRole] = useState(null);
-  const [owner, setOwner] = useState("");
-  const [assignments, setAssignments] = useState(null);
-
   // External Data
   const { projectId } = useParams();
   const { project, error: projectError } = useProject(projectId);
   const { user: currentUserData, error: authError } = useRecoilValue(userData);
+
+  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("member");
+  const [userRole, setUserRole] = useState("");
+  const [userDetails, setUserDetails] = useState(null);
+  const [userNotFound, setUserNotFound] = useState(false);
+  const [reloadAssignments, setReloadAssignments] = useState(false);
+  const [owner, setOwner] = useState("");
+
+  const {
+    assignments,
+    userRole: collabUseRole,
+    isLoading,
+    error,
+    refetch,
+  } = useProjectAssignments(projectId, currentUserData.user_id);
+
+  useEffect(() => {
+    setUserRole(collabUseRole);
+  }, [collabUseRole]);
 
   // Effects: Fetch Project Owner
   useEffect(() => {
@@ -57,39 +66,6 @@ const AddUserRoles = () => {
 
     if (project?.created) fetchProjectOwner();
   }, [projectId, project?.created]);
-
-  // Effects: Fetch Assignments
-  useEffect(() => {
-    const fetchAssignments = async () => {
-      setLoading(true);
-      try {
-        const response = await getAssignmentsByProjectId(projectId);
-        const assignmentsData = response.data;
-
-        if (response.status === 404) {
-          setAssignments([]);
-          return;
-        }
-
-        setAssignments(assignmentsData);
-
-        const currentUserAssignment = assignmentsData.find(
-          (a) => a.user_id === parseInt(currentUserData.user_id)
-        );
-
-        if (currentUserAssignment) {
-          setUserRole(currentUserAssignment.role);
-        }
-      } catch (err) {
-        console.error("🚀 ~ fetchAssignments ~ err:", err);
-        toast.error("Error fetching assignments");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAssignments();
-  }, [projectId, reloadAssignments]);
 
   // Debounced Email Search
   const handleSearchUser = useDebouncedCallback((email) => {
@@ -167,7 +143,7 @@ const AddUserRoles = () => {
         },
       });
 
-      setReloadAssignments((prev) => !prev);
+      refetch();
       setEmail("");
       setRole("member");
       setUserDetails(null);
@@ -245,6 +221,7 @@ const AddUserRoles = () => {
         userRole={userRole}
         reloadAssignments={reloadAssignments}
         setReloadAssignments={setReloadAssignments}
+        refetch={refetch}
       />
     </div>
   );

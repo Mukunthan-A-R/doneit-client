@@ -12,6 +12,7 @@ const UserAssignmentsDisplay = ({
   userRole,
   currentUserData,
   owner,
+  refetch,
 }) => {
   const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -66,8 +67,7 @@ const UserAssignmentsDisplay = ({
             targetUserEmail: userToDelete.email,
           },
         });
-
-        setReloadAssignments(!reloadAssignments);
+        refetch();
       } else {
         alert(response.message || "Failed to delete assignment.");
       }
