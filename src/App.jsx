@@ -28,6 +28,7 @@ import TransactionHistory from "./pages/TransactionHistory";
 import UserDashboard from "./pages/UserDashboard";
 import PricingPlans from "./pages/PricingPlans";
 import ScrollRestoration from "./components/ScrollRestoration";
+import ChatBotPage from "./pages/chatBotPage";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
               element={<TransactionAnalytics />}
             />
             <Route path="/graph/:projectId" element={<Graph />} />
+            <Route path="/ai-assistant/:projectId" element={<ChatBotPage />} />
             <Route path="/heat-map/:projectId" element={<HeatMapPage />} />
             <Route path="/adduser/:projectId" element={<AddProjectUser />} />
           </Route>
