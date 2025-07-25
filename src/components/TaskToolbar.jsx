@@ -5,7 +5,10 @@ import { AiOutlineUserAdd } from "react-icons/ai";
 import { BiTask } from "react-icons/bi";
 import { BsArrowLeft } from "react-icons/bs";
 import { FaTasks } from "react-icons/fa";
-import { IoCalendarClearOutline } from "react-icons/io5";
+import {
+  IoCalendarClearOutline,
+  IoChatboxEllipsesOutline,
+} from "react-icons/io5";
 import { LuDatabase } from "react-icons/lu";
 import { MdTimeline } from "react-icons/md";
 import { PiFireSimpleBold } from "react-icons/pi";
@@ -46,6 +49,11 @@ const navItems = [
     text: "Task List",
   },
   {
+    to: (id) => `/ai-assistant/${id}`,
+    icon: <IoChatboxEllipsesOutline size={20} className="shrink-0" />,
+    text: "AI Assistant",
+  },
+  {
     to: (id) => `/adduser/${id}`,
     icon: <AiOutlineUserAdd size={20} className="shrink-0" />,
     text: "Add User",
@@ -71,7 +79,9 @@ const TaskToolbar = ({ setNavigate }) => {
       <NavLink
         to="/dashboard"
         className={({ isActive }) =>
-          `flex ${isActive ? "bg-blue-700" : ""} py-3 gap-2 text-left text-white hover:bg-blue-800 items-center pl-4`
+          `flex ${
+            isActive ? "bg-blue-700" : ""
+          } py-3 gap-2 text-left text-white hover:bg-blue-800 items-center pl-4`
         }
       >
         <BsArrowLeft size={20} className="shrink-0" />
@@ -88,7 +98,11 @@ const TaskToolbar = ({ setNavigate }) => {
             key={text}
             to={to(projectId)}
             className={({ isActive }) =>
-              `flex ${isActive ? "bg-blue-700" : ""} text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4 ${sideBarToggle ? "md:p-3.5" : ""}`
+              `flex ${
+                isActive ? "bg-blue-700" : ""
+              } text-white rounded-es-md rounded-ss-md hover:bg-blue-800 items-center pl-4 ${
+                sideBarToggle ? "md:p-3.5" : ""
+              }`
             }
             onClick={setNavigate}
           >

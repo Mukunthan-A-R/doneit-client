@@ -33,7 +33,7 @@ const ChatBotPage = () => {
       const response = await askAssistant(input, mode);
       const botMessage = {
         sender: "bot",
-        content: response.reply, // ✅ fix: extract string from object
+        content: response.reply, // Ensure this is a string
       };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
@@ -55,8 +55,8 @@ const ChatBotPage = () => {
   };
 
   return (
-    <div className="bg-[#f4f6fa] text-gray-900 font-sans flex h-screen overflow-hidden">
-      <div className="flex-1 flex flex-col">
+    <div className="bg-[#f4f6fa] text-gray-900 font-sans flex h-[calc(100vh-64px)] overflow-hidden rounded-xl border">
+      <div className="flex flex-col flex-1">
         {/* Header */}
         <header className="h-16 bg-white border-b flex items-center justify-between px-6">
           <div>
@@ -79,7 +79,7 @@ const ChatBotPage = () => {
           </div>
         </header>
 
-        {/* Chat Log */}
+        {/* Chat Scrollable Area */}
         <main className="flex-1 overflow-y-auto px-6 py-4 space-y-4 bg-[#f4f6fa]">
           {messages.map((msg, index) => (
             <div
