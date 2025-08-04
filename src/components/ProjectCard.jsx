@@ -35,7 +35,7 @@ const ProjectCard = ({ project, onDelete }) => {
     try {
       console.log("varudhaa");
       const confirmed = await confirmComponent(
-        "Are you sure you want to delete this Project?\n This action cannot be undone.",
+        "Are you sure you want to delete this Project?\n This action cannot be undone."
       );
       if (!confirmed) {
         console.log("🚀 ~ handleDelete ~ confirmed:", confirmed);
@@ -143,28 +143,28 @@ const ProjectCard = ({ project, onDelete }) => {
                   <div className="size-4 rounded-full bg-red-600"></div>
                 )}
                 <h2
-                  className="text-xl font-semibold text-blue-800 truncate w-[160px]"
+                  className="text-xl font-semibold text-blue-800 truncate w-[140px]"
                   title={project.name}
                 >
                   {project.name}
                 </h2>
               </div>
               <span
-                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full mr-5 ${
+                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full mr-8 ${
                   project.priority === "high"
                     ? "bg-red-100 text-red-800"
                     : project.priority === "medium"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : project.priority === "low"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-200 text-gray-700"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : project.priority === "low"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-gray-200 text-gray-700"
                 }`}
               >
                 {project.priority?.toUpperCase()}
               </span>
             </div>
             <p
-              className="text-gray-600 mt-2 text-sm truncate w-full pr-10 cursor-pointer"
+              className="text-gray-600 mt-2 text-sm truncate pr-10 cursor-pointer"
               title={project.description}
             >
               {project.description}
@@ -273,7 +273,7 @@ const ProjectCard = ({ project, onDelete }) => {
                 id="end_date"
                 name="end_date"
                 value={new Date(editedProjectData.end_date).toLocaleDateString(
-                  "en-CA",
+                  "en-CA"
                 )}
                 onChange={handleInputChange}
                 className="mt-2 p-2 border border-gray-300 rounded w-full"

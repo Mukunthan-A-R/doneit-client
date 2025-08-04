@@ -92,7 +92,7 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
 
   return (
     <>
-      <div className="max-w-sm p-3 pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
+      <div className="md:w-[280px] w-full p-3 animate-fade-in pb-2 gap-2 flex flex-col rounded-lg bg-white overflow-hidden relative shadow-md border border-gray-200 hover:shadow-xl hover:scale-101 transition">
         {/* Menu Icon */}
         <div className="absolute top-1 right-1">
           {project.role === "admin" && (
@@ -144,13 +144,13 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
                 <div className="size-4 rounded-full bg-red-600"></div>
               )}
               <h2
-                className="text-xl font-semibold text-blue-800 truncate w-[160px]"
+                className="text-xl font-semibold text-blue-800 truncate w-[140px]"
                 title={project.name}
               >
                 {truncate(project.name, 20)}
               </h2>
               <span
-                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full mr-5 ${
+                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full mr-8 ${
                   project.priority === "high"
                     ? "bg-red-100 text-red-800"
                     : project.priority === "medium"
@@ -164,7 +164,7 @@ const ProjectCollabCard = ({ project, onDelete, handleEditTrigger }) => {
               </span>
             </div>
             <p
-              className="text-gray-600 mt-2 text-sm truncate w-full cursor-help pr-10"
+              className="text-gray-600 mt-2 text-sm truncate cursor-pointer pr-10"
               title={project.description}
             >
               {project.description}
