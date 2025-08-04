@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { updateUserById } from "../services/UserData";
+import { toast } from "react-toastify";
 
 const EditUserModal = ({ onClose }) => {
   const [saving, setSaving] = useState(false);
@@ -33,6 +34,7 @@ const EditUserModal = ({ onClose }) => {
     try {
       await updateUserById(user.user.user_id, formData);
       onClose(); // Close modal after successful update
+      toast.success("User details updated successfully!");
     } catch (error) {
       console.error("Failed to update user:", error);
       // Optionally show a message here

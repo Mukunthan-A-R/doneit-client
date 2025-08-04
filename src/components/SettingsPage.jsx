@@ -1,7 +1,6 @@
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import EditUserModal from "./EditUserModal";
-import { toast } from "react-toastify";
 
 const SettingsPage = ({ edit = true }) => {
   const { isLoading, user, error, refetch } = useAuth();
@@ -40,7 +39,6 @@ const SettingsPage = ({ edit = true }) => {
           onClose={() => {
             setShowEditModal(false);
             refetch();
-            toast.success("User details updated successfully!");
           }}
         />
       )}
