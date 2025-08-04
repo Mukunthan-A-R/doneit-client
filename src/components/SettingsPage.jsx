@@ -9,6 +9,14 @@ const SettingsPage = ({ edit = true }) => {
 
   const userDetails = user.user || {};
 
+  const getInitials = (name) => {
+    if (!name) return "";
+    const parts = name.trim().split(" ").filter(Boolean);
+    const first = parts[0]?.[0] || "";
+    const second = parts[1]?.[0] || "";
+    return (first + second).toUpperCase();
+  };
+
   if (isLoading) {
     return (
       <div className="text-center text-gray-500">Loading user details…</div>
@@ -40,11 +48,9 @@ const SettingsPage = ({ edit = true }) => {
       {/* User Info Section */}
       <section className="bg-white mt-6 p-4 rounded-lg shadow flex flex-col sm:flex-row sm:items-center sm:justify-between border-l-4 border-blue-700">
         <div className="flex items-center space-x-4 mb-4 sm:mb-0">
-          <img
-            className="h-16 w-16 rounded-full border-2 border-blue-700"
-            src="https://i.pravatar.cc/100?img=2"
-            alt="User"
-          />
+          <div className="text-xl rounded-full bg-gray-100 text-blue-900 font-bold flex items-center justify-center border-2 border-blue-700 h-16 w-16 ">
+            {getInitials(userDetails.name)}
+          </div>
           <div>
             <h2 className="text-xl font-semibold text-blue-900">
               {userDetails.name || "No Name"}
