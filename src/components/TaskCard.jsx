@@ -220,8 +220,8 @@ const TaskCard = ({
       (user) => user.user_id === userDetails.user_id
     );
 
-    console.log("alreadyAssigned");
-    console.log(alreadyAssigned);
+    // console.log("alreadyAssigned");
+    // console.log(alreadyAssigned);
 
     if (alreadyAssigned) {
       toast.error("User is already tagged to this task.");

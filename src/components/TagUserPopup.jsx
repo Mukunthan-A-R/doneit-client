@@ -55,7 +55,10 @@ const TagUserPopup = ({
       onClick={onClose}
       className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50 animate-fade-in"
     >
-      <div className="bg-white text-black rounded-xl shadow-2xl p-6 w-[90%] max-w-3xl max-h-[90vh] overflow-auto relative border border-gray-200">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white z-100 text-black rounded-xl shadow-2xl p-6 w-[90%] max-w-3xl max-h-[90vh] overflow-auto relative border border-gray-200"
+      >
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Tag Users to Task</h2>
