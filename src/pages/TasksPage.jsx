@@ -45,14 +45,7 @@ export default function TasksPage() {
   if (error) {
     console.log("error in task page");
     console.log(error);
-
-    console.log("---------------");
-    console.log(error.response.data);
-    console.log("---------------");
   }
-
-  console.log("tasks");
-  console.log(tasks);
 
   useEffect(() => {
     const fetchProjects = async () => {
