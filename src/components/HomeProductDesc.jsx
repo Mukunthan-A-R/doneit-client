@@ -1,5 +1,13 @@
 // src/components/HomeProductDesc.js
 import React, { forwardRef } from "react";
+import {
+  FiCheckSquare, // Task Management
+  FiColumns, // Kanban Board
+  FiZap, // AI Assistant
+  FiUsers, // Team Collaboration
+  FiCalendar, // Timeline & Calendar
+  FiBarChart2, // Heatmap & Logs
+} from "react-icons/fi";
 
 const HomeProductDesc = forwardRef((props, ref) => {
   return (
@@ -17,40 +25,40 @@ const HomeProductDesc = forwardRef((props, ref) => {
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 text-left">
             {[
               {
-                title: "Smart Task Management",
-                desc: "Create, edit, organize and prioritize your tasks with intuitive controls and a user-friendly UI.",
+                title: "Task & Project Management",
+                desc: "Organize tasks, set priorities, and manage projects with clarity using a centralized, intuitive workspace.",
+                icon: <FiCheckSquare className="w-6 h-6" />,
+                iconColor: "bg-indigo-100 text-indigo-600",
+              },
+              {
+                title: "Kanban Boards",
+                desc: "Visualize progress with drag-and-drop workflows, ideal for agile teams and fast-paced task management.",
+                icon: <FiColumns className="w-6 h-6" />,
                 iconColor: "bg-blue-100 text-blue-600",
-                path: "M9 12h6m2 6H7a2 2 0 01-2-2V6a2 2 0 012-2h4l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2z",
+              },
+              {
+                title: "AI Assistant",
+                desc: "Get smart suggestions, deep insights, and instant help with our built-in AI assistant — available 24/7.",
+                icon: <FiZap className="w-6 h-6" />,
+                iconColor: "bg-purple-100 text-purple-600",
               },
               {
                 title: "Team Collaboration",
-                desc: "Assign tasks, set deadlines, and work with your team in real time with seamless coordination tools.",
+                desc: "Assign roles, share tasks, and collaborate in real-time with teammates across departments.",
+                icon: <FiUsers className="w-6 h-6" />,
                 iconColor: "bg-green-100 text-green-600",
-                path: "M5 13l4 4L19 7",
               },
               {
-                title: "Real-time Notifications",
-                desc: "Stay updated on task progress, mentions, and deadlines with instant alerts and activity logs.",
-                iconColor: "bg-purple-100 text-purple-600",
-                path: "M12 8v4l3 3m6 1a9 9 0 11-18 0 9 9 0 0118 0z",
-              },
-              {
-                title: "Clean & Intuitive UI",
-                desc: "Minimalist design with powerful features so you can focus on what matters most — getting things done.",
-                iconColor: "bg-pink-100 text-pink-600",
-                path: "M3 7h18M3 12h18m-9 5h9",
-              },
-              {
-                title: "Analytics & Insights",
-                desc: "Visualize your productivity with built-in charts, trends, and progress tracking for individuals and teams.",
+                title: "Live Timeline & Calendar",
+                desc: "Plan, schedule, and view your work using integrated calendars and live timelines.",
+                icon: <FiCalendar className="w-6 h-6" />,
                 iconColor: "bg-yellow-100 text-yellow-600",
-                path: "M3 10h11M9 21V3m12 8h-6",
               },
               {
-                title: "Cross-Platform Access",
-                desc: "Access your tasks anywhere — web, tablet, or mobile. Sync in real-time across all devices.",
-                iconColor: "bg-red-100 text-red-600",
-                path: "M15 17h5l-1.405-1.405M20 12V5a2 2 0 00-2-2h-4.586a1 1 0 00-.707.293l-7.414 7.414a1 1 0 000 1.414l6.586 6.586a1 1 0 001.414 0l1.414-1.414M9 16h.01",
+                title: "Heatmap & Activity Logs",
+                desc: "Track user activity, identify bottlenecks, and stay informed with visual insights and action history.",
+                icon: <FiBarChart2 className="w-6 h-6" />,
+                iconColor: "bg-pink-100 text-pink-600",
               },
             ].map((card, idx) => (
               <div
@@ -60,19 +68,7 @@ const HomeProductDesc = forwardRef((props, ref) => {
                 <div
                   className={`w-12 h-12 flex items-center justify-center rounded-md mb-4 ${card.iconColor}`}
                 >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d={card.path}
-                    />
-                  </svg>
+                  {card.icon}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {card.title}

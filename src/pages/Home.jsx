@@ -5,6 +5,7 @@ import HomeProductDesc from "../components/HomeProductDesc";
 import ProductivityBoost from "../components/modals/ProductivityBoost";
 import Footer from "../components/Footer";
 import ProductPricing from "../components/ProductPricing";
+import FreeForNow from "../components/FreeForNow";
 
 const Home = () => {
   const productDescRef = useRef(null);
@@ -18,7 +19,8 @@ const Home = () => {
       <HomeBanner onLearnMoreClick={scrollToProductDesc} />
       <HomeProductDesc ref={productDescRef} />
       <ProductivityBoost />
-      <ProductPricing></ProductPricing>
+      <FreeForNow />
+      {/* <ProductPricing></ProductPricing> */}
       <Footer></Footer>
     </div>
   );
