@@ -6,12 +6,12 @@ import { sideBarToggle as sideBarToggleAtom } from "../../data/atom";
 import useUserSubscription from "../../hooks/useUserSubscription";
 import TaskToolbar from "../TaskToolbar";
 import TrialExpiredOverlay from "../modals/TrialExpiredOverlay";
+
 const TaskboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [sideBarToggle, setSideBarToggle] = useRecoilState(sideBarToggleAtom);
-  const { subscription } = useUserSubscription();
-  const expired = subscription && !subscription.is_active;
+  const { subscription, isLoading } = useUserSubscription();
 
   function handleNavigate() {
     return setIsSidebarOpen(false);
@@ -19,19 +19,26 @@ const TaskboardLayout = () => {
 
   useEffect(() => {
     let timeout;
-    if (expired) {
+
+    if (isLoading) return;
+
+    if (subscription && !subscription.is_active) {
       timeout = setTimeout(() => {
         setShowOverlay(true);
       }, 1000);
+    } else {
+      setShowOverlay(false);
     }
 
     return () => clearTimeout(timeout);
-  }, [expired]);
+  }, [isLoading, subscription]);
 
   return (
     <div className="flex flex-col lg:flex-row h-full relative overflow-x-hidden flex-1">
+      {/* Overlay */}
+      {!isLoading && showOverlay && <TrialExpiredOverlay />}
+
       {/* Sidebar */}
-      {showOverlay && <TrialExpiredOverlay />}
       <div
         className={`
           bg-blue-900 p-2 pr-0 w-[16rem]
@@ -101,7 +108,9 @@ const TaskboardLayout = () => {
         className={`
           w-full bg-white p-6 relative
           ${isSidebarOpen ? "ml-[16rem]" : "ml-0"}
-          lg:data-[isdesktopsidebaropen=true]:ml-16 lg:data-[isdesktopsidebaropen=false]:ml-64 transition-all duration-300
+          lg:data-[isdesktopsidebaropen=true]:ml-16
+          lg:data-[isdesktopsidebaropen=false]:ml-64
+          transition-all duration-300
         `}
         data-isdesktopsidebaropen={sideBarToggle}
       >
