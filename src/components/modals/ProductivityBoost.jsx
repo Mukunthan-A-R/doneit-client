@@ -49,11 +49,11 @@ const ProductivityBoost = () => {
               </p>
             </div>
             <div className="lg:w-1/2 w-full">
-              <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md w-full h-60">
+              <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md w-full h-60 sm:h-72 md:h-80 max-w-md mx-auto lg:mx-0">
                 <img
                   src="/Graph.jpg"
                   alt="Analytics dashboard"
-                  className="object-cover w-full h-full rounded-xl"
+                  className="object-cover w-full h-full"
                 />
               </div>
             </div>
@@ -79,7 +79,7 @@ const ProductivityBoost = () => {
               </p>
             </div>
             <div className="lg:w-1/2 w-full">
-              <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md w-full h-60">
+              <div className="bg-gray-100 rounded-xl overflow-hidden shadow-md w-full h-60 sm:h-72 md:h-80 max-w-md mx-auto lg:mx-0">
                 <img
                   src="/paperwork.avif"
                   alt="Time management"
