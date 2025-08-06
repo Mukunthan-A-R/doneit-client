@@ -45,7 +45,14 @@ export default function TasksPage() {
   if (error) {
     console.log("error in task page");
     console.log(error);
+
+    console.log("---------------");
+    console.log(error.response.data);
+    console.log("---------------");
   }
+
+  console.log("tasks");
+  console.log(tasks);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -210,7 +217,7 @@ export default function TasksPage() {
         bg: "bg-blue-900",
         name: "not started",
         items:
-          !isLoading && filteredTasks.length
+          !isLoading && filteredTasks?.length
             ? filteredTasks.filter((task) => task.status === "not started")
             : [],
       },
@@ -219,7 +226,7 @@ export default function TasksPage() {
         bg: "bg-yellow-600",
         name: "in progress",
         items:
-          !isLoading && filteredTasks.length
+          !isLoading && filteredTasks?.length
             ? filteredTasks.filter((task) => task.status === "in progress")
             : [],
       },
@@ -228,7 +235,7 @@ export default function TasksPage() {
         bg: "bg-green-600",
         name: "completed",
         items:
-          !isLoading && filteredTasks.length
+          !isLoading && filteredTasks?.length
             ? filteredTasks.filter((task) => task.status === "completed")
             : [],
       },
@@ -246,7 +253,7 @@ export default function TasksPage() {
     return <p className="text-blue-500">Loading tasks...</p>;
   }
 
-  if (error) {
+  if (error && !isLoading) {
     return <ErrorHandler error={error} />;
   }
 
