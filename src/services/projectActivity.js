@@ -20,6 +20,7 @@ const getToken = () => {
 // Fetch all activity logs for a project
 export const fetchActivityLogs = async (projectId) => {
   const token = getToken();
+
   try {
     const response = await axios.get(`${API_URL}/${projectId}`, {
       headers: {
@@ -29,19 +30,26 @@ export const fetchActivityLogs = async (projectId) => {
     });
     return {
       success: true,
-      status: response.status,
-      data: response.data, // already { success, data }
+      data: Array.isArray(response.data?.data) ? response.data.data : [],
     };
   } catch (error) {
     console.error("Error fetching activity logs:", error);
 
-    // Capture backend-provided data if exists
-    return {
-      success: false,
-      status: error.response?.status || 500,
-      data: error.response?.data || null,
-      message: error.response?.data?.message || error.message,
-    };
+    if (error.response) {
+      const { status, data } = error.response;
+      if (status === 403) {
+        return {
+          success: false,
+          status: 403,
+          message: data?.message || "Access Denied",
+          data: [],
+        };
+      }
+      throw new Error(
+        data?.message || "An error occurred while fetching activity logs"
+      );
+    }
+    throw new Error(error.message || "An unknown error occurred");
   }
 };
 
