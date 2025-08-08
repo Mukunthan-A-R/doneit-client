@@ -21,29 +21,38 @@ const UserAssignmentsDisplay = ({
   const { projectId: projectIdParam } = useParams();
   const projectId = parseInt(projectIdParam);
 
+  console.log(assignments);
+
   // Fetch and store user details for each assignment
   useEffect(() => {
-    const fetchUserDetails = async (assignmentsData) => {
-      const userPromises = assignmentsData.map(async (assignment) => {
-        if (!users[assignment.user_id]) {
-          try {
-            const userData = await fetchUserById(assignment.user_id);
-            setUsers((prevUsers) => ({
-              ...prevUsers,
-              [assignment.user_id]: userData.data,
-            }));
-            setLoading(false);
-          } catch (err) {
-            console.error("Error fetching user data:", err);
-            setError(err.message);
-          }
-        }
-      });
+    if (!assignments || assignments.length === 0) {
+      setUsers({});
+      setLoading(false);
+      return;
+    }
 
-      await Promise.all(userPromises);
+    const fetchUserDetails = async () => {
+      try {
+        await Promise.all(
+          assignments.map(async (assignment) => {
+            if (!users[assignment.user_id]) {
+              const userData = await fetchUserById(assignment.user_id);
+              setUsers((prevUsers) => ({
+                ...prevUsers,
+                [assignment.user_id]: userData.data,
+              }));
+            }
+          })
+        );
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchUserDetails(assignments || []);
+    fetchUserDetails();
   }, [assignments, projectId, reloadAssignments]);
 
   // Handle delete operation for assignment
@@ -84,12 +93,17 @@ const UserAssignmentsDisplay = ({
 
     return (
       <tr key={assignment.assignment_id} className="border-b">
-        <td className="px-4 py-4">{user ? user.name : "Loading..."}</td>
-        <td className="px-4 py-4">{assignment.role}</td>
-        <td className="px-4 py-4">{user ? user.company : "Loading..."}</td>
-        <td className="px-4 py-4 max-w-[170px] truncate" title={user?.email}>
-          {user ? user.email : "Loading..."}
+        <td className="px-4 py-4">
+          {loading ? "Loading..." : user?.name || "Unknown"}
         </td>
+        <td className="px-4 py-4">{assignment.role}</td>
+        <td className="px-4 py-4">
+          {loading ? "Loading..." : user?.company || "Unknown"}
+        </td>
+        <td className="px-4 py-4 max-w-[170px] truncate" title={user?.email}>
+          {loading ? "Loading..." : user?.email || "Unknown"}
+        </td>
+
         <td className="px-4 py-4">
           {new Date(assignment.assigned_at).toLocaleDateString()}
         </td>
