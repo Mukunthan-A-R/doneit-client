@@ -62,6 +62,15 @@ const ActivitySummaryDashboard = ({ transactions }) => {
     count,
   }));
 
+  if (transactions.length === 0) {
+    return (
+      <p className="text-center text-lg text-gray mt-10">
+        {" "}
+        No transaction analytics avaliable.{" "}
+      </p>
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl shadow p-6 mt-8 w-full max-w-6xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
