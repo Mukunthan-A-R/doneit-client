@@ -13,6 +13,7 @@ import ExportLogs from "../components/ExportLogs";
 import ProjectTitleCard from "../components/ProjectTitleCard";
 import { fetchActivityLogs } from "../services/projectActivity";
 import { toast } from "react-toastify";
+import ErrorHandler from "../components/ErrorHandler";
 
 const TransactionHistory = () => {
   const { projectId } = useParams();
@@ -29,9 +30,16 @@ const TransactionHistory = () => {
     const getTransactions = async () => {
       setLoading(true);
       try {
-        const response = await fetchActivityLogs(projectId);
-        setTransactions(response.data || []);
-        setError(null);
+        const result = await fetchActivityLogs(projectId);
+
+        if (!result.success) {
+          toast.error(result.message || "Failed to fetch transactions.");
+          setError(result.message || "Failed to fetch transactions.");
+          setTransactions([]); // safe empty array
+        } else {
+          setError(null);
+          setTransactions(result.data); // safe array from service
+        }
       } catch (err) {
         console.error("🚀 ~ getTransactions ~ err:", err);
         toast.error("Failed to fetch transactions.");
@@ -95,7 +103,9 @@ const TransactionHistory = () => {
     }
   };
 
-  return (
+  return error ? (
+    <ErrorHandler error={error}></ErrorHandler>
+  ) : (
     <>
       <ProjectTitleCard project_id={projectId} />
 
