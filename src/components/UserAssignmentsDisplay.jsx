@@ -21,8 +21,6 @@ const UserAssignmentsDisplay = ({
   const { projectId: projectIdParam } = useParams();
   const projectId = parseInt(projectIdParam);
 
-  console.log(assignments);
-
   // Fetch and store user details for each assignment
   useEffect(() => {
     if (!assignments || assignments.length === 0) {
