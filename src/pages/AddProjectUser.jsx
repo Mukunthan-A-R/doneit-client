@@ -1,10 +1,18 @@
 import { useParams } from "react-router-dom";
 import AddUserRoles from "../components/AddUserRoles";
 import ProjectTitleCard from "../components/ProjectTitleCard";
+import useProjectTasks from "../hooks/useProjectTasks";
+import ErrorHandler from "../components/ErrorHandler";
 
 const AddProjectUser = () => {
   const params = useParams();
   const project_id = params.projectId;
+
+  const { tasks, refetch, isLoading, error } = useProjectTasks(project_id);
+
+  if (error) {
+    return <ErrorHandler error={error} />;
+  }
 
   return (
     <>
