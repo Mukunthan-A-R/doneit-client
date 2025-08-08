@@ -107,6 +107,18 @@ const TransactionHistory = () => {
     }
   };
 
+  if (transactions.length === 0) {
+    return (
+      <>
+        <ProjectTitleCard project_id={projectId} />
+        <header className="bg-blue-950 text-white py-4 px-6 shadow rounded-lg flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 md:gap-0">
+          <h1 className="text-2xl font-bold">Project Logs</h1>
+        </header>
+        <p className="text-center text-lg mt-10">No transactions avaliable.</p>;
+      </>
+    );
+  }
+
   return (
     <>
       <ProjectTitleCard project_id={projectId} />
