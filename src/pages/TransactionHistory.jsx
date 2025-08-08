@@ -30,8 +30,20 @@ const TransactionHistory = () => {
       setLoading(true);
       try {
         const response = await fetchActivityLogs(projectId);
-        setTransactions(response.data || []);
-        setError(null);
+        console.log("Activity logs response:", response);
+
+        if (response.status === 403) {
+          setTransactions([]);
+          setError("You do not have permission to view these logs.");
+        } else if (response.success) {
+          setTransactions(
+            Array.isArray(response.data?.data) ? response.data.data : []
+          );
+          setError(null);
+        } else {
+          setTransactions([]);
+          setError(response.message || "Failed to fetch transactions.");
+        }
       } catch (err) {
         console.error("🚀 ~ getTransactions ~ err:", err);
         toast.error("Failed to fetch transactions.");
@@ -163,7 +175,13 @@ const TransactionHistory = () => {
         {loading ? (
           <p className="text-gray-500">Loading...</p>
         ) : error ? (
-          <p className="text-red-500">{error}</p>
+          <p
+            className={`font-semibold ${
+              error.includes("permission") ? "text-orange-600" : "text-red-500"
+            }`}
+          >
+            {error}
+          </p>
         ) : filteredTransactions.length === 0 ? (
           <p className="text-gray-600">No transactions match the filter.</p>
         ) : (
@@ -218,16 +236,6 @@ const TransactionHistory = () => {
                     </tr>
                   );
                 })}
-                {transactions.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={3}
-                      className="text-center py-8 text-gray-500 italic"
-                    >
-                      No transactions found.
-                    </td>
-                  </tr>
-                )}
               </tbody>
             </table>
           </div>

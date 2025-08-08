@@ -27,10 +27,21 @@ export const fetchActivityLogs = async (projectId) => {
       },
       withCredentials: true,
     });
-    return response.data; // { success: true, data: [...] }
+    return {
+      success: true,
+      status: response.status,
+      data: response.data, // already { success, data }
+    };
   } catch (error) {
     console.error("Error fetching activity logs:", error);
-    throw new Error(error.response?.data || error.message);
+
+    // Capture backend-provided data if exists
+    return {
+      success: false,
+      status: error.response?.status || 500,
+      data: error.response?.data || null,
+      message: error.response?.data?.message || error.message,
+    };
   }
 };
 
