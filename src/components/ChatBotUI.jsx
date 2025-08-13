@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { askAssistant } from "../services/chatBotService";
 import { useParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 const ChatBotPage = () => {
   const [messages, setMessages] = useState([
@@ -97,7 +98,7 @@ const ChatBotPage = () => {
                   : "bg-gray-200 text-gray-800 self-start mr-auto"
               }`}
             >
-              {msg.content}
+              <ReactMarkdown>{msg.content}</ReactMarkdown>
             </div>
           ))}
 
