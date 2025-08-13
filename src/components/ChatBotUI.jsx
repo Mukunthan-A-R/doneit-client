@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { askAssistant } from "../services/chatBotService";
+import { useParams } from "react-router-dom";
 
 const ChatBotPage = () => {
   const [messages, setMessages] = useState([
@@ -19,6 +20,8 @@ const ChatBotPage = () => {
 
   useEffect(scrollToBottom, [messages, typing]);
 
+  const { projectId } = useParams();
+
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -32,7 +35,7 @@ const ChatBotPage = () => {
     setTyping(true);
 
     try {
-      const response = await askAssistant(input, mode);
+      const response = await askAssistant(input, mode, projectId);
       const botMessage = {
         sender: "bot",
         content: response.reply,
