@@ -284,7 +284,7 @@ const TaskCard = ({
       onDragEnd={onDragEnd}
     >
       {/* 3-Dot Menu */}
-      {userRole !== "client" && project.status !== "completed" && (
+      {userRole !== "client" && project?.status !== "completed" && (
         <div className="absolute top-2 right-2 flex gap-4">
           <button
             onClick={() => setIsTagPopupVisible(true)}
@@ -356,7 +356,7 @@ const TaskCard = ({
         </div>
       )}
 
-      {userRole !== "client" && project.status !== "completed" && (
+      {userRole !== "client" && project?.status !== "completed" && (
         <button
           className="text-gray-500 rounded-lg cursor-pointer hover:bg-gray-100 grid place-items-center text-[10px] font-bold p-1 size-8 absolute bottom-1 right-1"
           onMouseDown={onMouseDown}
@@ -460,8 +460,8 @@ const TaskCard = ({
                   name="start_date"
                   value={formData.start_date}
                   onChange={handleInputChange}
-                  min={formatInputDate(project.start_date)}
-                  max={formatInputDate(project.end_date)}
+                  min={formatInputDate(project?.start_date)}
+                  max={formatInputDate(project?.end_date)}
                   className="w-full p-2 mt-1 border border-gray-300 rounded-md text-black"
                 />
                 {errors.start_date && (
@@ -480,8 +480,8 @@ const TaskCard = ({
                   name="end_date"
                   value={formData.end_date}
                   onChange={handleInputChange}
-                  min={formatInputDate(project.start_date)}
-                  max={formatInputDate(project.end_date)}
+                  min={formatInputDate(project?.start_date)}
+                  max={formatInputDate(project?.end_date)}
                   className="w-full p-2 mt-1 border border-gray-300 rounded-md text-black"
                 />
                 {errors.end_date && (

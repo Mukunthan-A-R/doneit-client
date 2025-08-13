@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { askAssistant } from "../services/chatBotService";
+import { useParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 const ChatBotPage = () => {
   const [messages, setMessages] = useState([
@@ -13,6 +15,8 @@ const ChatBotPage = () => {
   const [typing, setTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
+  const { projectId } = useParams();
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -22,34 +26,23 @@ const ChatBotPage = () => {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMessage = {
-      sender: "user",
-      content: input.trim(),
-    };
-
+    const userMessage = { sender: "user", content: input.trim() };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setTyping(true);
 
     try {
-      const response = await askAssistant(input, mode);
-      const botMessage = {
-        sender: "bot",
-        content: response.reply,
-      };
+      const response = await askAssistant(input, mode, projectId);
+      const botMessage = { sender: "bot", content: response.reply };
 
-      // Small delay to simulate typing
       setTimeout(() => {
         setMessages((prev) => [...prev, botMessage]);
         setTyping(false);
-      }, 600); // Adjust delay as needed
+      }, 600);
     } catch (error) {
       setMessages((prev) => [
         ...prev,
-        {
-          sender: "bot",
-          content: "Sorry, something went wrong.",
-        },
+        { sender: "bot", content: "Sorry, something went wrong." },
       ]);
       setTyping(false);
     }
@@ -68,8 +61,14 @@ const ChatBotPage = () => {
         {/* Header */}
         <header className="h-16 bg-white border-b flex items-center justify-between px-6">
           <div>
-            <h2 className="text-lg font-semibold">Sandy</h2>
-            <p className="text-xs text-gray-500">AI Business Assistant</p>
+            <h2 className="text-lg font-semibold">
+              {mode === "project" ? "Sandy" : "Sandy"}
+            </h2>
+            <p className="text-xs text-gray-500">
+              {mode === "project"
+                ? "AI with full project context"
+                : "AI Business Assistant"}
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <label htmlFor="modeSelect" className="text-sm text-gray-600">
@@ -83,6 +82,7 @@ const ChatBotPage = () => {
             >
               <option value="quick">Quick Response</option>
               <option value="deep">Deep Think</option>
+              <option value="project">Project Assistant</option>
             </select>
           </div>
         </header>
@@ -98,20 +98,20 @@ const ChatBotPage = () => {
                   : "bg-gray-200 text-gray-800 self-start mr-auto"
               }`}
             >
-              {msg.content}
+              <ReactMarkdown>{msg.content}</ReactMarkdown>
             </div>
           ))}
 
-          {/* Typing Indicator */}
           {typing && (
             <div className="flex items-center space-x-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg w-fit animate-pulse">
-              <span className="dot-flash">Sandy is Thinking</span>
+              <span className="dot-flash">
+                {mode === "project" ? "Sandy is Thinking" : "Sandy is Thinking"}
+              </span>
               <span className="animate-bounce delay-100">.</span>
               <span className="animate-bounce delay-200">.</span>
               <span className="animate-bounce delay-300">.</span>
             </div>
           )}
-
           <div ref={messagesEndRef} />
         </main>
 
@@ -119,7 +119,11 @@ const ChatBotPage = () => {
         <footer className="p-4 border-t bg-white flex items-center gap-2">
           <textarea
             rows={1}
-            placeholder="Send your message to Sandy..."
+            placeholder={
+              mode === "project"
+                ? "Ask about your project..."
+                : "Send your message to Sandy..."
+            }
             className="flex-1 resize-none px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={input}
             onChange={(e) => setInput(e.target.value)}
