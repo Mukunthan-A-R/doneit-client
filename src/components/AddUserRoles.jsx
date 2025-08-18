@@ -127,6 +127,9 @@ const AddUserRoles = () => {
         project_id: projectId,
         role,
         status: "pending",
+        addedUserEmail: userDetails.data.email,
+        addedUserName: userDetails.data.name,
+        projectName: project.name,
       };
 
       await createAssignment(newUser);
