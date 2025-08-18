@@ -47,24 +47,24 @@ const ProjectCollabCardHolder = () => {
   if (error) return <ErrorHandler error={error} />;
 
   return (
-    <div>
+    <div
+      className={`flex flex-wrap gap-6 ${
+        projects.length === 0 ? "justify-center" : ""
+      }`}
+    >
       {projects.length === 0 ? (
         <div className="text-gray-500 text-center mt-10 text-lg">
           No Collab Project for Now
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {projects.map((project) => (
-            <ProjectCollabCard
-              handleEditTrigger={() => {
-                setEditTrigger(editTrigger + 1);
-              }}
-              key={project.project_id}
-              project={project}
-              onDelete={handleDeleteProject}
-            />
-          ))}
-        </div>
+        projects.map((project) => (
+          <ProjectCollabCard
+            handleEditTrigger={() => setEditTrigger(editTrigger + 1)}
+            key={project.project_id}
+            project={project}
+            onDelete={handleDeleteProject}
+          />
+        ))
       )}
     </div>
   );
