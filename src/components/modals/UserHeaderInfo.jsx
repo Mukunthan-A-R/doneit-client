@@ -45,7 +45,7 @@ const UserHeaderInfo = () => {
         <p className="text-base font-bold text-gray-600">
           Timezone: {location.timezone}
         </p> */}
-        <SubscriptionStatus />
+        {/* <SubscriptionStatus /> */}
       </div>
       <LiveClock />
     </div>
