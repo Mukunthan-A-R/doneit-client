@@ -44,7 +44,7 @@ const getMonthDays = (date) => {
 // --- Component ---
 const CalendarCard = ({ startDate, endDate, tasksByDate = {} }) => {
   const [mode, setMode] = useState("project"); // default Project Mode
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState(new Date(startDate));
 
   const start = new Date(startDate);
   const end = new Date(endDate);
@@ -105,7 +105,10 @@ const CalendarCard = ({ startDate, endDate, tasksByDate = {} }) => {
               Project
             </button>
             <button
-              onClick={() => setMode("calendar")}
+              onClick={() => {
+                setMode("calendar");
+                setCurrentMonth(new Date(startDate)); // 👈 jump to project start month
+              }}
               className={`px-3 py-1 text-sm rounded-md transition ${
                 mode === "calendar"
                   ? "bg-blue-600 text-white"
