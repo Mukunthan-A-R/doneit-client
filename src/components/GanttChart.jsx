@@ -62,71 +62,89 @@ const GanttChart = ({ projectId }) => {
         </p>
       ) : (
         <div className="overflow-x-auto">
-          <div className="min-w-[800px] bg-white rounded-xl shadow-xl p-6 w-full max-w-7xl mx-auto mt-12 border border-gray-200">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-10 text-center tracking-tight">
-              📊 Project Timeline – Next {NUM_DAYS} Days
+          <div className="min-w-[1000px] bg-white rounded-xl shadow-xl w-full max-w-7xl mx-auto mt-12 border border-gray-200">
+            <h2 className="text-2xl font-semibold text-gray-800 px-6 pt-6 mb-6 text-center tracking-tight">
+              Project Timeline – Next 10 Days
             </h2>
 
-            {/* Grid Header */}
-            <div className="grid grid-cols-13 font-medium text-[11px] text-gray-700 border-b pb-3 mb-5">
-              <div className="col-span-1 pl-2">Task</div>
-              <div className="col-span-12 grid grid-cols-12 gap-[1px]">
-                {Array.from({ length: NUM_DAYS }).map((_, i) => (
+            <div className="flex">
+              {/* Task Column */}
+              <div className="w-1/6 bg-gray-50 border-r border-gray-200 sticky left-0 z-10">
+                {/* Header cell */}
+                <div className="h-12 flex items-center justify-center font-semibold text-gray-700 border-b bg-gray-100 text-sm">
+                  Task
+                </div>
+                {/* Task labels */}
+                {tasks.map((t) => (
                   <div
-                    key={i}
-                    className="text-center py-1 bg-gray-100 text-gray-600 border border-gray-300 font-semibold rounded-sm"
+                    key={t.task_id}
+                    className="h-12 flex items-center p-2 border-b border-gray-200 truncate text-sm font-medium text-gray-800 hover:bg-gray-100"
+                    title={t.title}
                   >
-                    {getDateForOffset(baseDate, i)}
+                    {t.title}
                   </div>
                 ))}
               </div>
-            </div>
 
-            {/* Task Rows */}
-            <div className="space-y-3">
-              {tasks.map((task) => {
-                const startOffset = getDayOffset(baseDate, task.start_date);
-                const endOffset = getDayOffset(baseDate, task.end_date);
-
-                // Skip if task is completely outside the visible window
-                if (endOffset < 0 || startOffset > NUM_DAYS - 1) {
-                  return null;
-                }
-
-                // Clamp the task bar to visible range
-                const colStart = Math.max(0, startOffset);
-                const colEnd = Math.min(NUM_DAYS - 1, endOffset);
-                const colSpan = Math.max(1, colEnd - colStart + 1);
-
-                const taskColorClass = getTaskColor(task.end_date);
-
-                return (
-                  <div
-                    key={task.task_id}
-                    className="grid grid-cols-13 items-center text-sm group relative"
-                  >
-                    <div className="col-span-1 font-medium text-gray-800 truncate pl-2">
-                      {task.title}
+              {/* Timeline Column */}
+              <div className="w-5/6 overflow-hidden relative">
+                {/* Header Row */}
+                <div
+                  className="grid border-b border-gray-300 bg-gray-100 text-sm text-gray-600"
+                  style={{
+                    gridTemplateColumns: `repeat(${NUM_DAYS}, minmax(60px, 1fr))`,
+                  }}
+                >
+                  {Array.from({ length: NUM_DAYS }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-12 flex items-center justify-center font-semibold border-l border-gray-200"
+                    >
+                      {baseDate ? getDateForOffset(baseDate, i) : ""}
                     </div>
-                    <div className="col-span-12 grid grid-cols-12 gap-[1px] relative h-6">
+                  ))}
+                </div>
+
+                {/* Task Bars */}
+                <div className="relative">
+                  {tasks.map((task) => {
+                    const startOffset = getDayOffset(baseDate, task.start_date);
+                    const endOffset = getDayOffset(baseDate, task.end_date);
+
+                    if (endOffset < 0 || startOffset > NUM_DAYS - 1) {
+                      return null;
+                    }
+
+                    const colStart = Math.max(0, startOffset);
+                    const colEnd = Math.min(NUM_DAYS - 1, endOffset);
+                    const colSpan = Math.max(1, colEnd - colStart + 1);
+
+                    const taskColorClass = getTaskColor(task.end_date);
+
+                    return (
                       <div
-                        className={`absolute h-full rounded-md shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-[1.01] ${taskColorClass}`}
-                        style={{
-                          left: `${(colStart / NUM_DAYS) * 100}%`,
-                          width: `${(colSpan / NUM_DAYS) * 100}%`,
-                        }}
-                        title={`${task.title} (${formatDate(
-                          task.start_date
-                        )} → ${formatDate(task.end_date)})`}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+                        key={task.task_id}
+                        className="relative h-12 flex items-center"
+                      >
+                        <div
+                          className={`absolute h-4 rounded-md shadow-md transition-all duration-300 ${taskColorClass}`}
+                          style={{
+                            left: `${(colStart / NUM_DAYS) * 100}%`,
+                            width: `${(colSpan / NUM_DAYS) * 100}%`,
+                          }}
+                          title={`${task.title} (${formatDate(
+                            task.start_date
+                          )} → ${formatDate(task.end_date)})`}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
             {/* Legend */}
-            <div className="mt-8 text-sm text-gray-500 text-center italic">
+            <div className="mt-8 pb-6 text-sm text-gray-500 text-center italic">
               Displaying a {NUM_DAYS}-day window starting from{" "}
               <span className="font-semibold text-gray-700">
                 {baseDate ? formatDate(baseDate) : "N/A"}
