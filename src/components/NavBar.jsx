@@ -19,10 +19,12 @@ function Navbar() {
   return (
     <>
       <nav className="bg-[#0a1e3f] fixed top-0 left-0 w-full text-white shadow-md z-50 flex justify-center">
+        <div className="bg-white p-2 ">
+          <img src={"/DoneIt.svg"} alt="Done It" className="h-10 w-auto" />
+        </div>
         <div className="w-full px-4 sm:px-6 py-2.5 lg:px-8 flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <img src={"/SandySoft.png"} alt="Logo" className="h-8 w-auto" />
             <Link
               to="/"
               className="text-xl font-bold text-white hover:text-blue-300 transition"
@@ -44,7 +46,9 @@ function Navbar() {
                 </Link>
                 <Link
                   to="/dashboard"
-                  className={`text-gray-300 hover:text-blue-400 transition font-medium ${isLoading ? "pointer-events-none animate-pulse" : ""}`}
+                  className={`text-gray-300 hover:text-blue-400 transition font-medium ${
+                    isLoading ? "pointer-events-none animate-pulse" : ""
+                  }`}
                 >
                   Dashboard
                 </Link>
