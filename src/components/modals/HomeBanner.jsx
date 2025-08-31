@@ -1,14 +1,18 @@
 // src/components/modals/HomeBanner.js
 import { Link } from "react-router-dom";
+import Logo from "../../../public/DoneIt.svg";
 
 const HomeBanner = ({ onLearnMoreClick }) => {
   return (
     <section className="bg-gray-50 py-20 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center gap-12">
         <div className="text-center lg:text-left max-w-2xl">
-          <span className="text-blue-600 text-sm font-semibold uppercase tracking-wide">
-            Task Tracker
-          </span>
+          <div className="flex flex-row items-center gap-2 ml-2">
+            <img src={Logo} className="w-10" alt="DoneIt Logo" />
+            <span className="text-3xl md:text-4xl font-bold text-gray-900  ">
+              done it
+            </span>
+          </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 leading-tight">
             Organize. Prioritize. Achieve.
           </h1>
