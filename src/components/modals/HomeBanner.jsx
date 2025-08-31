@@ -8,7 +8,7 @@ const HomeBanner = ({ onLearnMoreClick }) => {
       <div className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center gap-12">
         <div className="text-center lg:text-left max-w-2xl">
           <div className="flex flex-row items-center gap-2 ml-2">
-            <img src={Logo} className="w-10" alt="DoneIt Logo" />
+            <img src={Logo} className="w-15" alt="DoneIt Logo" />
             <span className="text-3xl md:text-4xl font-bold text-gray-900  ">
               done it
             </span>
