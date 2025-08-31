@@ -43,7 +43,7 @@ const TaskboardLayout = () => {
         className={`
           bg-blue-900 p-2 pr-0 w-[16rem]
           transition-all duration-300 flex flex-col
-          fixed top-0 h-full pt-20 z-40
+          fixed top-0 h-full pt-20 z-40 mt-3
           ${isSidebarOpen ? "left-0" : "-left-64"}
           lg:left-0 md:data-[isdesktopsidebaropen=true]:w-14 pl-0
         `}
