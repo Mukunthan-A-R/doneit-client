@@ -77,7 +77,7 @@ export default function TasksPage() {
           ({ task_id, user_id, user_name, user_email }) => {
             if (!map[task_id]) map[task_id] = [];
             map[task_id].push({ user_id, name: user_name, email: user_email });
-          }
+          },
         );
 
         setTaskAssignments(map);
@@ -142,12 +142,21 @@ export default function TasksPage() {
   const handleDelete = async (taskId, taskTitle) => {
     try {
       await deleteTask(taskId);
+      console.log({
+        user_id: currentUserId,
+        projectId: activeProjectId,
+        task_id: taskId,
+        action: "delete",
+        context: {
+          title: taskTitle,
+        },
+      });
       refetchTasks();
 
       toast.success("Task Deleted Successfully!");
       await createActivityLog({
         user_id: currentUserId,
-        projectId: activeProjectId,
+        project_id: activeProjectId,
         task_id: taskId,
         action: "delete",
         context: {
@@ -196,8 +205,8 @@ export default function TasksPage() {
     if (taskViewMode === "tagged") {
       return tasks.filter((task) =>
         (taskAssignments[task.task_id] || []).some(
-          (user) => user.user_id === currentUserId
-        )
+          (user) => user.user_id === currentUserId,
+        ),
       );
     }
     return tasks;
@@ -233,7 +242,7 @@ export default function TasksPage() {
             : [],
       },
     ],
-    [filteredTasks, isLoading]
+    [filteredTasks, isLoading],
   );
 
   if (!activeProjectId) {
