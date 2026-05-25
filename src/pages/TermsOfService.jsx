@@ -61,9 +61,8 @@ const TermsOfService = () => {
             5. Payment and Refunds
           </h2>
           <p>
-            Done It offers a monthly subscription plan after an initial free
-            trial period. All payments are handled securely. Refunds, if any,
-            are at the discretion of Done It and subject to applicable laws.
+            Done It offers a free work space so you could manage your project at
+            ease.
           </p>
         </section>
 

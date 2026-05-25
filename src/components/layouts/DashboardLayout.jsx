@@ -5,15 +5,15 @@ import {
   sideBarToggle as sideBarToggleAtom,
   userSubscription,
 } from "../../data/atom";
-import PlanExpiredModal from "../modals/PlanExpiredModal";
+// import PlanExpiredModal from "../modals/PlanExpiredModal";
 import ProjectToolbar from "../ProjectToolbar";
 import { GoSidebarExpand, GoSidebarCollapse } from "react-icons/go";
 
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(true);
   const [sideBarToggle, setSideBarToggle] = useRecoilState(sideBarToggleAtom);
-  const subscriptionData = useRecoilValue(userSubscription);
+  // const [showOverlay, setShowOverlay] = useState(true);
+  // const subscriptionData = useRecoilValue(userSubscription);
 
   function handleNavigate() {
     return setIsSidebarOpen(false);
@@ -21,13 +21,13 @@ export default function DashboardLayout() {
 
   return (
     <div className="flex flex-col lg:flex-row h-full relative overflow-x-hidden flex-1">
-      {showOverlay && subscriptionData.is_active === false && (
+      {/* {showOverlay && subscriptionData.is_active === false && (
         <PlanExpiredModal
           plan={subscriptionData.plan_name}
           endDate={subscriptionData.end_date}
           onClose={() => setShowOverlay(false)}
         />
-      )}
+      )} */}
       {/* Sidebar */}
       <div
         className={`

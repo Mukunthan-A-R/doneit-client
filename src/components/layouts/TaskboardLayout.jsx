@@ -3,7 +3,7 @@ import { GoSidebarCollapse, GoSidebarExpand } from "react-icons/go";
 import { Outlet } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { sideBarToggle as sideBarToggleAtom } from "../../data/atom";
-import useUserSubscription from "../../hooks/useUserSubscription";
+// import useUserSubscription from "../../hooks/useUserSubscription";
 import TaskToolbar from "../TaskToolbar";
 import TrialExpiredOverlay from "../modals/TrialExpiredOverlay";
 
@@ -11,32 +11,32 @@ const TaskboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [sideBarToggle, setSideBarToggle] = useRecoilState(sideBarToggleAtom);
-  const { subscription, isLoading } = useUserSubscription();
+  // const { subscription, isLoading } = useUserSubscription();
 
   function handleNavigate() {
     return setIsSidebarOpen(false);
   }
 
-  useEffect(() => {
-    let timeout;
+  // useEffect(() => {
+  //   let timeout;
 
-    if (isLoading) return;
+  //   if (isLoading) return;
 
-    if (subscription && !subscription.is_active) {
-      timeout = setTimeout(() => {
-        setShowOverlay(true);
-      }, 1000);
-    } else {
-      setShowOverlay(false);
-    }
+  //   if (subscription && !subscription.is_active) {
+  //     timeout = setTimeout(() => {
+  //       setShowOverlay(true);
+  //     }, 1000);
+  //   } else {
+  //     setShowOverlay(false);
+  //   }
 
-    return () => clearTimeout(timeout);
-  }, [isLoading, subscription]);
+  //   return () => clearTimeout(timeout);
+  // }, [isLoading, subscription]);
 
   return (
     <div className="flex flex-col lg:flex-row h-full relative overflow-x-hidden flex-1">
       {/* Overlay */}
-      {!isLoading && showOverlay && <TrialExpiredOverlay />}
+      {/* {!isLoading && showOverlay && <TrialExpiredOverlay />} */}
 
       {/* Sidebar */}
       <div
