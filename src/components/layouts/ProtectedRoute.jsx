@@ -9,7 +9,7 @@ const ProtectedRoute = () => {
     return (
       <div className="w-full h-full flex-1 flex flex-col items-center justify-center gap-3">
         <img
-          src="/SandySoft.png"
+          src="/DoneIt.svg"
           alt="Done It"
           className="w-44 h-auto animate-fade-in"
         />
